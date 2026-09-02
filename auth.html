@@ -245,7 +245,6 @@
     </style>
 </head>
 
-
 <body>
 
 <div class="auth-container">
@@ -268,35 +267,25 @@
 
         </div>
 
-
         <h2 class="section-title">
             تسجيل الدخول
         </h2>
-
-
-        <!-- GOOGLE -->
 
         <button
             class="google-btn"
             id="google-btn"
             type="button"
         >
-
             <span class="google-icon">
                 G
             </span>
 
             تسجيل الدخول باستخدام Google
-
         </button>
-
 
         <div class="divider">
             أو
         </div>
-
-
-        <!-- PHONE -->
 
         <div class="input-group">
 
@@ -322,9 +311,7 @@
 
         </div>
 
-
         <div id="recaptcha-container"></div>
-
 
         <button
             class="main-btn"
@@ -333,9 +320,6 @@
         >
             إرسال رمز التحقق
         </button>
-
-
-        <!-- OTP -->
 
         <div
             class="otp-section"
@@ -359,7 +343,6 @@
 
             </div>
 
-
             <button
                 class="main-btn"
                 id="verify-code-btn"
@@ -370,7 +353,6 @@
 
         </div>
 
-
         <div
             class="loading"
             id="loading"
@@ -378,17 +360,14 @@
             جاري التنفيذ...
         </div>
 
-
         <div
             class="message"
             id="message"
         ></div>
 
-
         <div class="small-note">
             بتسجيل الدخول، يمكنك متابعة طلباتك وإدارة حسابك.
         </div>
-
 
         <a
             href="index.html"
@@ -401,19 +380,12 @@
 
 </div>
 
-
-
 <script type="module">
-
-    /* =========================
-       Firebase Imports
-    ========================= */
 
     import {
         initializeApp
     } from
         "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
 
     import {
         getAuth,
@@ -426,7 +398,6 @@
         "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-
     /* =========================
        Firebase Configuration
     ========================= */
@@ -434,7 +405,7 @@
     const firebaseConfig = {
 
         apiKey:
-            "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
+            "AIzaSyC2utHZyGAdptjuNjpFbTJSlRO6xs8G7U",
 
         authDomain:
             "suhayeb-25ef9.firebaseapp.com",
@@ -452,26 +423,22 @@
             "1:904310961712:web:178e457e45db1136d85ff5",
 
         measurementId:
-            "G-KXMD8DQS2X2"
+            "G-KXMD8DQS2X"
     };
 
 
-
     /* =========================
-       Initialize Firebase
+       Firebase
     ========================= */
 
     const app =
         initializeApp(firebaseConfig);
 
-
     const auth =
         getAuth(app);
 
-
     const googleProvider =
         new GoogleAuthProvider();
-
 
 
     /* =========================
@@ -479,66 +446,41 @@
     ========================= */
 
     const googleBtn =
-        document.getElementById(
-            "google-btn"
-        );
+        document.getElementById("google-btn");
 
     const phoneInput =
-        document.getElementById(
-            "phone"
-        );
+        document.getElementById("phone");
 
     const sendCodeBtn =
-        document.getElementById(
-            "send-code-btn"
-        );
+        document.getElementById("send-code-btn");
 
     const verifyCodeBtn =
-        document.getElementById(
-            "verify-code-btn"
-        );
+        document.getElementById("verify-code-btn");
 
     const otpInput =
-        document.getElementById(
-            "otp"
-        );
+        document.getElementById("otp");
 
     const otpSection =
-        document.getElementById(
-            "otp-section"
-        );
+        document.getElementById("otp-section");
 
     const message =
-        document.getElementById(
-            "message"
-        );
+        document.getElementById("message");
 
     const loading =
-        document.getElementById(
-            "loading"
-        );
+        document.getElementById("loading");
 
 
-
-    let confirmationResult =
-        null;
-
-    let recaptchaVerifier =
-        null;
-
+    let confirmationResult = null;
+    let recaptchaVerifier = null;
 
 
     /* =========================
        Messages
     ========================= */
 
-    function showMessage(
-        text,
-        type = "error"
-    ) {
+    function showMessage(text, type = "error") {
 
-        message.textContent =
-            text;
+        message.textContent = text;
 
         message.className =
             "message show " + type;
@@ -547,13 +489,10 @@
 
     function hideMessage() {
 
-        message.className =
-            "message";
+        message.className = "message";
 
-        message.textContent =
-            "";
+        message.textContent = "";
     }
-
 
 
     /* =========================
@@ -563,20 +502,12 @@
     function setLoading(status) {
 
         loading.style.display =
-            status
-                ? "block"
-                : "none";
+            status ? "block" : "none";
 
-        googleBtn.disabled =
-            status;
-
-        sendCodeBtn.disabled =
-            status;
-
-        verifyCodeBtn.disabled =
-            status;
+        googleBtn.disabled = status;
+        sendCodeBtn.disabled = status;
+        verifyCodeBtn.disabled = status;
     }
-
 
 
     /* =========================
@@ -585,10 +516,7 @@
 
     function saveCurrentUser(user) {
 
-        if (!user) {
-            return;
-        }
-
+        if (!user) return;
 
         const userData = {
 
@@ -619,7 +547,6 @@
     }
 
 
-
     /* =========================
        Go To Account
     ========================= */
@@ -630,7 +557,6 @@
             "./account.html"
         );
     }
-
 
 
     /* =========================
@@ -644,10 +570,8 @@
             error
         );
 
-
         const code =
             error?.code || "";
-
 
         const originalMessage =
             error?.message || "";
@@ -656,10 +580,6 @@
         switch (code) {
 
             case "auth/invalid-api-key":
-
-                return "Firebase رفض مفتاح API.";
-
-
             case "auth/api-key-not-valid":
 
                 return "Firebase رفض مفتاح API.";
@@ -717,7 +637,6 @@
     }
 
 
-
     /* =========================
        GOOGLE LOGIN
     ========================= */
@@ -729,7 +648,6 @@
             hideMessage();
 
             setLoading(true);
-
 
             try {
 
@@ -745,11 +663,6 @@
                 );
 
 
-                /*
-                 * تسجيل الدخول تم.
-                 * الانتقال إلى الحساب.
-                 */
-
                 goToAccount();
 
 
@@ -764,14 +677,12 @@
 
                 setLoading(false);
             }
-
         }
     );
 
 
-
     /* =========================
-       Prepare Phone
+       Phone Number
     ========================= */
 
     function preparePhoneNumber(value) {
@@ -797,7 +708,6 @@
 
         return "+218" + phone;
     }
-
 
 
     /* =========================
@@ -848,13 +758,11 @@
                 error
             );
 
-
             showMessage(
                 getFirebaseError(error)
             );
         }
     }
-
 
 
     /* =========================
@@ -941,7 +849,6 @@
     );
 
 
-
     /* =========================
        VERIFY OTP
     ========================= */
@@ -1018,7 +925,6 @@
     );
 
 
-
     /* =========================
        AUTH STATE
     ========================= */
@@ -1029,20 +935,16 @@
 
             if (user) {
 
-                saveCurrentUser(
-                    user
-                );
+                saveCurrentUser(user);
 
                 goToAccount();
             }
-
         }
     );
 
 
-
     /* =========================
-       START reCAPTCHA
+       Start reCAPTCHA
     ========================= */
 
     window.addEventListener(
