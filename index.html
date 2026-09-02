@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>متجر الرياضة</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- تنسيق نافذة اختيار المقاس واللون فقط -->
+    <style>
+        .product-options {
+            margin-top: 10px;
+        }
+
+        .option-group {
+            margin-bottom: 16px;
+        }
+
+        .option-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .option-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .option-button {
+            border: 1px solid #d1d5db;
+            background: #fff;
+            color: #18202a;
+            border-radius: 9px;
+            padding: 9px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .2s;
+        }
+
+        .option-button:hover {
+            border-color: #111827;
+        }
+
+        .option-button.selected {
+            background: #111827;
+            color: #fff;
+            border-color: #111827;
+        }
+
+        .selected-option-text {
+            margin-top: 7px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .cart-item-options {
+            margin: 6px 0;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .cart-item-options strong {
+            color: #111827;
+        }
+
+        .product-option-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .options-product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .options-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .options-confirm-button {
+            width: 100%;
+            border: 0;
+            background: #111827;
+            color: #fff;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .options-confirm-button:hover {
+            background: #1f2937;
+        }
+
+        .checkout-item-options {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         الهيدر
+    ========================== -->
+    <header class="header">
+
+        <div class="container header-content">
+
+            <a href="#home" class="logo">
+                <div class="logo-icon">⚡</div>
+
+                <div>
+                    <strong>متجر الرياضة</strong>
+                    <small>SPORT STORE</small>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a href="#home">الرئيسية</a>
+                <a href="#categories">الأقسام</a>
+                <a href="#products">المنتجات</a>
+                <a href="#contact">تواصل معنا</a>
+            </nav>
+
+            <div class="header-actions">
+
+                <a href="admin.html" class="admin-button" id="admin-button">
+                    ⚙️ <span>إدارة المتجر</span>
+                </a>
+
+                <a href="admin.html" class="admin-button" id="add-product-button">
+                    ➕ <span>إضافة منتج</span>
+                </a>
+
+                <!-- حسابي -->
+                <a
+                    href="auth.html"
+                    class="account-button"
+                    id="account-button"
+                    onclick="openAccount(event)"
+                >
+                    👤 <span>حسابي</span>
+                </a>
+
+                <button type="button" class="cart-button" onclick="openCart()">
+                    🛒 <span>السلة</span>
+                    <b id="cart-count">0</b>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         الرئيسية
+    ========================== -->
+    <section class="hero" id="home">
+
+        <div class="container hero-content">
+
+            <div class="hero-text">
+
+                <span class="hero-badge">
+                    🏃 منتجات رياضية
+                </span>
+
+                <div class="hero-small">
+                    SPORT STORE
+                </div>
+
+                <h1>
+                    كل ما تحتاجه
+                    <span>للرياضة والأناقة</span>
+                </h1>
+
+                <p>
+                    متجر متخصص في الملابس والمستلزمات الرياضية،
+                    نوفر لك منتجات متنوعة بجودة ممتازة وأسعار مناسبة.
+                    اختر منتجك واطلبه بسهولة.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#products" class="primary-button">
+                        تسوق الآن
+                    </a>
+
+                    <a href="#categories" class="secondary-button">
+                        تصفح الأقسام
+                    </a>
+
+                </div>
+
+                <div class="hero-features">
+
+                    <div>
+                        🚚
+                        <span>توصيل</span>
+                    </div>
+
+                    <div>
+                        💳
+                        <span>أسعار مناسبة</span>
+                    </div>
+
+                    <div>
+                        ⭐
+                        <span>جودة ممتازة</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-card">
+
+                <div class="hero-circle"></div>
+
+                <div class="hero-product">
+                    🏃
+                </div>
+
+                <div class="hero-card-text">
+                    <strong>SPORT STYLE</strong>
+                    <span>MOVE • TRAIN • WIN</span>
+                </div>
+
+                <div class="hero-flag">
+                    🇱🇾
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         الأقسام
+    ========================== -->
+    <section class="categories-section" id="categories">
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-label">
+                        تصفح المتجر
+                    </span>
+
+                    <h2>
+                        الأقسام
+                    </h2>
+                </div>
+
+                <a href="#products">
+                    مشاهدة المنتجات
+                </a>
+
+            </div>
+
+
+            <div class="sport-categories">
+
+                <button
+                    type="button"
+                    class="sport-category"
+                    onclick="filterByCategory('قمصان')"
+                >
+
+                    <div class="sport-category-icon">
+                        👕
+                    </div>
+
+                    <div class="sport-category-content">
+
+                        <span>
+                            SPORTS
+                        </span>
+
+                        <strong>
+                            قمصان رياضية
+                        </strong>
+
+                        <small>
+                            قمصان الأندية والمنتخبات
+                        </small>
+
+                    </div>
+
+                    <div class="sport-category-arrow">
+                        ←
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="sport-category"
+                    onclick="filterByCategory('بدلات')"
+                >
+
+                    <div class="sport-category-icon">
+                        🏃
+                    </div>
+
+                    <div class="sport-category-content">
+
+                        <span>
+                            TRAINING
+                        </span>
+
+                        <strong>
+                            بدلات رياضية
+                        </strong>
+
+                        <small>
+                            ملابس التدريب والرياضة
+                        </small>
+
+                    </div>
+
+                    <div class="sport-category-arrow">
+                        ←
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="sport-category"
+                    onclick="filterByCategory('شورتات')"
+                >
+
+                    <div class="sport-category-icon">
+                        🩳
+                    </div>
+
+                    <div class="sport-category-content">
+
+                        <span>
+                            SPORTS
+                        </span>
+
+                        <strong>
+                            شورتات
+                        </strong>
+
+                        <small>
+                            شورتات رياضية متنوعة
+                        </small>
+
+                    </div>
+
+                    <div class="sport-category-arrow">
+                        ←
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="sport-category sport-category-all"
+                    onclick="filterByCategory('الكل')"
+                >
+
+                    <div class="sport-category-icon">
+                        🛍️
+                    </div>
+
+                    <div class="sport-category-content">
+
+                        <span>
+                            STORE
+                        </span>
+
+                        <strong>
+                            كل المنتجات
+                        </strong>
+
+                        <small>
+                            شاهد جميع المنتجات
+                        </small>
+
+                    </div>
+
+                    <div class="sport-category-arrow">
+                        ←
+                    </div>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         المنتجات
+    ========================== -->
+    <section class="products-section" id="products">
+
+        <div class="container">
+
+            <div class="products-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        اختياراتنا
+                    </span>
+
+                    <h2>
+                        المنتجات
+                    </h2>
+
+                </div>
+
+
+                <div class="search-box">
+
+                    <input
+                        type="search"
+                        id="search-input"
+                        placeholder="ابحث عن منتج..."
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-buttons">
+
+                <button
+                    type="button"
+                    class="filter-btn active"
+                    data-category="الكل"
+                    onclick="filterByCategory('الكل', this)"
+                >
+                    الكل
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-btn"
+                    data-category="قمصان"
+                    onclick="filterByCategory('قمصان', this)"
+                >
+                    قمصان
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-btn"
+                    data-category="بدلات"
+                    onclick="filterByCategory('بدلات', this)"
+                >
+                    بدلات
+                </button>
+
+                <button
+                    type="button"
+                    class="filter-btn"
+                    data-category="شورتات"
+                    onclick="filterByCategory('شورتات', this)"
+                >
+                    شورتات
+                </button>
+
+            </div>
+
+
+            <div
+                class="products-grid"
+                id="products-container"
+            ></div>
+
+
+            <div
+                class="no-products"
+                id="no-products"
+            >
+                لا توجد منتجات حاليًا.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         تواصل معنا
+    ========================== -->
+    <section class="contact-section" id="contact">
+
+        <div class="container">
+
+            <div class="contact-box">
+
+                <div>
+
+                    <div class="contact-icon">
+                        💬
+                    </div>
+
+                    <span>
+                        نحن هنا لمساعدتك
+                    </span>
+
+                    <h2>
+                        تواصل معنا
+                    </h2>
+
+                    <p>
+                        للاستفسار أو الطلب تواصل معنا مباشرة عبر واتساب.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="https://api.whatsapp.com/send?phone=218910251861"
+                    class="whatsapp-button"
+                >
+                    💬 تواصل معنا عبر واتساب
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         نافذة اختيار المقاس واللون
+    ========================== -->
+    <div
+        class="modal-overlay"
+        id="product-options-modal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span>
+                        اختر المواصفات
+                    </span>
+
+                    <h2>
+                        🛍️ تفاصيل المنتج
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="close-button"
+                    onclick="closeProductOptions()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="options-product-name" id="options-product-name">
+                المنتج
+            </div>
+
+
+            <div
+                class="options-error"
+                id="options-error"
+            >
+                يرجى اختيار الخيارات المطلوبة.
+            </div>
+
+
+            <div
+                class="product-options"
+                id="product-options"
+            ></div>
+
+
+            <button
+                type="button"
+                class="options-confirm-button"
+                onclick="confirmProductOptions()"
+            >
+                🛒 إضافة للسلة
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         سلة المشتريات
+    ========================== -->
+    <div
+        class="modal-overlay"
+        id="cart-modal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span>
+                        مشترياتك
+                    </span>
+
+                    <h2>
+                        🛒 سلة المشتريات
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="close-button"
+                    onclick="closeCart()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="cart-items"
+                id="cart-items"
+            ></div>
+
+
+            <div class="cart-footer">
+
+                <div class="cart-total">
+
+                    <span>
+                        الإجمالي
+                    </span>
+
+                    <strong id="cart-total">
+                        0 د.ل
+                    </strong>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="checkout-button"
+                    onclick="checkout()"
+                >
+                    إتمام الطلب
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         إتمام الطلب
+    ========================== -->
+    <div
+        class="modal-overlay"
+        id="checkout-modal"
+    >
+
+        <div class="modal">
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span>
+                        بيانات التوصيل
+                    </span>
+
+                    <h2>
+                        إتمام الطلب
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="close-button"
+                    onclick="closeCheckout()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="checkout-form">
+
+                <div class="form-group">
+
+                    <label for="customer-name">
+                        الاسم
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customer-name"
+                        placeholder="اكتب اسمك"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-phone">
+                        رقم الهاتف
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="customer-phone"
+                        placeholder="0912345678"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-city">
+                        المدينة
+                    </label>
+
+                    <input
+                        type="text"
+                        id="customer-city"
+                        placeholder="مثال: طرابلس"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-address">
+                        العنوان
+                    </label>
+
+                    <textarea
+                        id="customer-address"
+                        placeholder="اكتب عنوان التوصيل بالتفصيل"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="customer-notes">
+                        ملاحظات
+                    </label>
+
+                    <textarea
+                        id="customer-notes"
+                        placeholder="أي ملاحظات إضافية..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="checkout-summary">
+
+                    <h3>
+                        ملخص الطلب
+                    </h3>
+
+                    <div
+                        class="checkout-items"
+                        id="checkout-items"
+                    ></div>
+
+                    <div class="checkout-total">
+
+                        <span>
+                            الإجمالي
+                        </span>
+
+                        <strong id="checkout-total">
+                            0 د.ل
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="confirm-order-button"
+                >
+                    📲 إرسال الطلب عبر واتساب
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         الفوتر
+    ========================== -->
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-logo">
+                ⚡ متجر الرياضة
+            </div>
+
+            <p>
+                ملابس ومستلزمات رياضية
+            </p>
+
+            <div class="footer-line"></div>
+
+            <small>
+                © جميع الحقوق محفوظة
+            </small>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         فتح الحساب حسب حالة تسجيل الدخول
+    ========================== -->
+    <script>
+        function openAccount(event) {
+
+            event.preventDefault();
+
+            const currentUser =
+                localStorage.getItem("myStoreCurrentUser");
+
+            if (currentUser) {
+
+                window.location.href = "account.html";
+
+            } else {
+
+                window.location.href = "auth.html";
+
+            }
+        }
+    </script>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

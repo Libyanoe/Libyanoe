@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>تسجيل الدخول - متجر الرياضة</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Tahoma, sans-serif;
+            background: #f5f7fa;
+            color: #18202a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.10);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 12px;
+            border-radius: 20px;
+            background: #18202a;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .logo h1 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .google-btn {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: .2s;
+        }
+
+        .google-btn:hover {
+            background: #f7f7f7;
+        }
+
+        .google-icon {
+            font-size: 21px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 25px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e5e5;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .phone-wrapper {
+            display: flex;
+            direction: ltr;
+            gap: 8px;
+        }
+
+        .country-code {
+            width: 75px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            direction: ltr;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 0 15px;
+            font-size: 16px;
+            outline: none;
+            direction: ltr;
+        }
+
+        input:focus {
+            border-color: #18202a;
+        }
+
+        .main-btn {
+            width: 100%;
+            height: 50px;
+            border: 0;
+            border-radius: 12px;
+            background: #18202a;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .main-btn:disabled,
+        .google-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .otp-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .otp-section.show {
+            display: block;
+        }
+
+        #recaptcha-container {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .message {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.error {
+            background: #ffecec;
+            color: #b42318;
+        }
+
+        .message.success {
+            background: #ecfdf3;
+            color: #067647;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #18202a;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .small-note {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 12px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 25px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <div class="auth-card">
+
+        <div class="logo">
+            <div class="logo-icon">🏆</div>
+            <h1>متجر الرياضة</h1>
+            <p>سجّل الدخول إلى حسابك</p>
+        </div>
+
+        <h2 class="section-title">تسجيل الدخول</h2>
+
+        <!-- Google -->
+        <button class="google-btn" id="google-btn">
+            <span class="google-icon">G</span>
+            تسجيل الدخول باستخدام Google
+        </button>
+
+        <div class="divider">
+            أو
+        </div>
+
+        <!-- Phone -->
+        <div class="input-group">
+            <label for="phone">رقم الهاتف الليبي</label>
+
+            <div class="phone-wrapper">
+                <div class="country-code">+218</div>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    inputmode="numeric"
+                    autocomplete="tel"
+                    placeholder="91xxxxxxx"
+                >
+            </div>
+        </div>
+
+        <div id="recaptcha-container"></div>
+
+        <button class="main-btn" id="send-code-btn">
+            إرسال رمز التحقق
+        </button>
+
+        <!-- OTP -->
+        <div class="otp-section" id="otp-section">
+
+            <div class="input-group">
+                <label for="otp">رمز التحقق</label>
+
+                <input
+                    type="text"
+                    id="otp"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="6"
+                    placeholder="أدخل الرمز المرسل إليك"
+                >
+            </div>
+
+            <button class="main-btn" id="verify-code-btn">
+                تأكيد الرمز وتسجيل الدخول
+            </button>
+
+        </div>
+
+        <div class="loading" id="loading">
+            جاري التنفيذ...
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="small-note">
+            بتسجيل الدخول، يمكنك متابعة طلباتك وإدارة حسابك.
+        </div>
+
+        <a href="index.html" class="back-btn">
+            ← العودة إلى المتجر
+        </a>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+    import { initializeApp } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        RecaptchaVerifier,
+        signInWithPhoneNumber,
+        onAuthStateChanged
+    } from
+        "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    /* =========================
+       Firebase Configuration
+    ========================= */
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyC2utHZyGAdptjuNjpFbTJSlRO6xs8G7U",
+        authDomain: "suhayeb-25ef9.firebaseapp.com",
+        projectId: "suhayeb-25ef9",
+        storageBucket: "suhayeb-25ef9.firebasestorage.app",
+        messagingSenderId: "904310961712",
+        appId: "1:904310961712:web:178e457e45db1136d85ff5",
+        measurementId: "G-KXMD8DQS2X"
+    };
+
+
+    /* =========================
+       Initialize Firebase
+    ========================= */
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const googleProvider = new GoogleAuthProvider();
+
+
+    /* =========================
+       Elements
+    ========================= */
+
+    const googleBtn =
+        document.getElementById("google-btn");
+
+    const phoneInput =
+        document.getElementById("phone");
+
+    const sendCodeBtn =
+        document.getElementById("send-code-btn");
+
+    const verifyCodeBtn =
+        document.getElementById("verify-code-btn");
+
+    const otpInput =
+        document.getElementById("otp");
+
+    const otpSection =
+        document.getElementById("otp-section");
+
+    const message =
+        document.getElementById("message");
+
+    const loading =
+        document.getElementById("loading");
+
+
+    let confirmationResult = null;
+    let recaptchaVerifier = null;
+
+
+    /* =========================
+       Messages
+    ========================= */
+
+    function showMessage(text, type = "error") {
+
+        message.textContent = text;
+
+        message.className =
+            "message show " + type;
+    }
+
+
+    function hideMessage() {
+
+        message.className = "message";
+        message.textContent = "";
+    }
+
+
+    function setLoading(status) {
+
+        loading.style.display =
+            status ? "block" : "none";
+
+        googleBtn.disabled = status;
+        sendCodeBtn.disabled = status;
+        verifyCodeBtn.disabled = status;
+    }
+
+
+    /* =========================
+       Save User
+    ========================= */
+
+    function saveCurrentUser(user) {
+
+        if (!user) return;
+
+        const userData = {
+            uid: user.uid || "",
+            name: user.displayName || "",
+            email: user.email || "",
+            phone: user.phoneNumber || "",
+            photoURL: user.photoURL || "",
+            provider: user.providerData?.[0]?.providerId || ""
+        };
+
+        localStorage.setItem(
+            "myStoreCurrentUser",
+            JSON.stringify(userData)
+        );
+    }
+
+
+    /* =========================
+       Redirect
+    ========================= */
+
+    function goToAccount() {
+
+        window.location.href = "account.html";
+    }
+
+
+    /* =========================
+       Firebase Error
+    ========================= */
+
+    function getFirebaseError(error) {
+
+        console.error("Firebase Error:", error);
+
+        const code = error?.code || "";
+        const originalMessage =
+            error?.message || "";
+
+        switch (code) {
+
+            case "auth/invalid-api-key":
+                return "Firebase رفض مفتاح API. تأكد أن الموقع يستخدم إعدادات مشروع SUHAYEB الصحيحة.";
+
+            case "auth/api-key-not-valid":
+                return "Firebase رفض مفتاح API. تأكد أن API Key صحيح ومربوط بمشروع SUHAYEB.";
+
+            case "auth/operation-not-allowed":
+                return "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase Authentication.";
+
+            case "auth/unauthorized-domain":
+                return "هذا الموقع غير مضاف إلى Authorized domains في Firebase.";
+
+            case "auth/app-not-authorized":
+                return "هذا التطبيق غير مصرح له باستخدام Firebase Authentication.";
+
+            case "auth/invalid-phone-number":
+                return "رقم الهاتف غير صحيح. اكتب رقمًا ليبيًا مثل 0912345678.";
+
+            case "auth/missing-phone-number":
+                return "اكتب رقم الهاتف أولاً.";
+
+            case "auth/too-many-requests":
+                return "تم إرسال طلبات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.";
+
+            case "auth/quota-exceeded":
+                return "تم تجاوز حد رسائل SMS المتاح حاليًا.";
+
+            case "auth/captcha-check-failed":
+                return "فشل التحقق من reCAPTCHA. أعد تحميل الصفحة وحاول مرة أخرى.";
+
+            case "auth/invalid-verification-code":
+                return "رمز التحقق غير صحيح.";
+
+            case "auth/code-expired":
+                return "رمز التحقق انتهت صلاحيته. اطلب رمزًا جديدًا.";
+
+            case "auth/network-request-failed":
+                return "حدثت مشكلة في الاتصال بالإنترنت.";
+
+            case "auth/popup-blocked":
+                return "المتصفح منع نافذة Google. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.";
+
+            case "auth/popup-closed-by-user":
+                return "تم إغلاق نافذة تسجيل الدخول.";
+
+            case "auth/account-exists-with-different-credential":
+                return "هذا الحساب موجود مسبقًا بطريقة تسجيل دخول مختلفة.";
+
+            default:
+                return "خطأ Firebase:\n" +
+                       code +
+                       "\n\n" +
+                       originalMessage;
+        }
+    }
+
+
+    /* =========================
+       reCAPTCHA
+    ========================= */
+
+    function setupRecaptcha() {
+
+        try {
+
+            if (recaptchaVerifier) {
+                return;
+            }
+
+            recaptchaVerifier =
+                new RecaptchaVerifier(
+                    auth,
+                    "recaptcha-container",
+                    {
+                        size: "normal",
+
+                        callback: function () {
+                            hideMessage();
+                        },
+
+                        "expired-callback": function () {
+                            showMessage(
+                                "انتهت صلاحية التحقق. أعد التحقق مرة أخرى."
+                            );
+                        }
+                    }
+                );
+
+            recaptchaVerifier.render();
+
+        } catch (error) {
+
+            console.error(
+                "reCAPTCHA Error:",
+                error
+            );
+
+            showMessage(
+                getFirebaseError(error)
+            );
+        }
+    }
+
+
+    /* =========================
+       Prepare Libyan Phone
+    ========================= */
+
+    function preparePhoneNumber(value) {
+
+        let phone =
+            String(value || "")
+            .replace(/\D/g, "");
+
+        if (phone.startsWith("218")) {
+
+            phone =
+                phone.substring(3);
+        }
+
+        if (phone.startsWith("0")) {
+
+            phone =
+                phone.substring(1);
+        }
+
+        return "+218" + phone;
+    }
+
+
+    /* =========================
+       Google Login
+    ========================= */
+
+    googleBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideMessage();
+            setLoading(true);
+
+            try {
+
+                const result =
+                    await signInWithPopup(
+                        auth,
+                        googleProvider
+                    );
+
+                saveCurrentUser(
+                    result.user
+                );
+
+                showMessage(
+                    "تم تسجيل الدخول بنجاح.",
+                    "success"
+                );
+
+                setTimeout(
+                    goToAccount,
+                    500
+                );
+
+            } catch (error) {
+
+                showMessage(
+                    getFirebaseError(error)
+                );
+
+            } finally {
+
+                setLoading(false);
+            }
+        }
+    );
+
+
+    /* =========================
+       Send Phone Code
+    ========================= */
+
+    sendCodeBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideMessage();
+
+            const phone =
+                preparePhoneNumber(
+                    phoneInput.value
+                );
+
+            if (!/^\+218\d{9}$/.test(phone)) {
+
+                showMessage(
+                    "اكتب رقمًا ليبيًا صحيحًا. مثال: 0912345678"
+                );
+
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+
+                setupRecaptcha();
+
+                if (!recaptchaVerifier) {
+                    throw new Error(
+                        "reCAPTCHA لم يتم تجهيزه."
+                    );
+                }
+
+                confirmationResult =
+                    await signInWithPhoneNumber(
+                        auth,
+                        phone,
+                        recaptchaVerifier
+                    );
+
+                otpSection.classList.add("show");
+
+                showMessage(
+                    "تم إرسال رمز التحقق إلى هاتفك.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Phone Login Error:",
+                    error
+                );
+
+                showMessage(
+                    getFirebaseError(error)
+                );
+
+            } finally {
+
+                setLoading(false);
+            }
+        }
+    );
+
+
+    /* =========================
+       Verify OTP
+    ========================= */
+
+    verifyCodeBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideMessage();
+
+            const code =
+                otpInput.value.trim();
+
+            if (!confirmationResult) {
+
+                showMessage(
+                    "أرسل رمز التحقق أولاً."
+                );
+
+                return;
+            }
+
+            if (!/^\d{6}$/.test(code)) {
+
+                showMessage(
+                    "أدخل رمز التحقق المكوّن من 6 أرقام."
+                );
+
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+
+                const result =
+                    await confirmationResult.confirm(
+                        code
+                    );
+
+                saveCurrentUser(
+                    result.user
+                );
+
+                showMessage(
+                    "تم تسجيل الدخول بنجاح.",
+                    "success"
+                );
+
+                setTimeout(
+                    goToAccount,
+                    500
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "OTP Error:",
+                    error
+                );
+
+                showMessage(
+                    getFirebaseError(error)
+                );
+
+            } finally {
+
+                setLoading(false);
+            }
+        }
+    );
+
+
+    /* =========================
+       Firebase Auth State
+    ========================= */
+
+    onAuthStateChanged(
+        auth,
+        function (user) {
+
+            if (user) {
+
+                saveCurrentUser(user);
+            }
+        }
+    );
+
+
+    /* =========================
+       Start reCAPTCHA
+    ========================= */
+
+    window.addEventListener(
+        "load",
+        function () {
+
+            setupRecaptcha();
+        }
+    );
+
+</script>
+
+</body>
+</html>
