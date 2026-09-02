@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -196,6 +197,7 @@
             border-radius: 10px;
             font-size: 14px;
             line-height: 1.6;
+            white-space: pre-line;
         }
 
         .message.show {
@@ -253,28 +255,52 @@
 
         <div class="logo">
             <div class="logo-icon">🏆</div>
+
             <h1>متجر الرياضة</h1>
+
             <p>سجّل الدخول إلى حسابك</p>
         </div>
 
-        <h2 class="section-title">تسجيل الدخول</h2>
+        <h2 class="section-title">
+            تسجيل الدخول
+        </h2>
+
 
         <!-- Google -->
-        <button class="google-btn" id="google-btn">
-            <span class="google-icon">G</span>
+
+        <button
+            class="google-btn"
+            id="google-btn"
+            type="button"
+        >
+
+            <span class="google-icon">
+                G
+            </span>
+
             تسجيل الدخول باستخدام Google
+
         </button>
+
 
         <div class="divider">
             أو
         </div>
 
+
         <!-- Phone -->
+
         <div class="input-group">
-            <label for="phone">رقم الهاتف الليبي</label>
+
+            <label for="phone">
+                رقم الهاتف الليبي
+            </label>
 
             <div class="phone-wrapper">
-                <div class="country-code">+218</div>
+
+                <div class="country-code">
+                    +218
+                </div>
 
                 <input
                     type="tel"
@@ -283,20 +309,36 @@
                     autocomplete="tel"
                     placeholder="91xxxxxxx"
                 >
+
             </div>
+
         </div>
+
 
         <div id="recaptcha-container"></div>
 
-        <button class="main-btn" id="send-code-btn">
+
+        <button
+            class="main-btn"
+            id="send-code-btn"
+            type="button"
+        >
             إرسال رمز التحقق
         </button>
 
+
         <!-- OTP -->
-        <div class="otp-section" id="otp-section">
+
+        <div
+            class="otp-section"
+            id="otp-section"
+        >
 
             <div class="input-group">
-                <label for="otp">رمز التحقق</label>
+
+                <label for="otp">
+                    رمز التحقق
+                </label>
 
                 <input
                     type="text"
@@ -306,25 +348,44 @@
                     maxlength="6"
                     placeholder="أدخل الرمز المرسل إليك"
                 >
+
             </div>
 
-            <button class="main-btn" id="verify-code-btn">
+
+            <button
+                class="main-btn"
+                id="verify-code-btn"
+                type="button"
+            >
                 تأكيد الرمز وتسجيل الدخول
             </button>
 
         </div>
 
-        <div class="loading" id="loading">
+
+        <div
+            class="loading"
+            id="loading"
+        >
             جاري التنفيذ...
         </div>
 
-        <div class="message" id="message"></div>
+
+        <div
+            class="message"
+            id="message"
+        ></div>
+
 
         <div class="small-note">
             بتسجيل الدخول، يمكنك متابعة طلباتك وإدارة حسابك.
         </div>
 
-        <a href="index.html" class="back-btn">
+
+        <a
+            href="index.html"
+            class="back-btn"
+        >
             ← العودة إلى المتجر
         </a>
 
@@ -333,10 +394,19 @@
 </div>
 
 
+
 <script type="module">
 
-    import { initializeApp } from
+
+    /* =========================
+       Firebase Imports
+    ========================= */
+
+    import {
+        initializeApp
+    } from
         "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 
     import {
         getAuth,
@@ -349,29 +419,49 @@
         "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
+
     /* =========================
        Firebase Configuration
     ========================= */
 
     const firebaseConfig = {
+
         apiKey: "NEW_API_KEY_REDACTED",
-        authDomain: "suhayeb-25ef9.firebaseapp.com",
-        projectId: "suhayeb-25ef9",
-        storageBucket: "suhayeb-25ef9.firebasestorage.app",
-        messagingSenderId: "904310961712",
-        appId: "1:904310961712:web:178e457e45db1136d85ff5",
-        measurementId: "G-KXMD8DQS2X"
+
+        authDomain:
+            "suhayeb-25ef9.firebaseapp.com",
+
+        projectId:
+            "suhayeb-25ef9",
+
+        storageBucket:
+            "suhayeb-25ef9.firebasestorage.app",
+
+        messagingSenderId:
+            "904310961712",
+
+        appId:
+            "1:904310961712:web:178e457e45db1136d85ff5",
+
+        measurementId:
+            "G-KXMD8DQS2X2"
     };
+
 
 
     /* =========================
        Initialize Firebase
     ========================= */
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const app =
+        initializeApp(firebaseConfig);
 
-    const googleProvider = new GoogleAuthProvider();
+    const auth =
+        getAuth(app);
+
+    const googleProvider =
+        new GoogleAuthProvider();
+
 
 
     /* =========================
@@ -379,41 +469,66 @@
     ========================= */
 
     const googleBtn =
-        document.getElementById("google-btn");
+        document.getElementById(
+            "google-btn"
+        );
 
     const phoneInput =
-        document.getElementById("phone");
+        document.getElementById(
+            "phone"
+        );
 
     const sendCodeBtn =
-        document.getElementById("send-code-btn");
+        document.getElementById(
+            "send-code-btn"
+        );
 
     const verifyCodeBtn =
-        document.getElementById("verify-code-btn");
+        document.getElementById(
+            "verify-code-btn"
+        );
 
     const otpInput =
-        document.getElementById("otp");
+        document.getElementById(
+            "otp"
+        );
 
     const otpSection =
-        document.getElementById("otp-section");
+        document.getElementById(
+            "otp-section"
+        );
 
     const message =
-        document.getElementById("message");
+        document.getElementById(
+            "message"
+        );
 
     const loading =
-        document.getElementById("loading");
+        document.getElementById(
+            "loading"
+        );
 
 
-    let confirmationResult = null;
-    let recaptchaVerifier = null;
+
+    let confirmationResult =
+        null;
+
+    let recaptchaVerifier =
+        null;
+
 
 
     /* =========================
        Messages
     ========================= */
 
-    function showMessage(text, type = "error") {
+    function showMessage(
+        text,
+        type = "error"
+    ) {
 
-        message.textContent = text;
+        message.textContent =
+            text;
 
         message.className =
             "message show " + type;
@@ -422,20 +537,36 @@
 
     function hideMessage() {
 
-        message.className = "message";
-        message.textContent = "";
+        message.className =
+            "message";
+
+        message.textContent =
+            "";
     }
 
+
+
+    /* =========================
+       Loading
+    ========================= */
 
     function setLoading(status) {
 
         loading.style.display =
-            status ? "block" : "none";
+            status
+                ? "block"
+                : "none";
 
-        googleBtn.disabled = status;
-        sendCodeBtn.disabled = status;
-        verifyCodeBtn.disabled = status;
+        googleBtn.disabled =
+            status;
+
+        sendCodeBtn.disabled =
+            status;
+
+        verifyCodeBtn.disabled =
+            status;
     }
+
 
 
     /* =========================
@@ -444,16 +575,31 @@
 
     function saveCurrentUser(user) {
 
-        if (!user) return;
+        if (!user) {
+            return;
+        }
 
         const userData = {
-            uid: user.uid || "",
-            name: user.displayName || "",
-            email: user.email || "",
-            phone: user.phoneNumber || "",
-            photoURL: user.photoURL || "",
-            provider: user.providerData?.[0]?.providerId || ""
+
+            uid:
+                user.uid || "",
+
+            name:
+                user.displayName || "",
+
+            email:
+                user.email || "",
+
+            phone:
+                user.phoneNumber || "",
+
+            photoURL:
+                user.photoURL || "",
+
+            provider:
+                user.providerData?.[0]?.providerId || ""
         };
+
 
         localStorage.setItem(
             "myStoreCurrentUser",
@@ -462,85 +608,116 @@
     }
 
 
+
     /* =========================
-       Redirect
+       Go To Account
     ========================= */
 
     function goToAccount() {
 
-        window.location.href = "account.html";
+        window.location.href =
+            "account.html";
     }
 
 
+
     /* =========================
-       Firebase Error
+       Firebase Errors
     ========================= */
 
     function getFirebaseError(error) {
 
-        console.error("Firebase Error:", error);
+        console.error(
+            "Firebase Error:",
+            error
+        );
 
-        const code = error?.code || "";
+
+        const code =
+            error?.code || "";
+
+
         const originalMessage =
             error?.message || "";
+
 
         switch (code) {
 
             case "auth/invalid-api-key":
-                return "Firebase رفض مفتاح API. تأكد أن الموقع يستخدم إعدادات مشروع SUHAYEB الصحيحة.";
+
+                return "Firebase رفض مفتاح API.";
 
             case "auth/api-key-not-valid":
-                return "Firebase رفض مفتاح API. تأكد أن API Key صحيح ومربوط بمشروع SUHAYEB.";
+
+                return "Firebase رفض مفتاح API.";
 
             case "auth/operation-not-allowed":
+
                 return "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase Authentication.";
 
             case "auth/unauthorized-domain":
+
                 return "هذا الموقع غير مضاف إلى Authorized domains في Firebase.";
 
             case "auth/app-not-authorized":
+
                 return "هذا التطبيق غير مصرح له باستخدام Firebase Authentication.";
 
             case "auth/invalid-phone-number":
-                return "رقم الهاتف غير صحيح. اكتب رقمًا ليبيًا مثل 0912345678.";
+
+                return "رقم الهاتف غير صحيح.";
 
             case "auth/missing-phone-number":
+
                 return "اكتب رقم الهاتف أولاً.";
 
             case "auth/too-many-requests":
+
                 return "تم إرسال طلبات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.";
 
             case "auth/quota-exceeded":
+
                 return "تم تجاوز حد رسائل SMS المتاح حاليًا.";
 
             case "auth/captcha-check-failed":
-                return "فشل التحقق من reCAPTCHA. أعد تحميل الصفحة وحاول مرة أخرى.";
+
+                return "فشل التحقق من reCAPTCHA.";
 
             case "auth/invalid-verification-code":
+
                 return "رمز التحقق غير صحيح.";
 
             case "auth/code-expired":
-                return "رمز التحقق انتهت صلاحيته. اطلب رمزًا جديدًا.";
+
+                return "رمز التحقق انتهت صلاحيته.";
 
             case "auth/network-request-failed":
+
                 return "حدثت مشكلة في الاتصال بالإنترنت.";
 
             case "auth/popup-blocked":
-                return "المتصفح منع نافذة Google. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.";
+
+                return "المتصفح منع نافذة Google.";
 
             case "auth/popup-closed-by-user":
+
                 return "تم إغلاق نافذة تسجيل الدخول.";
 
             case "auth/account-exists-with-different-credential":
+
                 return "هذا الحساب موجود مسبقًا بطريقة تسجيل دخول مختلفة.";
 
             default:
-                return "خطأ Firebase:\n" +
-                       code +
-                       "\n\n" +
-                       originalMessage;
+
+                return (
+                    "خطأ Firebase:\n" +
+                    code +
+                    "\n\n" +
+                    originalMessage
+                );
         }
     }
+
 
 
     /* =========================
@@ -555,26 +732,34 @@
                 return;
             }
 
+
             recaptchaVerifier =
                 new RecaptchaVerifier(
                     auth,
                     "recaptcha-container",
                     {
+
                         size: "normal",
 
-                        callback: function () {
-                            hideMessage();
-                        },
+                        callback:
+                            function () {
 
-                        "expired-callback": function () {
-                            showMessage(
-                                "انتهت صلاحية التحقق. أعد التحقق مرة أخرى."
-                            );
-                        }
+                                hideMessage();
+                            },
+
+                        "expired-callback":
+                            function () {
+
+                                showMessage(
+                                    "انتهت صلاحية التحقق. أعد التحقق مرة أخرى."
+                                );
+                            }
                     }
                 );
 
+
             recaptchaVerifier.render();
+
 
         } catch (error) {
 
@@ -583,11 +768,13 @@
                 error
             );
 
+
             showMessage(
                 getFirebaseError(error)
             );
         }
     }
+
 
 
     /* =========================
@@ -598,7 +785,8 @@
 
         let phone =
             String(value || "")
-            .replace(/\D/g, "");
+                .replace(/\D/g, "");
+
 
         if (phone.startsWith("218")) {
 
@@ -606,14 +794,17 @@
                 phone.substring(3);
         }
 
+
         if (phone.startsWith("0")) {
 
             phone =
                 phone.substring(1);
         }
 
+
         return "+218" + phone;
     }
+
 
 
     /* =========================
@@ -625,7 +816,9 @@
         async function () {
 
             hideMessage();
+
             setLoading(true);
+
 
             try {
 
@@ -635,17 +828,24 @@
                         googleProvider
                     );
 
+
                 saveCurrentUser(
                     result.user
                 );
+
 
                 showMessage(
                     "تم تسجيل الدخول بنجاح.",
                     "success"
                 );
 
-                window.location.href =
-                    "account.html";
+
+                /*
+                 * التحويل المباشر
+                 */
+
+                goToAccount();
+
 
             } catch (error) {
 
@@ -653,12 +853,15 @@
                     getFirebaseError(error)
                 );
 
+
             } finally {
 
                 setLoading(false);
             }
+
         }
     );
+
 
 
     /* =========================
@@ -671,10 +874,12 @@
 
             hideMessage();
 
+
             const phone =
                 preparePhoneNumber(
                     phoneInput.value
                 );
+
 
             if (!/^\+218\d{9}$/.test(phone)) {
 
@@ -685,17 +890,22 @@
                 return;
             }
 
+
             setLoading(true);
+
 
             try {
 
                 setupRecaptcha();
 
+
                 if (!recaptchaVerifier) {
+
                     throw new Error(
                         "reCAPTCHA لم يتم تجهيزه."
                     );
                 }
+
 
                 confirmationResult =
                     await signInWithPhoneNumber(
@@ -704,12 +914,17 @@
                         recaptchaVerifier
                     );
 
-                otpSection.classList.add("show");
+
+                otpSection.classList.add(
+                    "show"
+                );
+
 
                 showMessage(
                     "تم إرسال رمز التحقق إلى هاتفك.",
                     "success"
                 );
+
 
             } catch (error) {
 
@@ -718,16 +933,20 @@
                     error
                 );
 
+
                 showMessage(
                     getFirebaseError(error)
                 );
+
 
             } finally {
 
                 setLoading(false);
             }
+
         }
     );
+
 
 
     /* =========================
@@ -740,8 +959,10 @@
 
             hideMessage();
 
+
             const code =
                 otpInput.value.trim();
+
 
             if (!confirmationResult) {
 
@@ -752,6 +973,7 @@
                 return;
             }
 
+
             if (!/^\d{6}$/.test(code)) {
 
                 showMessage(
@@ -761,7 +983,9 @@
                 return;
             }
 
+
             setLoading(true);
+
 
             try {
 
@@ -770,17 +994,20 @@
                         code
                     );
 
+
                 saveCurrentUser(
                     result.user
                 );
+
 
                 showMessage(
                     "تم تسجيل الدخول بنجاح.",
                     "success"
                 );
 
-                window.location.href =
-                    "account.html";
+
+                goToAccount();
+
 
             } catch (error) {
 
@@ -789,16 +1016,20 @@
                     error
                 );
 
+
                 showMessage(
                     getFirebaseError(error)
                 );
+
 
             } finally {
 
                 setLoading(false);
             }
+
         }
     );
+
 
 
     /* =========================
@@ -811,10 +1042,21 @@
 
             if (user) {
 
-                saveCurrentUser(user);
+                saveCurrentUser(
+                    user
+                );
+
+                /*
+                 * Firebase أكد أن المستخدم
+                 * مسجل الدخول
+                 */
+
+                goToAccount();
             }
+
         }
     );
+
 
 
     /* =========================
@@ -826,8 +1068,10 @@
         function () {
 
             setupRecaptcha();
+
         }
     );
+
 
 </script>
 
