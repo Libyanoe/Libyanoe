@@ -3,2107 +3,1790 @@
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>حسابي - متجر الرياضة</title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: Arial, Tahoma, sans-serif;
-            background: #f5f7fa;
-            color: #18202a;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .container {
-            width: 92%;
-            max-width: 1050px;
-            margin: auto;
-        }
-
-        /* =========================
-           الهيدر
-        ========================== */
-
-        .header {
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            min-height: 75px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .logo {
-            text-decoration: none;
-            color: #111827;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 13px;
-            background: #111827;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .logo strong {
-            display: block;
-            font-size: 17px;
-        }
-
-        .logo small {
-            display: block;
-            color: #6b7280;
-            font-size: 10px;
-            letter-spacing: 1px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .back-button {
-            text-decoration: none;
-            background: #f3f4f6;
-            color: #111827;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .logout-button {
-            border: 0;
-            background: #111827;
-            color: #ffffff;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .logout-button:hover {
-            background: #1f2937;
-        }
-
-        /* =========================
-           الصفحة
-        ========================== */
-
-        .page {
-            padding: 35px 0 60px;
-        }
-
-        .page-title {
-            margin-bottom: 25px;
-        }
-
-        .page-title span {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .page-title h1 {
-            font-size: 30px;
-            margin-top: 5px;
-        }
-
-        /* =========================
-           بطاقة الحساب
-        ========================== */
-
-        .account-card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 8px 30px rgba(0,0,0,.06);
-            margin-bottom: 25px;
-        }
-
-        .account-top {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-
-        .profile-image {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #111827;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-name-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .profile-name {
-            font-size: 21px;
-            font-weight: bold;
-        }
-
-        .edit-name-button {
-            border: 0;
-            background: #f3f4f6;
-            color: #111827;
-            padding: 7px 10px;
-            border-radius: 9px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .edit-name-button:hover {
-            background: #e5e7eb;
-        }
-
-        .profile-provider {
-            color: #6b7280;
-            font-size: 13px;
-            margin-top: 3px;
-        }
-
-        .account-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .info-box {
-            background: #f8fafc;
-            border: 1px solid #eef0f3;
-            border-radius: 12px;
-            padding: 15px;
-        }
-
-        .info-box span {
-            display: block;
-            color: #6b7280;
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .info-box strong {
-            display: block;
-            font-size: 15px;
-            word-break: break-word;
-        }
-
-        /* =========================
-           نافذة تعديل الاسم
-        ========================== */
-
-        .edit-name-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.45);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 1000;
-        }
-
-        .edit-name-modal.show {
-            display: flex;
-        }
-
-        .edit-name-box {
-            width: 100%;
-            max-width: 420px;
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 22px;
-            box-shadow: 0 20px 50px rgba(0,0,0,.15);
-        }
-
-        .edit-name-box h3 {
-            font-size: 20px;
-            margin-bottom: 7px;
-        }
-
-        .edit-name-box p {
-            color: #6b7280;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .name-input {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            border-radius: 11px;
-            padding: 13px;
-            font-size: 15px;
-            outline: none;
-            direction: rtl;
-        }
-
-        .name-input:focus {
-            border-color: #111827;
-        }
-
-        .edit-name-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .save-name-button,
-        .cancel-name-button {
-            flex: 1;
-            border: 0;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .save-name-button {
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .cancel-name-button {
-            background: #f3f4f6;
-            color: #111827;
-        }
-
-        /* =========================
-           الطلبات
-        ========================== */
-
-        .orders-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .orders-title h2 {
-            font-size: 22px;
-        }
-
-        .orders-count {
-            background: #111827;
-            color: #ffffff;
-            border-radius: 20px;
-            padding: 5px 11px;
-            font-size: 12px;
-        }
-
-        .orders-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .order-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 15px;
-            padding: 18px;
-            background: #ffffff;
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .order-number {
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .order-date {
-            color: #6b7280;
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        .status {
-            padding: 7px 11px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        .status-pending {
-            background: #fff7ed;
-            color: #c2410c;
-        }
-
-        .status-confirmed {
-            background: #eff6ff;
-            color: #1d4ed8;
-        }
-
-        .status-preparing {
-            background: #f5f3ff;
-            color: #6d28d9;
-        }
-
-        .status-shipping {
-            background: #ecfeff;
-            color: #0e7490;
-        }
-
-        .status-delivered {
-            background: #ecfdf5;
-            color: #047857;
-        }
-
-        .status-cancelled {
-            background: #fef2f2;
-            color: #b91c1c;
-        }
-
-        .status-default {
-            background: #f3f4f6;
-            color: #374151;
-        }
-
-        .order-items {
-            border-top: 1px solid #eef0f3;
-            padding-top: 12px;
-        }
-
-        .order-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .order-item:last-child {
-            border-bottom: 0;
-        }
-
-        .order-item-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .order-item-image {
-            width: 52px;
-            height: 52px;
-            border-radius: 10px;
-            object-fit: cover;
-            background: #f3f4f6;
-            flex-shrink: 0;
-        }
-
-        .order-item-name {
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .order-item-details {
-            color: #6b7280;
-            font-size: 12px;
-            margin-top: 2px;
-        }
-
-        .order-item-price {
-            font-weight: bold;
-            white-space: nowrap;
-            font-size: 13px;
-        }
-
-        .order-footer {
-            border-top: 1px solid #eef0f3;
-            margin-top: 10px;
-            padding-top: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .order-total-label {
-            color: #6b7280;
-            font-size: 13px;
-        }
-
-        .order-total {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           لا توجد طلبات
-        ========================== */
-
-        .empty-orders {
-            text-align: center;
-            padding: 45px 20px;
-            background: #ffffff;
-            border-radius: 16px;
-            border: 1px dashed #d1d5db;
-            color: #6b7280;
-        }
-
-        .empty-icon {
-            font-size: 42px;
-            margin-bottom: 10px;
-        }
-
-        .empty-orders strong {
-            display: block;
-            color: #18202a;
-            margin-bottom: 5px;
-        }
-
-        .shop-button {
-            display: inline-block;
-            margin-top: 15px;
-            background: #111827;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 11px 18px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #6b7280;
-        }
-
-        .error-box {
-            background: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .error-box.show {
-            display: block;
-        }
-
-        /* =========================
-           الفوتر
-        ========================== */
-
-        .footer {
-            background: #111827;
-            color: #ffffff;
-            text-align: center;
-            padding: 25px 0;
-        }
-
-        .footer-logo {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .footer p {
-            color: #9ca3af;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        /* =========================
-           الهاتف
-        ========================== */
-
-        @media (max-width: 700px) {
-
-            .header-content {
-                min-height: 68px;
-            }
-
-            .logo strong {
-                font-size: 15px;
-            }
-
-            .back-button span {
-                display: none;
-            }
-
-            .page-title h1 {
-                font-size: 25px;
-            }
-
-            .account-info {
-                grid-template-columns: 1fr;
-            }
-
-            .account-card {
-                padding: 18px;
-            }
-
-            .order-header {
-                flex-direction: column;
-            }
-
-            .order-item {
-                align-items: flex-start;
-            }
-
-            .order-footer {
-                align-items: flex-end;
-            }
-
-        }
-
-        @media (max-width: 430px) {
-
-            .container {
-                width: 94%;
-            }
-
-            .header-actions {
-                gap: 6px;
-            }
-
-            .back-button {
-                padding: 9px 10px;
-            }
-
-            .logout-button {
-                padding: 9px 10px;
-            }
-
-            .profile-image {
-                width: 60px;
-                height: 60px;
-            }
-
-            .profile-name {
-                font-size: 18px;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>حسابي - متجر الرياضة</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Tahoma, sans-serif;
+    background: #f5f7fa;
+    color: #18202a;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    width: 92%;
+    max-width: 1050px;
+    margin: auto;
+}
+
+
+/* =========================
+   الهيدر
+========================= */
+
+.header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    text-decoration: none;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 13px;
+    background: #111827;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.logo strong {
+    display: block;
+    font-size: 17px;
+}
+
+.logo small {
+    display: block;
+    color: #6b7280;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back-button,
+.logout-button {
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.back-button {
+    text-decoration: none;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.logout-button {
+    border: 0;
+    background: #111827;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+
+/* =========================
+   الصفحة
+========================= */
+
+.page {
+    padding: 35px 0 60px;
+}
+
+.page-title {
+    margin-bottom: 25px;
+}
+
+.page-title span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+    margin-top: 5px;
+}
+
+
+/* =========================
+   الحساب
+========================= */
+
+.account-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.06);
+    margin-bottom: 25px;
+}
+
+.account-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.profile-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #111827;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.profile-name {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.edit-name-button {
+    border: 0;
+    background: #f3f4f6;
+    color: #111827;
+    padding: 7px 10px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-provider {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+.account-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.info-box {
+    background: #f8fafc;
+    border: 1px solid #eef0f3;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.info-box span {
+    display: block;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.info-box strong {
+    display: block;
+    font-size: 15px;
+    word-break: break-word;
+}
+
+
+/* =========================
+   الطلبات
+========================= */
+
+.orders-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.orders-title h2 {
+    font-size: 22px;
+}
+
+.orders-count {
+    background: #111827;
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-size: 12px;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 18px;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.order-number {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.order-date {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.status {
+    padding: 7px 11px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-confirmed {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.status-preparing {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+.status-shipping {
+    background: #ecfeff;
+    color: #0e7490;
+}
+
+.status-delivered {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-cancelled {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.order-items {
+    border-top: 1px solid #eef0f3;
+    padding-top: 12px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.order-item:last-child {
+    border-bottom: 0;
+}
+
+.order-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.order-item-image {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: #f3f4f6;
+    flex-shrink: 0;
+}
+
+.order-item-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.order-item-details {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.order-item-price {
+    font-weight: bold;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+.order-footer {
+    border-top: 1px solid #eef0f3;
+    margin-top: 10px;
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-total-label {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.order-total {
+    font-size: 18px;
+}
+
+
+/* =========================
+   لا توجد طلبات
+========================= */
+
+.empty-orders {
+    text-align: center;
+    padding: 45px 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px dashed #d1d5db;
+    color: #6b7280;
+}
+
+.empty-icon {
+    font-size: 42px;
+}
+
+.empty-orders strong {
+    display: block;
+    color: #18202a;
+    margin: 5px 0;
+}
+
+.shop-button {
+    display: inline-block;
+    margin-top: 15px;
+    background: #111827;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   رسائل
+========================= */
+
+.error-box {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.error-box.show {
+    display: block;
+}
+
+
+/* =========================
+   الفوتر
+========================= */
+
+.footer {
+    background: #111827;
+    color: #ffffff;
+    text-align: center;
+    padding: 25px 0;
+}
+
+.footer-logo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.footer p {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+
+/* =========================
+   الهاتف
+========================= */
+
+@media (max-width:700px) {
+
+    .account-info {
+        grid-template-columns: 1fr;
+    }
+
+    .account-card {
+        padding: 18px;
+    }
+
+    .order-header {
+        flex-direction: column;
+    }
+
+    .back-button span {
+        display: none;
+    }
+
+}
+
+</style>
 
 </head>
+
 
 <body>
 
 <header class="header">
 
-    <div class="container header-content">
+<div class="container header-content">
 
-        <a href="index.html" class="logo">
+<a href="index.html" class="logo">
 
-            <div class="logo-icon">
-                ⚡
-            </div>
+<div class="logo-icon">
+⚡
+</div>
 
-            <div>
+<div>
 
-                <strong>
-                    متجر الرياضة
-                </strong>
+<strong>
+متجر الرياضة
+</strong>
 
-                <small>
-                    SPORT STORE
-                </small>
-
-            </div>
-
-        </a>
-
-        <div class="header-actions">
-
-            <a
-                href="index.html"
-                class="back-button"
-            >
-                ← <span>المتجر</span>
-            </a>
-
-            <button
-                type="button"
-                class="logout-button"
-                id="logout-button"
-            >
-                🚪 تسجيل الخروج
-            </button>
-
-        </div>
-
-    </div>
-
-</header>
-
-<main class="page">
-
-    <div class="container">
-
-        <div class="page-title">
-
-            <span>
-                حسابك في المتجر
-            </span>
-
-            <h1>
-                👤 حسابي
-            </h1>
-
-        </div>
-
-        <div
-            class="error-box"
-            id="error-box"
-        ></div>
-
-        <section class="account-card">
-
-            <div class="account-top">
-
-                <div
-                    class="profile-image"
-                    id="profile-image"
-                >
-                    👤
-                </div>
-
-                <div>
-
-                    <div class="profile-name-row">
-
-                        <div
-                            class="profile-name"
-                            id="profile-name"
-                        >
-                            جاري التحميل...
-                        </div>
-
-                        <button
-                            type="button"
-                            class="edit-name-button"
-                            id="edit-name-button"
-                        >
-                            ✏️ تعديل
-                        </button>
-
-                    </div>
-
-                    <div
-                        class="profile-provider"
-                        id="profile-provider"
-                    >
-                        جاري تحميل بيانات الحساب...
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="account-info">
-
-                <div class="info-box">
-
-                    <span>
-                        الاسم
-                    </span>
-
-                    <strong id="account-name">
-                        —
-                    </strong>
-
-                </div>
-
-                <div class="info-box">
-
-                    <span>
-                        رقم الهاتف
-                    </span>
-
-                    <strong id="account-phone">
-                        —
-                    </strong>
-
-                </div>
-
-                <div class="info-box">
-
-                    <span>
-                        البريد الإلكتروني
-                    </span>
-
-                    <strong id="account-email">
-                        —
-                    </strong>
-
-                </div>
-
-                <div class="info-box">
-
-                    <span>
-                        طريقة الدخول
-                    </span>
-
-                    <strong id="account-login-method">
-                        —
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section>
-
-            <div class="orders-title">
-
-                <h2>
-                    📦 طلباتي
-                </h2>
-
-                <span
-                    class="orders-count"
-                    id="orders-count"
-                >
-                    0 طلب
-                </span>
-
-            </div>
-
-            <div
-                class="loading"
-                id="orders-loading"
-            >
-                جاري تحميل الطلبات...
-            </div>
-
-            <div
-                class="orders-list"
-                id="orders-list"
-            ></div>
-
-        </section>
-
-    </div>
-
-</main>
-
-<footer class="footer">
-
-    <div class="container">
-
-        <div class="footer-logo">
-            ⚡ متجر الرياضة
-        </div>
-
-        <p>
-            ملابس ومستلزمات رياضية
-        </p>
-
-    </div>
-
-</footer>
-
-<!-- =========================
-     نافذة تعديل الاسم
-========================== -->
-
-<div
-    class="edit-name-modal"
-    id="edit-name-modal"
->
-
-    <div class="edit-name-box">
-
-        <h3>
-            ✏️ تعديل الاسم
-        </h3>
-
-        <p>
-            اكتب الاسم الذي تريد ظهوره في حسابك.
-        </p>
-
-        <input
-            type="text"
-            class="name-input"
-            id="name-input"
-            placeholder="اكتب اسمك"
-            maxlength="50"
-        >
-
-        <div class="edit-name-actions">
-
-            <button
-                type="button"
-                class="save-name-button"
-                id="save-name-button"
-            >
-                💾 حفظ
-            </button>
-
-            <button
-                type="button"
-                class="cancel-name-button"
-                id="cancel-name-button"
-            >
-                إلغاء
-            </button>
-
-        </div>
-
-    </div>
+<small>
+SPORT STORE
+</small>
 
 </div>
 
+</a>
+
+
+<div class="header-actions">
+
+<a
+href="index.html"
+class="back-button"
+>
+← <span>المتجر</span>
+</a>
+
+<button
+type="button"
+class="logout-button"
+id="logout-button"
+>
+🚪 تسجيل الخروج
+</button>
+
+</div>
+
+</div>
+
+</header>
+
+
+<main class="page">
+
+<div class="container">
+
+<div class="page-title">
+
+<span>
+حسابك في المتجر
+</span>
+
+<h1>
+👤 حسابي
+</h1>
+
+</div>
+
+
+<div
+class="error-box"
+id="error-box"
+></div>
+
+
+<section class="account-card">
+
+<div class="account-top">
+
+<div
+class="profile-image"
+id="profile-image"
+>
+👤
+</div>
+
+<div>
+
+<div class="profile-name-row">
+
+<div
+class="profile-name"
+id="profile-name"
+>
+جاري التحميل...
+</div>
+
+<button
+type="button"
+class="edit-name-button"
+id="edit-name-button"
+>
+✏️ تعديل
+</button>
+
+</div>
+
+<div
+class="profile-provider"
+id="profile-provider"
+>
+جاري تحميل بيانات الحساب...
+</div>
+
+</div>
+
+</div>
+
+
+<div class="account-info">
+
+<div class="info-box">
+
+<span>الاسم</span>
+
+<strong id="account-name">—</strong>
+
+</div>
+
+
+<div class="info-box">
+
+<span>رقم الهاتف</span>
+
+<strong id="account-phone">—</strong>
+
+</div>
+
+
+<div class="info-box">
+
+<span>البريد الإلكتروني</span>
+
+<strong id="account-email">—</strong>
+
+</div>
+
+
+<div class="info-box">
+
+<span>طريقة الدخول</span>
+
+<strong id="account-login-method">—</strong>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section>
+
+<div class="orders-title">
+
+<h2>
+📦 طلباتي
+</h2>
+
+<span
+class="orders-count"
+id="orders-count"
+>
+0 طلب
+</span>
+
+</div>
+
+
+<div
+class="orders-list"
+id="orders-list"
+></div>
+
+</section>
+
+</div>
+
+</main>
+
+
+<footer class="footer">
+
+<div class="container">
+
+<div class="footer-logo">
+⚡ متجر الرياضة
+</div>
+
+<p>
+ملابس ومستلزمات رياضية
+</p>
+
+</div>
+
+</footer>
+
+
 <script type="module">
 
-    import {
-        initializeApp
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+    initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-    import {
-        getAuth,
-        onAuthStateChanged,
-        signOut,
-        updateProfile
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    /* =========================
-       إعداد Firebase
-    ========================== */
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    updateProfile
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-    const firebaseConfig = {
 
-        apiKey:
-    "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
-        
-        authDomain:
-            "suhayeb-25ef9.firebaseapp.com",
+const firebaseConfig = {
 
-        projectId:
-            "suhayeb-25ef9",
+    apiKey:
+        "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
 
-        storageBucket:
-            "suhayeb-25ef9.firebasestorage.app",
+    authDomain:
+        "suhayeb-25ef9.firebaseapp.com",
 
-        messagingSenderId:
-            "904310961712",
+    projectId:
+        "suhayeb-25ef9",
 
-        appId:
-            "1:904310961712:web:178e457e45db1136d85ff5",
+    storageBucket:
+        "suhayeb-25ef9.firebasestorage.app",
 
-        measurementId:
-            "G-KXMD8DQS2X"
+    messagingSenderId:
+        "904310961712",
 
-    };
+    appId:
+        "1:904310961712:web:178e457e45db1136d85ff5",
 
-    const app =
-        initializeApp(firebaseConfig);
+    measurementId:
+        "G-KXMD8DQS2X"
 
-    const auth =
-        getAuth(app);
+};
 
-    /* =========================
-       العناصر
-    ========================== */
 
-    const profileImage =
-        document.getElementById("profile-image");
+const app =
+    initializeApp(firebaseConfig);
 
-    const profileName =
-        document.getElementById("profile-name");
+const auth =
+    getAuth(app);
 
-    const profileProvider =
-        document.getElementById("profile-provider");
 
-    const accountName =
-        document.getElementById("account-name");
+let currentUser = null;
 
-    const accountPhone =
-        document.getElementById("account-phone");
 
-    const accountEmail =
-        document.getElementById("account-email");
-
-    const accountLoginMethod =
-        document.getElementById("account-login-method");
-
-    const ordersList =
-        document.getElementById("orders-list");
-
-    const ordersCount =
-        document.getElementById("orders-count");
-
-    const ordersLoading =
-        document.getElementById("orders-loading");
-
-    const errorBox =
-        document.getElementById("error-box");
-
-    const logoutButton =
-        document.getElementById("logout-button");
-
-    const editNameButton =
-        document.getElementById("edit-name-button");
-
-    const editNameModal =
-        document.getElementById("edit-name-modal");
-
-    const nameInput =
-        document.getElementById("name-input");
-
-    const saveNameButton =
-        document.getElementById("save-name-button");
-
-    const cancelNameButton =
-        document.getElementById("cancel-name-button");
-
-    let currentUser = null;
-
-    /* =========================
-       التحقق من المستخدم
-    ========================== */
-
-    onAuthStateChanged(
-        auth,
-        function(user) {
-
-            if (!user) {
-
-                localStorage.removeItem(
-                    "myStoreCurrentUser"
-                );
-
-                window.location.href =
-                    "auth.html";
-
-                return;
-
-            }
-
-            currentUser = user;
-
-            saveCurrentUser(user);
-
-            showAccount(user);
-
-            loadOrders(user);
-
-        }
+const profileImage =
+    document.getElementById(
+        "profile-image"
     );
 
-    /* =========================
-       حفظ المستخدم
-    ========================== */
+const profileName =
+    document.getElementById(
+        "profile-name"
+    );
 
-    function saveCurrentUser(user) {
+const profileProvider =
+    document.getElementById(
+        "profile-provider"
+    );
 
-        const providerData =
-            user.providerData &&
-            user.providerData.length > 0
-                ? user.providerData[0]
-                : null;
+const accountName =
+    document.getElementById(
+        "account-name"
+    );
 
-        const providerId =
-            providerData
-                ? providerData.providerId
-                : "";
+const accountPhone =
+    document.getElementById(
+        "account-phone"
+    );
 
-        const userData = {
+const accountEmail =
+    document.getElementById(
+        "account-email"
+    );
 
-            uid:
-                user.uid,
+const accountLoginMethod =
+    document.getElementById(
+        "account-login-method"
+    );
 
-            name:
-                user.displayName ||
-                "مستخدم المتجر",
+const ordersList =
+    document.getElementById(
+        "orders-list"
+    );
 
-            phone:
-                user.phoneNumber ||
-                "",
+const ordersCount =
+    document.getElementById(
+        "orders-count"
+    );
 
-            email:
-                user.email ||
-                "",
+const logoutButton =
+    document.getElementById(
+        "logout-button"
+    );
 
-            photo:
-                user.photoURL ||
-                "",
+const editNameButton =
+    document.getElementById(
+        "edit-name-button"
+    );
 
-            provider:
-                providerId
 
-        };
+/* =========================
+   التحقق من الحساب
+========================= */
 
-        localStorage.setItem(
-            "myStoreCurrentUser",
-            JSON.stringify(userData)
-        );
+onAuthStateChanged(
+    auth,
+    function(user) {
 
-    }
+        if (!user) {
 
-    /* =========================
-       عرض بيانات الحساب
-    ========================== */
-
-    function showAccount(user) {
-
-        const name =
-            user.displayName ||
-            "مستخدم المتجر";
-
-        const phone =
-            user.phoneNumber ||
-            "غير مرتبط";
-
-        const email =
-            user.email ||
-            "غير مرتبط";
-
-        profileName.textContent =
-            name;
-
-        accountName.textContent =
-            name;
-
-        accountPhone.textContent =
-            phone;
-
-        accountEmail.textContent =
-            email;
-
-        if (user.photoURL) {
-
-            profileImage.innerHTML =
-                `<img
-                    src="${escapeHtml(user.photoURL)}"
-                    alt="صورة الحساب"
-                >`;
-
-        } else {
-
-            profileImage.textContent =
-                "👤";
-
-        }
-
-        const provider =
-            getLoginMethod(user);
-
-        profileProvider.textContent =
-            provider;
-
-        accountLoginMethod.textContent =
-            provider;
-
-    }
-
-    /* =========================
-       فتح تعديل الاسم
-    ========================== */
-
-    editNameButton.addEventListener(
-        "click",
-        function() {
-
-            if (!currentUser) {
-                return;
-            }
-
-            nameInput.value =
-                currentUser.displayName || "";
-
-            editNameModal.classList.add(
-                "show"
+            localStorage.removeItem(
+                "myStoreCurrentUser"
             );
 
-            setTimeout(
-                function() {
-                    nameInput.focus();
-                    nameInput.select();
-                },
-                100
-            );
-
-        }
-    );
-
-    /* =========================
-       إغلاق تعديل الاسم
-    ========================== */
-
-    cancelNameButton.addEventListener(
-        "click",
-        function() {
-
-            editNameModal.classList.remove(
-                "show"
-            );
-
-        }
-    );
-
-    editNameModal.addEventListener(
-        "click",
-        function(event) {
-
-            if (
-                event.target ===
-                editNameModal
-            ) {
-
-                editNameModal.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-    );
-
-    /* =========================
-       حفظ الاسم في Firebase
-    ========================== */
-
-    saveNameButton.addEventListener(
-        "click",
-        async function() {
-
-            if (!currentUser) {
-                return;
-            }
-
-            const newName =
-                nameInput.value.trim();
-
-            if (!newName) {
-
-                showError(
-                    "يرجى كتابة الاسم أولاً."
-                );
-
-                return;
-
-            }
-
-            if (newName.length < 2) {
-
-                showError(
-                    "الاسم يجب أن يحتوي على حرفين على الأقل."
-                );
-
-                return;
-
-            }
-
-            saveNameButton.disabled =
-                true;
-
-            saveNameButton.textContent =
-                "جاري الحفظ...";
-
-            try {
-
-                await updateProfile(
-                    currentUser,
-                    {
-                        displayName:
-                            newName
-                    }
-                );
-
-                saveCurrentUser(
-                    currentUser
-                );
-
-                showAccount(
-                    currentUser
-                );
-
-                editNameModal.classList.remove(
-                    "show"
-                );
-
-                showSuccess(
-                    "تم تحديث الاسم بنجاح ✅"
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(error);
-
-                showError(
-                    "حدث خطأ أثناء حفظ الاسم. حاول مرة أخرى."
-                );
-
-            }
-
-            finally {
-
-                saveNameButton.disabled =
-                    false;
-
-                saveNameButton.textContent =
-                    "💾 حفظ";
-
-            }
-
-        }
-    );
-
-    /* =========================
-       طريقة الدخول
-    ========================== */
-
-    function getLoginMethod(user) {
-
-        const providers =
-            user.providerData || [];
-
-        if (
-            providers.some(
-                p =>
-                    p.providerId ===
-                    "google.com"
-            )
-        ) {
-
-            return "Google 🔵";
-
-        }
-
-        if (
-            providers.some(
-                p =>
-                    p.providerId ===
-                    "phone"
-            )
-        ) {
-
-            return "رقم الهاتف 📱";
-
-        }
-
-        return "Firebase";
-
-    }
-
-    /* =========================
-       تحميل الطلبات
-    ========================== */
-
-    function loadOrders(user) {
-
-        ordersLoading.style.display =
-            "none";
-
-        let orders = [];
-
-        try {
-
-            orders =
-                JSON.parse(
-                    localStorage.getItem(
-                        "myStoreOrders"
-                    )
-                ) || [];
-
-        }
-
-        catch (error) {
-
-            orders = [];
-
-        }
-
-        const userPhone =
-            user.phoneNumber || "";
-
-        const userEmail =
-            user.email || "";
-
-        const userName =
-            user.displayName || "";
-
-        const userOrders =
-            orders.filter(
-                function(order) {
-
-                    if (
-                        order.userId &&
-                        order.userId ===
-                        user.uid
-                    ) {
-
-                        return true;
-
-                    }
-
-                    if (
-                        order.customerPhone &&
-                        userPhone &&
-                        normalizePhone(
-                            order.customerPhone
-                        ) ===
-                        normalizePhone(
-                            userPhone
-                        )
-                    ) {
-
-                        return true;
-
-                    }
-
-                    if (
-                        order.customerEmail &&
-                        userEmail &&
-                        order.customerEmail
-                            .toLowerCase() ===
-                        userEmail.toLowerCase()
-                    ) {
-
-                        return true;
-
-                    }
-
-                    if (
-                        order.customerName &&
-                        userName &&
-                        order.customerName
-                            .trim()
-                            .toLowerCase() ===
-                        userName
-                            .trim()
-                            .toLowerCase()
-                    ) {
-
-                        return true;
-
-                    }
-
-                    return false;
-
-                }
-            );
-
-        ordersCount.textContent =
-            userOrders.length +
-            " طلب";
-
-        if (userOrders.length === 0) {
-
-            ordersList.innerHTML = `
-
-                <div class="empty-orders">
-
-                    <div class="empty-icon">
-                        📦
-                    </div>
-
-                    <strong>
-                        لا توجد طلبات حتى الآن
-                    </strong>
-
-                    <span>
-                        عندما تقوم بإجراء طلب،
-                        سيظهر هنا مع حالته.
-                    </span>
-
-                    <br>
-
-                    <a
-                        href="index.html#products"
-                        class="shop-button"
-                    >
-                        🛍️ ابدأ التسوق
-                    </a>
-
-                </div>
-
-            `;
+            window.location.href =
+                "auth.html";
 
             return;
 
         }
 
-        userOrders.sort(
-            function(a, b) {
+        currentUser = user;
 
-                return (
-                    getOrderDateValue(b) -
-                    getOrderDateValue(a)
-                );
+        saveCurrentUser(user);
 
-            }
-        );
+        showAccount(user);
 
-        ordersList.innerHTML =
-            userOrders
-                .map(renderOrder)
-                .join("");
+        loadOrders(user);
+
+    }
+);
+
+
+/* =========================
+   حفظ المستخدم
+========================= */
+
+function saveCurrentUser(user) {
+
+    const providerData =
+        user.providerData &&
+        user.providerData.length
+            ? user.providerData[0]
+            : null;
+
+    const providerId =
+        providerData
+            ? providerData.providerId
+            : "";
+
+    const userData = {
+
+        uid:
+            user.uid,
+
+        name:
+            user.displayName ||
+            "مستخدم المتجر",
+
+        phone:
+            user.phoneNumber ||
+            "",
+
+        email:
+            user.email ||
+            "",
+
+        photo:
+            user.photoURL ||
+            "",
+
+        provider:
+            providerId
+
+    };
+
+    localStorage.setItem(
+        "myStoreCurrentUser",
+        JSON.stringify(userData)
+    );
+
+}
+
+
+/* =========================
+   عرض الحساب
+========================= */
+
+function showAccount(user) {
+
+    const name =
+        user.displayName ||
+        "مستخدم المتجر";
+
+    profileName.textContent =
+        name;
+
+    accountName.textContent =
+        name;
+
+    accountPhone.textContent =
+        user.phoneNumber ||
+        "غير مرتبط";
+
+    accountEmail.textContent =
+        user.email ||
+        "غير مرتبط";
+
+    accountLoginMethod.textContent =
+        getLoginMethod(user);
+
+    profileProvider.textContent =
+        getLoginMethod(user);
+
+
+    if (user.photoURL) {
+
+        profileImage.innerHTML =
+            `<img
+                src="${escapeHtml(
+                    user.photoURL
+                )}"
+                alt="صورة الحساب"
+            >`;
+
+    } else {
+
+        profileImage.textContent =
+            "👤";
 
     }
 
-    /* =========================
-       عرض الطلب
-    ========================== */
+}
 
-    function renderOrder(order) {
 
-        const status =
-            normalizeStatus(
-                order.status
-            );
+/* =========================
+   الطلبات
+========================= */
 
-        const statusClass =
-            getStatusClass(status);
+function loadOrders(user) {
 
-        const statusText =
-            getStatusText(status);
+    let orders = [];
 
-        const orderNumber =
-            order.orderNumber ||
-            order.id ||
-            "طلب";
+    try {
 
-        const date =
-            formatDate(
-                order.createdAt ||
-                order.date
-            );
+        orders =
+            JSON.parse(
+                localStorage.getItem(
+                    "myStoreOrders"
+                )
+            ) || [];
 
-        const items =
-            Array.isArray(order.items)
-                ? order.items
-                : [];
+    } catch (error) {
 
-        const itemsHtml =
-            items.length > 0
+        orders = [];
 
-                ? items
-                    .map(
-                        function(item) {
+    }
 
-                            return `
 
-                                <div class="order-item">
+    const userOrders =
+        orders.filter(function(order) {
 
-                                    <div class="order-item-left">
+            if (
+                order.userId &&
+                order.userId ===
+                user.uid
+            ) {
 
-                                        ${
+                return true;
+
+            }
+
+
+            if (
+                order.customerEmail &&
+                user.email &&
+                order.customerEmail
+                    .toLowerCase() ===
+                user.email.toLowerCase()
+            ) {
+
+                return true;
+
+            }
+
+
+            if (
+                order.customerPhone &&
+                user.phoneNumber &&
+                normalizePhone(
+                    order.customerPhone
+                ) ===
+                normalizePhone(
+                    user.phoneNumber
+                )
+            ) {
+
+                return true;
+
+            }
+
+
+            return false;
+
+        });
+
+
+    userOrders.sort(function(a,b) {
+
+        return (
+            getOrderDateValue(b) -
+            getOrderDateValue(a)
+        );
+
+    });
+
+
+    ordersCount.textContent =
+        userOrders.length +
+        " طلب";
+
+
+    if (userOrders.length === 0) {
+
+        ordersList.innerHTML = `
+
+            <div class="empty-orders">
+
+                <div class="empty-icon">
+                    📦
+                </div>
+
+                <strong>
+                    لا توجد طلبات حتى الآن
+                </strong>
+
+                <span>
+                    عندما تقوم بإجراء طلب،
+                    سيظهر هنا مع رقم الطلب وحالته.
+                </span>
+
+                <br>
+
+                <a
+                    href="index.html#products"
+                    class="shop-button"
+                >
+                    🛍️ ابدأ التسوق
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    ordersList.innerHTML =
+        userOrders
+            .map(renderOrder)
+            .join("");
+
+}
+
+
+/* =========================
+   عرض الطلب
+========================= */
+
+function renderOrder(order) {
+
+    const status =
+        normalizeStatus(
+            order.status
+        );
+
+    const statusText =
+        getStatusText(status);
+
+    const statusClass =
+        getStatusClass(status);
+
+    const orderNumber =
+        order.orderNumber ||
+        order.id ||
+        "طلب";
+
+
+    const date =
+        formatDate(
+            order.createdAt ||
+            order.date
+        );
+
+
+    const items =
+        Array.isArray(order.items)
+            ? order.items
+            : [];
+
+
+    const itemsHtml =
+        items.length
+
+            ? items.map(function(item) {
+
+                const quantity =
+                    Number(
+                        item.quantity || 1
+                    );
+
+                const price =
+                    Number(
+                        item.price || 0
+                    );
+
+                return `
+
+                    <div class="order-item">
+
+                        <div class="order-item-left">
+
+                            ${
+                                item.image
+
+                                    ? `<img
+                                        class="order-item-image"
+                                        src="${escapeHtml(
                                             item.image
-                                                ? `
-                                                    <img
-                                                        class="order-item-image"
-                                                        src="${escapeHtml(item.image)}"
-                                                        alt="${escapeHtml(item.name || "منتج")}"
-                                                    >
-                                                  `
-                                                : `
-                                                    <div
-                                                        class="order-item-image"
-                                                        style="
-                                                            display:flex;
-                                                            align-items:center;
-                                                            justify-content:center;
-                                                            font-size:24px;
-                                                        "
-                                                    >
-                                                        🛍️
-                                                    </div>
-                                                  `
-                                        }
+                                        )}"
+                                        alt=""
+                                      >`
 
-                                        <div>
+                                    : `<div
+                                        class="order-item-image"
+                                        style="
+                                            display:flex;
+                                            align-items:center;
+                                            justify-content:center;
+                                            font-size:24px;
+                                        "
+                                      >
+                                        🛍️
+                                      </div>`
+                            }
 
-                                            <div class="order-item-name">
 
-                                                ${escapeHtml(
-                                                    item.name ||
-                                                    "منتج"
-                                                )}
+                            <div>
 
-                                            </div>
+                                <div class="order-item-name">
 
-                                            <div class="order-item-details">
-
-                                                الكمية:
-                                                ${Number(
-                                                    item.quantity ||
-                                                    1
-                                                )}
-
-                                                ${
-                                                    item.size
-                                                        ? " | المقاس: " +
-                                                          escapeHtml(
-                                                              item.size
-                                                          )
-                                                        : ""
-                                                }
-
-                                                ${
-                                                    item.color
-                                                        ? " | اللون: " +
-                                                          escapeHtml(
-                                                              item.color
-                                                          )
-                                                        : ""
-                                                }
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="order-item-price">
-
-                                        ${formatPrice(
-                                            Number(
-                                                item.price ||
-                                                0
-                                            ) *
-                                            Number(
-                                                item.quantity ||
-                                                1
-                                            )
-                                        )}
-
-                                    </div>
+                                    ${escapeHtml(
+                                        item.name ||
+                                        "منتج"
+                                    )}
 
                                 </div>
 
-                            `;
 
-                        }
-                    )
-                    .join("")
+                                <div class="order-item-details">
 
-                : `
-                    <div
-                        style="
-                            color:#6b7280;
-                            font-size:13px;
-                            padding:10px 0;
-                        "
-                    >
-                        تفاصيل المنتجات غير متوفرة.
-                    </div>
-                  `;
+                                    الكمية:
+                                    ${quantity}
 
-        const total =
-            Number(
-                order.total ||
-                order.totalPrice ||
-                calculateOrderTotal(items)
-            );
+                                    ${
+                                        item.size
+                                            ? " | المقاس: " +
+                                              escapeHtml(
+                                                  item.size
+                                              )
+                                            : ""
+                                    }
 
-        return `
+                                    ${
+                                        item.color
+                                            ? " | اللون: " +
+                                              escapeHtml(
+                                                  item.color
+                                              )
+                                            : ""
+                                    }
 
-            <article class="order-card">
+                                </div>
 
-                <div class="order-header">
+                            </div>
 
-                    <div>
+                        </div>
 
-                        <div class="order-number">
 
-                            📦 ${escapeHtml(
-                                String(orderNumber)
+                        <div class="order-item-price">
+
+                            ${formatPrice(
+                                price * quantity
                             )}
 
                         </div>
 
-                        <div class="order-date">
+                    </div>
 
-                            ${date}
+                `;
 
-                        </div>
+            }).join("")
+
+            : `
+                <div class="order-item-details">
+                    تفاصيل المنتجات غير متوفرة.
+                </div>
+              `;
+
+
+    const total =
+        Number(
+            order.total || 0
+        );
+
+
+    return `
+
+        <article class="order-card">
+
+            <div class="order-header">
+
+                <div>
+
+                    <div class="order-number">
+
+                        📦 رقم الطلب:
+                        ${escapeHtml(
+                            String(orderNumber)
+                        )}
 
                     </div>
 
-                    <span
-                        class="status ${statusClass}"
-                    >
-                        ${statusText}
-                    </span>
+                    <div class="order-date">
+
+                        ${date}
+
+                    </div>
 
                 </div>
 
-                <div class="order-items">
 
-                    ${itemsHtml}
+                <span
+                    class="status ${statusClass}"
+                >
 
-                </div>
+                    ${statusText}
 
-                <div class="order-footer">
+                </span>
 
-                    <span class="order-total-label">
-                        إجمالي الطلب
-                    </span>
+            </div>
 
-                    <strong class="order-total">
 
-                        ${formatPrice(total)}
+            <div class="order-items">
 
-                    </strong>
+                ${itemsHtml}
 
-                </div>
+            </div>
 
-            </article>
 
-        `;
+            <div class="order-footer">
 
-    }
+                <span class="order-total-label">
+                    إجمالي الطلب
+                </span>
 
-    /* =========================
-       حالة الطلب
-    ========================== */
+                <strong class="order-total">
 
-    function normalizeStatus(status) {
+                    ${formatPrice(total)}
 
-        if (!status) {
-            return "pending";
-        }
+                </strong>
 
-        const value =
-            String(status)
-                .trim()
-                .toLowerCase();
+            </div>
 
-        if (
-            value === "pending" ||
-            value.includes("انتظار") ||
-            value.includes("جديد")
-        ) {
-            return "pending";
-        }
+        </article>
 
-        if (
-            value === "confirmed" ||
-            value.includes("تأكيد") ||
-            value.includes("مؤكد")
-        ) {
-            return "confirmed";
-        }
+    `;
 
-        if (
-            value === "preparing" ||
-            value.includes("تجهيز") ||
-            value.includes("جاري التجهيز")
-        ) {
-            return "preparing";
-        }
+}
 
-        if (
-            value === "shipping" ||
-            value.includes("شحن") ||
-            value.includes("توصيل")
-        ) {
-            return "shipping";
-        }
 
-        if (
-            value === "delivered" ||
-            value.includes("تم التسليم") ||
-            value.includes("مكتمل")
-        ) {
-            return "delivered";
-        }
+/* =========================
+   توحيد الحالة
+========================= */
 
-        if (
-            value === "cancelled" ||
-            value.includes("إلغاء") ||
-            value.includes("ملغي")
-        ) {
-            return "cancelled";
-        }
+function normalizeStatus(status) {
+
+    const value =
+        String(
+            status || "جديد"
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        value.includes("جديد") ||
+        value.includes("انتظار") ||
+        value.includes("مراجعة")
+    ) {
 
         return "pending";
 
     }
 
-    function getStatusText(status) {
 
-        const statuses = {
+    if (
+        value.includes("تأكيد") ||
+        value.includes("مؤكد")
+    ) {
 
-            pending:
-                "⏳ قيد المراجعة",
-
-            confirmed:
-                "✅ تم التأكيد",
-
-            preparing:
-                "📦 جاري التجهيز",
-
-            shipping:
-                "🚚 في التوصيل",
-
-            delivered:
-                "🎉 تم التسليم",
-
-            cancelled:
-                "❌ ملغي"
-
-        };
-
-        return (
-            statuses[status] ||
-            "⏳ قيد المراجعة"
-        );
+        return "confirmed";
 
     }
 
-    function getStatusClass(status) {
 
-        const classes = {
+    if (
+        value.includes("تجهيز")
+    ) {
 
-            pending:
-                "status-pending",
-
-            confirmed:
-                "status-confirmed",
-
-            preparing:
-                "status-preparing",
-
-            shipping:
-                "status-shipping",
-
-            delivered:
-                "status-delivered",
-
-            cancelled:
-                "status-cancelled"
-
-        };
-
-        return (
-            classes[status] ||
-            "status-default"
-        );
+        return "preparing";
 
     }
 
-    /* =========================
-       تسجيل الخروج
-    ========================== */
 
-    logoutButton.addEventListener(
-        "click",
-        async function() {
+    if (
+        value.includes("شحن") ||
+        value.includes("توصيل")
+    ) {
 
-            const confirmed =
-                confirm(
-                    "هل تريد تسجيل الخروج من حسابك؟"
-                );
+        return "shipping";
 
-            if (!confirmed) {
-                return;
-            }
+    }
 
-            logoutButton.disabled =
-                true;
 
-            logoutButton.textContent =
-                "جاري تسجيل الخروج...";
+    if (
+        value.includes("تسليم") ||
+        value.includes("مكتمل")
+    ) {
 
-            try {
+        return "delivered";
 
-                await signOut(auth);
+    }
 
-                localStorage.removeItem(
-                    "myStoreCurrentUser"
-                );
 
-                window.location.href =
-                    "auth.html";
+    if (
+        value.includes("إلغاء") ||
+        value.includes("ملغي")
+    ) {
 
-            }
+        return "cancelled";
 
-            catch (error) {
+    }
 
-                console.error(error);
 
-                showError(
-                    "حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى."
-                );
+    return "pending";
 
-                logoutButton.disabled =
-                    false;
+}
 
-                logoutButton.textContent =
-                    "🚪 تسجيل الخروج";
 
-            }
+/* =========================
+   نص الحالة
+========================= */
 
+function getStatusText(status) {
+
+    const statuses = {
+
+        pending:
+            "⏳ قيد المراجعة",
+
+        confirmed:
+            "✅ تم التأكيد",
+
+        preparing:
+            "📦 جاري التجهيز",
+
+        shipping:
+            "🚚 في التوصيل",
+
+        delivered:
+            "🎉 تم التسليم",
+
+        cancelled:
+            "❌ ملغي"
+
+    };
+
+    return (
+        statuses[status] ||
+        "⏳ قيد المراجعة"
+    );
+
+}
+
+
+/* =========================
+   لون الحالة
+========================= */
+
+function getStatusClass(status) {
+
+    const classes = {
+
+        pending:
+            "status-pending",
+
+        confirmed:
+            "status-confirmed",
+
+        preparing:
+            "status-preparing",
+
+        shipping:
+            "status-shipping",
+
+        delivered:
+            "status-delivered",
+
+        cancelled:
+            "status-cancelled"
+
+    };
+
+    return (
+        classes[status] ||
+        "status-pending"
+    );
+
+}
+
+
+/* =========================
+   تسجيل الخروج
+========================= */
+
+logoutButton.addEventListener(
+    "click",
+    async function() {
+
+        if (
+            !confirm(
+                "هل تريد تسجيل الخروج؟"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            await signOut(auth);
+
+            localStorage.removeItem(
+                "myStoreCurrentUser"
+            );
+
+            window.location.href =
+                "auth.html";
+
+        } catch (error) {
+
+            showError(
+                "حدث خطأ أثناء تسجيل الخروج."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   تعديل الاسم
+========================= */
+
+editNameButton.addEventListener(
+    "click",
+    async function() {
+
+        if (!currentUser) return;
+
+
+        const newName =
+            prompt(
+                "اكتب الاسم الجديد:",
+                currentUser.displayName || ""
+            );
+
+
+        if (!newName) return;
+
+
+        try {
+
+            await updateProfile(
+                currentUser,
+                {
+                    displayName:
+                        newName.trim()
+                }
+            );
+
+
+            saveCurrentUser(
+                currentUser
+            );
+
+
+            showAccount(
+                currentUser
+            );
+
+
+            showSuccess(
+                "تم تحديث الاسم بنجاح ✅"
+            );
+
+        } catch (error) {
+
+            showError(
+                "حدث خطأ أثناء تحديث الاسم."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   طريقة الدخول
+========================= */
+
+function getLoginMethod(user) {
+
+    const providers =
+        user.providerData || [];
+
+
+    if (
+        providers.some(function(p) {
+
+            return (
+                p.providerId ===
+                "google.com"
+            );
+
+        })
+    ) {
+
+        return "Google 🔵";
+
+    }
+
+
+    if (
+        providers.some(function(p) {
+
+            return (
+                p.providerId ===
+                "phone"
+            );
+
+        })
+    ) {
+
+        return "رقم الهاتف 📱";
+
+    }
+
+
+    return "Firebase";
+
+}
+
+
+/* =========================
+   التاريخ
+========================= */
+
+function getOrderDateValue(order) {
+
+    const value =
+        order.createdAt ||
+        order.date;
+
+    if (!value) return 0;
+
+    const date =
+        new Date(value);
+
+    return isNaN(
+        date.getTime()
+    )
+        ? 0
+        : date.getTime();
+
+}
+
+
+function formatDate(value) {
+
+    if (!value) {
+        return "تاريخ غير معروف";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleDateString(
+        "ar-LY",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
         }
     );
 
-    /* =========================
-       حساب إجمالي الطلب
-    ========================== */
+}
 
-    function calculateOrderTotal(items) {
 
-        return items.reduce(
-            function(total, item) {
+/* =========================
+   الهاتف
+========================= */
 
-                return (
-                    total +
-                    (
-                        Number(
-                            item.price || 0
-                        ) *
-                        Number(
-                            item.quantity || 1
-                        )
-                    )
-                );
+function normalizePhone(phone) {
 
-            },
-            0
+    return String(
+        phone || ""
+    )
+        .replace(/\D/g, "")
+        .replace(/^218/, "")
+        .replace(/^0/, "");
+
+}
+
+
+/* =========================
+   السعر
+========================= */
+
+function formatPrice(price) {
+
+    return (
+        Number(price || 0)
+            .toLocaleString("ar-LY") +
+        " د.ل"
+    );
+
+}
+
+
+/* =========================
+   حماية HTML
+========================= */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
         );
 
-    }
+}
 
-    /* =========================
-       التاريخ
-    ========================== */
 
-    function getOrderDateValue(order) {
+/* =========================
+   رسائل
+========================= */
 
-        if (!order) {
-            return 0;
-        }
+function showError(text) {
 
-        const value =
-            order.createdAt ||
-            order.date;
-
-        if (!value) {
-            return 0;
-        }
-
-        const date =
-            new Date(value);
-
-        return isNaN(
-            date.getTime()
-        )
-            ? 0
-            : date.getTime();
-
-    }
-
-    function formatDate(value) {
-
-        if (!value) {
-            return "تاريخ غير معروف";
-        }
-
-        const date =
-            new Date(value);
-
-        if (
-            isNaN(
-                date.getTime()
-            )
-        ) {
-            return String(value);
-        }
-
-        return date.toLocaleDateString(
-            "ar-LY",
-            {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }
+    const box =
+        document.getElementById(
+            "error-box"
         );
 
-    }
+    box.textContent =
+        text;
 
-    /* =========================
-       السعر
-    ========================== */
+    box.classList.add(
+        "show"
+    );
 
-    function formatPrice(price) {
+}
 
-        return (
-            Number(price || 0)
-                .toLocaleString("ar-LY") +
-            " د.ل"
+
+function showSuccess(text) {
+
+    const box =
+        document.getElementById(
+            "error-box"
         );
 
-    }
+    box.textContent =
+        text;
 
-    /* =========================
-       رقم الهاتف
-    ========================== */
+    box.style.background =
+        "#ecfdf5";
 
-    function normalizePhone(phone) {
+    box.style.color =
+        "#047857";
 
-        return String(
-            phone || ""
-        )
-            .replace(/\D/g, "")
-            .replace(/^218/, "")
-            .replace(/^0/, "");
+    box.style.borderColor =
+        "#a7f3d0";
 
-    }
+    box.classList.add(
+        "show"
+    );
 
-    /* =========================
-       حماية النصوص
-    ========================== */
+    setTimeout(function() {
 
-    function escapeHtml(value) {
-
-        return String(
-            value ?? ""
-        )
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-    /* =========================
-       رسائل
-    ========================== */
-
-    function showError(text) {
-
-        errorBox.textContent =
-            text;
-
-        errorBox.classList.add(
+        box.classList.remove(
             "show"
         );
 
-        setTimeout(
-            function() {
+        box.style.background =
+            "";
 
-                errorBox.classList.remove(
-                    "show"
-                );
+        box.style.color =
+            "";
 
-            },
-            4000
-        );
+        box.style.borderColor =
+            "";
 
-    }
+    }, 3000);
 
-    function showSuccess(text) {
-
-        errorBox.textContent =
-            text;
-
-        errorBox.style.background =
-            "#ecfdf5";
-
-        errorBox.style.color =
-            "#047857";
-
-        errorBox.style.borderColor =
-            "#a7f3d0";
-
-        errorBox.classList.add(
-            "show"
-        );
-
-        setTimeout(
-            function() {
-
-                errorBox.classList.remove(
-                    "show"
-                );
-
-                errorBox.style.background =
-                    "";
-
-                errorBox.style.color =
-                    "";
-
-                errorBox.style.borderColor =
-                    "";
-
-            },
-            3000
-        );
-
-    }
+}
 
 </script>
 
 </body>
-
-            </html>
+    </html>
