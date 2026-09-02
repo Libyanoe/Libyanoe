@@ -1,77 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لوحة إدارة المتجر</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Tahoma,sans-serif;
+    background:#f5f7fa;
+    color:#18202a;
+}
+
+button,
+input,
+select,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-page{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:linear-gradient(135deg,#111827,#1f2937);
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:white;
+    border-radius:22px;
+    padding:35px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    text-align:center;
+}
+
+.login-box h1{
+    margin-bottom:10px;
+}
+
+.login-box p{
+    color:#6b7280;
+    margin-bottom:25px;
+}
+
+.login-box input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    margin-bottom:12px;
+    font-size:16px;
+    text-align:center;
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#111827;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.login-error{
+    color:#dc2626;
+    margin-top:12px;
+    display:none;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard{
+    min-height:100vh;
+    display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:250px;
+    background:#111827;
+    color:white;
+    min-height:100vh;
+    padding:20px;
+    position:fixed;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+    padding:15px 5px 25px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menu button{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:#d1d5db;
+    padding:13px;
+    border-radius:10px;
+    text-align:right;
+    font-size:15px;
+}
+
+.menu button:hover,
+.menu button.active{
+    background:#374151;
+    color:white;
+}
+
+.menu .add-btn{
+    background:#2563eb;
+    color:white;
+    margin-top:10px;
+}
+
+.menu .store-btn{
+    margin-top:10px;
+    background:#059669;
+    color:white;
+}
+
+.menu .logout-btn{
+    margin-top:10px;
+    background:#dc2626;
+    color:white;
+}
+
+/* MAIN */
+
+.main{
+    flex:1;
+    margin-right:250px;
+    padding:25px;
+}
+
+.topbar{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.topbar h1{
+    font-size:24px;
+}
+
+.firebase-status{
+    font-size:13px;
+    color:#059669;
+    background:#ecfdf5;
+    padding:7px 12px;
+    border-radius:20px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.stat-card .icon{
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+.stat-card h3{
+    font-size:14px;
+    color:#6b7280;
+    margin-bottom:7px;
+}
+
+.stat-card strong{
+    font-size:25px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section{
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+}
+
+.section-header h2{
+    font-size:20px;
+}
+
+.search-box{
+    padding:12px 15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    min-width:250px;
+    outline:none;
+}
+
+.search-box:focus{
+    border-color:#2563eb;
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:18px;
+}
+
+.product-card{
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    overflow:hidden;
+    background:white;
+}
+
+.product-image{
+    height:200px;
+    background:#f3f4f6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.product-content{
+    padding:15px;
+}
+
+.product-content h3{
+    margin-bottom:8px;
+}
+
+.product-price{
+    font-weight:bold;
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.product-stock{
+    color:#6b7280;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.product-category{
+    display:inline-block;
+    background:#eef2ff;
+    color:#3730a3;
+    padding:4px 8px;
+    border-radius:6px;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.product-actions{
+    display:flex;
+    gap:8px;
+}
+
+.product-actions button{
+    flex:1;
+    border:none;
+    border-radius:9px;
+    padding:10px;
+    font-weight:bold;
+}
+
+.edit-btn{
+    background:#e0f2fe;
+    color:#0369a1;
+}
+
+.delete-btn{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+/* =========================
+   ORDERS
+========================= */
+
+.orders-list{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.order-card{
+    border:1px solid #e5e7eb;
+    border-radius:15px;
+    padding:18px;
+}
+
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-bottom:15px;
+}
+
+.order-number{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.order-date{
+    color:#6b7280;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.order-customer{
+    background:#f9fafb;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:15px;
+    line-height:1.8;
+}
+
+.order-items{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.order-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px;
+    background:#f9fafb;
+    border-radius:10px;
+}
+
+.order-item img{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:8px;
+    background:#eee;
+}
+
+.order-item-info{
+    flex:1;
+}
+
+.order-item-info strong{
+    display:block;
+    margin-bottom:3px;
+}
+
+.order-item-info small{
+    color:#6b7280;
+}
+
+.order-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    border-top:1px solid #eee;
+    padding-top:15px;
+    flex-wrap:wrap;
+}
+
+.order-total{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.status-select{
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    background:white;
+    min-width:150px;
+}
+
+.delete-order{
+    border:none;
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:10px 13px;
+    border-radius:9px;
+    font-weight:bold;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:500;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    border-radius:20px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.close-modal{
+    border:none;
+    background:#f3f4f6;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    font-size:20px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+}
+
+.form-group textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.preview{
+    margin-top:10px;
+    width:120px;
+    height:120px;
+    border-radius:10px;
+    overflow:hidden;
+    background:#f3f4f6;
+    display:none;
+}
+
+.preview img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.save-product{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+    text-align:center;
+    padding:40px 20px;
+    color:#6b7280;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        margin-right:210px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+
+    .dashboard{
+        display:block;
+    }
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        min-height:auto;
+    }
+
+    .main{
+        margin-right:0;
+        padding:15px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .topbar{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .search-box{
+        min-width:100%;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:450px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .products-grid{
+        grid-template-columns:1fr;
+    }
+
+    .order-footer{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .status-select{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-box">
+
+        <h1>🔐 لوحة الإدارة</h1>
+
+        <p>سجّل الدخول لإدارة المتجر</p>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="كلمة المرور"
+            autocomplete="current-password"
+        >
+
+        <button class="login-btn" onclick="login()">
+            دخول
+        </button>
+
+        <div id="loginError" class="login-error">
+            كلمة المرور غير صحيحة
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<div id="dashboard" class="dashboard hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🏪 متجر الرياضة
+        </div>
+
+        <div class="menu">
+
+            <button
+                id="productsMenu"
+                class="active"
+                onclick="showProducts()"
+            >
+                📦 المنتجات
+            </button>
+
+            <button
+                id="ordersMenu"
+                onclick="showOrders()"
+            >
+                🛒 الطلبات
+            </button>
+
+            <button
+                class="add-btn"
+                onclick="openProductModal()"
+            >
+                ➕ إضافة منتج
+            </button>
+
+            <button
+                class="store-btn"
+                onclick="goToStore()"
+            >
+                🏪 المتجر
+            </button>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                🚪 تسجيل الخروج
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <h1 id="pageTitle">
+                إدارة المنتجات
+            </h1>
+
+            <div
+                id="firebaseStatus"
+                class="firebase-status"
+            >
+                🔄 الاتصال بـ Firestore...
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             STATS
+        ========================= -->
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <div class="icon">📦</div>
+                <h3>إجمالي المنتجات</h3>
+                <strong id="totalProducts">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">✅</div>
+                <h3>المنتجات المتوفرة</h3>
+                <strong id="availableProducts">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">🛒</div>
+                <h3>الطلبات الجديدة</h3>
+                <strong id="newOrders">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">💰</div>
+                <h3>قيمة المبيعات</h3>
+                <strong id="salesValue">0 د.ل</strong>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PRODUCTS
+        ========================= -->
+
+        <section
+            id="productsSection"
+            class="section"
+        >
+
+            <div class="section-header">
+
+                <h2>📦 المنتجات</h2>
+
+                <input
+                    type="search"
+                    id="searchProducts"
+                    class="search-box"
+                    placeholder="🔎 البحث عن منتج..."
+                    oninput="renderProducts()"
+                >
+
+            </div>
+
+            <div
+                id="productsGrid"
+                class="products-grid"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+             ORDERS
+        ========================= -->
+
+        <section
+            id="ordersSection"
+            class="section hidden"
+        >
+
+            <div class="section-header">
+
+                <h2>🛒 الطلبات</h2>
+
+                <input
+                    type="search"
+                    id="searchOrders"
+                    class="search-box"
+                    placeholder="🔎 البحث في الطلبات..."
+                    oninput="renderOrders()"
+                >
+
+            </div>
+
+            <div
+                id="ordersList"
+                class="orders-list"
+            ></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     PRODUCT MODAL
+========================= -->
+
+<div
+    id="productModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                إضافة منتج
+            </h2>
+
+            <button
+                class="close-modal"
+                onclick="closeProductModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="productForm">
+
+            <input
+                type="hidden"
+                id="productId"
+            >
+
+            <div class="form-group">
+
+                <label>
+                    اسم المنتج
+                </label>
+
+                <input
+                    type="text"
+                    id="productName"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>
+                        السعر بالدينار
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productPrice"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        الكمية
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productQuantity"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    التصنيف
+                </label>
+
+                <input
+                    type="text"
+                    id="productCategory"
+                    placeholder="مثال: ملابس"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    المقاسات
+                </label>
+
+                <input
+                    type="text"
+                    id="productSizes"
+                    placeholder="S, M, L, XL"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    الألوان
+                </label>
+
+                <input
+                    type="text"
+                    id="productColors"
+                    placeholder="أسود, أبيض"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    الوصف
+                </label>
+
+                <textarea
+                    id="productDescription"
+                    placeholder="وصف المنتج..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    صورة المنتج
+                </label>
+
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                >
+
+                <div
+                    id="imagePreview"
+                    class="preview"
+                >
+                    <img
+                        id="previewImg"
+                        src=""
+                        alt="معاينة"
+                    >
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-product"
+            >
+                💾 حفظ المنتج
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     FIREBASE
+========================= -->
+
 <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore-compat.js"></script>
+
 
 <script>
 
 /* =====================================================
-   الإعدادات
-===================================================== */
-
-const STORAGE_KEY =
-    "myStoreProducts";
-
-const ORDERS_KEY =
-    "myStoreOrders";
-
-const PASSWORD =
-    "1234";
-
-
-/* =====================================================
-   FIREBASE
+   FIREBASE CONFIG
 ===================================================== */
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
-
-    authDomain:
-        "suhayeb-25ef9.firebaseapp.com",
-
-    projectId:
-        "suhayeb-25ef9",
-
-    storageBucket:
-        "suhayeb-25ef9.firebasestorage.app",
-
-    messagingSenderId:
-        "904310961712",
-
-    appId:
-        "1:904310961712:web:178e457e45db1136d85ff5",
-
-    measurementId:
-        "G-KXMD8DQS2X"
-
+    apiKey: "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
+    authDomain: "suhayeb-25ef9.firebaseapp.com",
+    projectId: "suhayeb-25ef9",
+    storageBucket: "suhayeb-25ef9.firebasestorage.app",
+    messagingSenderId: "904310961712",
+    appId: "1:904310961712:web:178e457e45db1136d85ff5",
+    measurementId: "G-KXMD8DQS2X"
 };
 
+let db = null;
 
-firebase.initializeApp(firebaseConfig);
+try {
 
-const db =
-    firebase.firestore();
+    firebase.initializeApp(firebaseConfig);
 
+    db = firebase.firestore();
 
-const ORDERS_COLLECTION =
-    "orders";
+    console.log("Firebase Firestore connected.");
+
+    setFirebaseStatus(
+        "🟢 Firestore متصل"
+    );
+
+} catch(error){
+
+    console.error(
+        "Firebase initialization error:",
+        error
+    );
+
+    setFirebaseStatus(
+        "🟠 وضع التخزين المحلي"
+    );
+
+}
 
 
 /* =====================================================
-   المتغيرات
+   SETTINGS
 ===================================================== */
 
-let products = [];
+const STORAGE_KEY = "myStoreProducts";
+const ORDERS_KEY = "myStoreOrders";
+const PASSWORD = "1234";
 
-let editingId = null;
 
-let selectedImage = "";
+/* =====================================================
+   FIRESTORE VARIABLES
+===================================================== */
 
 let firestoreOrders = [];
-
-let ordersLoaded = false;
-
+let firestoreOrdersLoaded = false;
 let ordersUnsubscribe = null;
+let migrationStarted = false;
+
+
+/* =====================================================
+   FIREBASE STATUS
+===================================================== */
+
+function setFirebaseStatus(text){
+
+    const element =
+        document.getElementById("firebaseStatus");
+
+    if(element){
+        element.textContent = text;
+    }
+
+}
 
 
 /* =====================================================
@@ -81,10 +1143,10 @@ let ordersUnsubscribe = null;
 function login(){
 
     const password =
-        document.getElementById(
-            "password"
-        ).value;
+        document.getElementById("password").value.trim();
 
+    const error =
+        document.getElementById("loginError");
 
     if(password === PASSWORD){
 
@@ -93,42 +1155,64 @@ function login(){
             "true"
         );
 
+        error.style.display = "none";
+
         showDashboard();
 
     }else{
 
-        document.getElementById(
-            "loginError"
-        ).style.display =
-            "block";
+        error.style.display = "block";
 
     }
 
 }
 
 
+document.getElementById("password")
+    .addEventListener("keydown",function(event){
+
+        if(event.key === "Enter"){
+            login();
+        }
+
+    });
+
+
 /* =====================================================
-   DASHBOARD
+   SHOW DASHBOARD
 ===================================================== */
 
 function showDashboard(){
 
-    document.getElementById(
-        "loginPage"
-    ).style.display =
-        "none";
+    document
+        .getElementById("loginPage")
+        .classList.add("hidden");
 
-
-    document.getElementById(
-        "dashboard"
-    ).style.display =
-        "block";
-
+    document
+        .getElementById("dashboard")
+        .classList.remove("hidden");
 
     loadProducts();
 
+    renderProducts();
+
+    updateStats();
 
     startOrdersListener();
+
+}
+
+
+/* =====================================================
+   AUTO LOGIN
+===================================================== */
+
+if(
+    sessionStorage.getItem("adminLoggedIn")
+    === "true"
+){
+
+    showDashboard();
 
 }
 
@@ -147,13 +1231,67 @@ function logout(){
 
     }
 
-
     sessionStorage.removeItem(
         "adminLoggedIn"
     );
 
-
     location.reload();
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showProducts(){
+
+    document
+        .getElementById("productsSection")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("ordersSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("productsMenu")
+        .classList.add("active");
+
+    document
+        .getElementById("ordersMenu")
+        .classList.remove("active");
+
+    document
+        .getElementById("pageTitle")
+        .textContent = "إدارة المنتجات";
+
+}
+
+
+function showOrders(){
+
+    document
+        .getElementById("productsSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("ordersSection")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("productsMenu")
+        .classList.remove("active");
+
+    document
+        .getElementById("ordersMenu")
+        .classList.add("active");
+
+    document
+        .getElementById("pageTitle")
+        .textContent = "إدارة الطلبات";
+
+    renderOrders();
 
 }
 
@@ -171,126 +1309,29 @@ function goToStore(){
 
 
 /* =====================================================
-   الأقسام
+   PRODUCTS - STORAGE
 ===================================================== */
 
-function showProducts(){
-
-    document.getElementById(
-        "productsSection"
-    ).classList.add(
-        "active-section"
-    );
-
-
-    document.getElementById(
-        "ordersSection"
-    ).classList.remove(
-        "active-section"
-    );
-
-
-    document.getElementById(
-        "productsMenu"
-    ).classList.add(
-        "active"
-    );
-
-
-    document.getElementById(
-        "ordersMenu"
-    ).classList.remove(
-        "active"
-    );
-
-
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        "إدارة المنتجات";
-
-
-    loadProducts();
-
-}
-
-
-/* =====================================================
-   عرض الطلبات
-===================================================== */
-
-function showOrders(){
-
-    document.getElementById(
-        "productsSection"
-    ).classList.remove(
-        "active-section"
-    );
-
-
-    document.getElementById(
-        "ordersSection"
-    ).classList.add(
-        "active-section"
-    );
-
-
-    document.getElementById(
-        "productsMenu"
-    ).classList.remove(
-        "active"
-    );
-
-
-    document.getElementById(
-        "ordersMenu"
-    ).classList.add(
-        "active"
-    );
-
-
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        "طلبات العملاء";
-
-
-    renderOrders();
-
-    updateOrderStats();
-
-}
-
-
-/* =====================================================
-   PRODUCTS
-   لا تغيير - تبقى LocalStorage
-===================================================== */
-
-function loadProducts(){
+function getProducts(){
 
     try{
 
-        products =
-            JSON.parse(
-                localStorage.getItem(
-                    STORAGE_KEY
-                )
-            ) || [];
+        return JSON.parse(
+            localStorage.getItem(STORAGE_KEY)
+        ) || [];
 
-    }catch(e){
+    }catch(error){
 
-        products = [];
+        console.error(error);
+
+        return [];
 
     }
-
-
-    renderProducts();
 
 }
 
 
-function saveProducts(){
+function saveProducts(products){
 
     localStorage.setItem(
         STORAGE_KEY,
@@ -300,6 +1341,57 @@ function saveProducts(){
 }
 
 
+function loadProducts(){
+
+    const products =
+        getProducts();
+
+    updateProductStats(
+        products
+    );
+
+}
+
+
+/* =====================================================
+   PRODUCT STATS
+===================================================== */
+
+function updateProductStats(products){
+
+    document
+        .getElementById("totalProducts")
+        .textContent =
+        products.length;
+
+    document
+        .getElementById("availableProducts")
+        .textContent =
+        products.filter(
+            p => Number(p.quantity || 0) > 0
+        ).length;
+
+}
+
+
+function updateStats(){
+
+    const products =
+        getProducts();
+
+    updateProductStats(
+        products
+    );
+
+    updateOrderStats();
+
+}
+
+
+/* =====================================================
+   RENDER PRODUCTS
+===================================================== */
+
 function renderProducts(){
 
     const grid =
@@ -307,59 +1399,53 @@ function renderProducts(){
             "productsGrid"
         );
 
-
     if(!grid){
-
         return;
-
     }
 
-
-    const searchElement =
+    const searchInput =
         document.getElementById(
             "searchProducts"
         );
 
-
     const search =
-        searchElement
-        ? searchElement.value
-            .trim()
-            .toLowerCase()
-        : "";
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
 
+    const products =
+        getProducts();
 
     const filtered =
-        products.filter(
-            product =>
+        products.filter(product => {
+
+            const name =
                 String(
                     product.name || ""
-                )
-                .toLowerCase()
-                .includes(search)
-        );
+                ).toLowerCase();
 
+            const category =
+                String(
+                    product.category || ""
+                ).toLowerCase();
 
-    if(filtered.length === 0){
+            return (
+                name.includes(search)
+                ||
+                category.includes(search)
+            );
+
+        });
+
+    if(!filtered.length){
 
         grid.innerHTML = `
-
             <div class="empty">
-
-                📦 لا توجد منتجات حالياً
-
-                <br><br>
-
-                اضغط على
-                "إضافة منتج جديد"
-                للبدء.
-
+                📦 لا توجد منتجات
             </div>
-
         `;
-
-
-        updateStats();
 
         return;
 
@@ -368,1392 +1454,102 @@ function renderProducts(){
 
     grid.innerHTML =
         filtered.map(
-            product => {
-
-                const quantity =
-                    Number(
-                        product.quantity
-                    ) || 0;
-
-
-                const price =
-                    Number(
-                        product.price
-                    ) || 0;
-
-
-                const image =
-                    product.image
-
-                    ?
-
-                    `
-                    <img
-                        src="${product.image}"
-                        alt="${escapeHTML(
-                            product.name
-                        )}"
-                    >
-                    `
-
-                    :
-
-                    `
-                    <div class="no-img">
-                        🛍️
-                    </div>
-                    `;
-
-
-                return `
-
-                    <div class="product-card">
-
-                        <div class="product-img">
-
-                            ${image}
-
-                        </div>
-
-
-                        <div class="product-details">
-
-                            <span class="product-category">
-
-                                ${escapeHTML(
-                                    product.category ||
-                                    "عام"
-                                )}
-
-                            </span>
-
-
-                            <h3 class="product-name">
-
-                                ${escapeHTML(
-                                    product.name ||
-                                    "بدون اسم"
-                                )}
-
-                            </h3>
-
-
-                            <div class="product-price">
-
-                                ${price.toFixed(2)}
-                                د.ل
-
-                            </div>
-
-
-                            <div class="
-                                product-stock
-                                ${quantity <= 0 ? "out" : ""}
-                            ">
-
-                                ${
-                                    quantity > 0
-
-                                    ?
-
-                                    "📦 المخزون: " +
-                                    quantity
-
-                                    :
-
-                                    "❌ نفذت الكمية"
-                                }
-
-                            </div>
-
-
-                            <div class="product-actions">
-
-                                <button
-                                    class="action edit"
-                                    onclick="editProduct(
-                                        '${product.id}'
-                                    )"
-                                >
-                                    ✏️ تعديل
-                                </button>
-
-
-                                <button
-                                    class="action delete"
-                                    onclick="deleteProduct(
-                                        '${product.id}'
-                                    )"
-                                >
-                                    🗑️ حذف
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }
-        ).join("");
-
-
-    updateStats();
-
-}
-
-
-/* =====================================================
-   STATS
-===================================================== */
-
-function updateStats(){
-
-    const total =
-        products.length;
-
-
-    const available =
-        products.filter(
-            p =>
-                Number(p.quantity) > 0
-        ).length;
-
-
-    const totalElement =
-        document.getElementById(
-            "totalProducts"
-        );
-
-
-    const availableElement =
-        document.getElementById(
-            "availableProducts"
-        );
-
-
-    if(totalElement){
-
-        totalElement.textContent =
-            total;
-
-    }
-
-
-    if(availableElement){
-
-        availableElement.textContent =
-            available;
-
-    }
-
-
-    updateOrderStats();
-
-}
-
-
-/* =====================================================
-   FIRESTORE - الطلبات
-===================================================== */
-
-
-/*
-    هذه الدالة تبدأ مراقبة Collection اسمها:
-
-    orders
-
-    أي طلب جديد أو تغيير حالة أو حذف
-    سيظهر في لوحة الإدارة تلقائياً.
-*/
-
-function startOrdersListener(){
-
-    if(ordersUnsubscribe){
-
-        ordersUnsubscribe();
-
-        ordersUnsubscribe = null;
-
-    }
-
-
-    console.log(
-        "بدء الاتصال بـ Firestore..."
-    );
-
-
-    ordersUnsubscribe =
-        db.collection(
-            ORDERS_COLLECTION
-        )
-        .onSnapshot(
-
-            async snapshot => {
-
-                const orders = [];
-
-
-                snapshot.forEach(
-                    doc => {
-
-                        const data =
-                            doc.data();
-
-
-                        orders.push({
-
-                            ...data,
-
-                            id:
-                                data.id ||
-                                doc.id
-
-                        });
-
-                    }
-                );
-
-
-                /*
-                    ترتيب الأحدث أولاً
-                */
-
-                orders.sort(
-                    (a,b) => {
-
-                        const dateA =
-                            new Date(
-                                a.createdAt ||
-                                a.date ||
-                                0
-                            ).getTime();
-
-
-                        const dateB =
-                            new Date(
-                                b.createdAt ||
-                                b.date ||
-                                0
-                            ).getTime();
-
-
-                        return dateB - dateA;
-
-                    }
-                );
-
-
-                firestoreOrders =
-                    orders;
-
-
-                ordersLoaded =
-                    true;
-
-
-                /*
-                    نحفظ نسخة محلية أيضاً
-                    كنسخة احتياطية
-                */
-
-                localStorage.setItem(
-                    ORDERS_KEY,
-                    JSON.stringify(
-                        firestoreOrders
-                    )
-                );
-
-
-                renderOrders();
-
-                updateOrderStats();
-
-
-                console.log(
-                    "Firestore orders:",
-                    firestoreOrders
-                );
-
-
-                /*
-                    إذا Firestore فارغ
-                    وكانت هناك طلبات قديمة في LocalStorage
-                    نحاول نقلها إلى Firestore
-                */
-
-                if(
-                    snapshot.empty
-                ){
-
-                    await migrateOldOrders();
-
-                }
-
-            },
-
-            error => {
-
-                console.error(
-                    "Firestore error:",
-                    error
-                );
-
-
-                ordersLoaded =
-                    false;
-
-
-                /*
-                    في حالة وجود مشكلة
-                    نرجع للنسخة المحلية
-                */
-
-                try{
-
-                    firestoreOrders =
-                        JSON.parse(
-                            localStorage.getItem(
-                                ORDERS_KEY
-                            )
-                        ) || [];
-
-                }catch(e){
-
-                    firestoreOrders = [];
-
-                }
-
-
-                renderOrders();
-
-                updateOrderStats();
-
-
-                alert(
-                    "تعذر الاتصال بقاعدة البيانات حالياً، سيتم عرض النسخة المحلية."
-                );
-
-            }
-
-        );
-
-}
-
-
-/* =====================================================
-   نقل الطلبات القديمة من LocalStorage
-   إلى Firestore
-===================================================== */
-
-async function migrateOldOrders(){
-
-    let localOrders = [];
-
-
-    try{
-
-        localOrders =
-            JSON.parse(
-                localStorage.getItem(
-                    ORDERS_KEY
-                )
-            ) || [];
-
-    }catch(e){
-
-        localOrders = [];
-
-    }
-
-
-    if(
-        !Array.isArray(localOrders) ||
-        localOrders.length === 0
-    ){
-
-        return;
-
-    }
-
-
-    console.log(
-        "محاولة نقل الطلبات القديمة إلى Firestore..."
-    );
-
-
-    let migrated =
-        0;
-
-
-    for(
-        const order of localOrders
-    ){
-
-        if(!order){
-
-            continue;
-
-        }
-
-
-        const orderId =
-            String(
-                order.id ||
-                generateOrderId()
-            );
-
-
-        try{
-
-            await db
-                .collection(
-                    ORDERS_COLLECTION
-                )
-                .doc(orderId)
-                .set({
-
-                    ...order,
-
-                    id:
-                        orderId,
-
-                    migratedAt:
-                        new Date().toISOString()
-
-                }, {
-
-                    merge:true
-
-                });
-
-
-            migrated++;
-
-        }catch(error){
-
-            console.error(
-                "فشل نقل الطلب:",
-                orderId,
-                error
-            );
-
-        }
-
-    }
-
-
-    if(migrated > 0){
-
-        console.log(
-            "تم نقل " +
-            migrated +
-            " طلب إلى Firestore."
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   توليد ID احتياطي
-===================================================== */
-
-function generateOrderId(){
-
-    return (
-        "LYB-" +
-        Date.now() +
-        "-" +
-        Math.floor(
-            1000 +
-            Math.random() *
-            9000
-        )
-    );
-
-}
-
-
-/* =====================================================
-   getOrders
-===================================================== */
-
-function getOrders(){
-
-    /*
-        إذا Firestore اشتغل،
-        نستخدم بيانات Firestore.
-    */
-
-    if(ordersLoaded){
-
-        return firestoreOrders;
-
-    }
-
-
-    /*
-        fallback إلى LocalStorage
-    */
-
-    try{
-
-        const data =
-            localStorage.getItem(
-                ORDERS_KEY
-            );
-
-
-        if(!data){
-
-            return [];
-
-        }
-
-
-        const parsed =
-            JSON.parse(data);
-
-
-        return Array.isArray(parsed)
-            ? parsed
-            : [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-/* =====================================================
-   saveOrders
-   نحتفظ بها للتوافق مع النظام القديم
-===================================================== */
-
-function saveOrders(orders){
-
-    localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify(orders)
-    );
-
-
-    firestoreOrders =
-        Array.isArray(orders)
-        ? orders
-        : [];
-
-}
-
-
-/* =====================================================
-   الإحصائيات
-===================================================== */
-
-function updateOrderStats(){
-
-    const orders =
-        getOrders();
-
-
-    const newOrders =
-        orders.filter(
-            order =>
-                normalizeStatus(
-                    order.status
-                ) ===
-                "جديد"
-        ).length;
-
-
-    const sales =
-        orders.reduce(
-            (sum, order) => {
-
-                return (
-                    sum +
-                    Number(
-                        order.total || 0
-                    )
-                );
-
-            },
-            0
-        );
-
-
-    const newElement =
-        document.getElementById(
-            "newOrders"
-        );
-
-
-    const salesElement =
-        document.getElementById(
-            "salesValue"
-        );
-
-
-    if(newElement){
-
-        newElement.textContent =
-            newOrders;
-
-    }
-
-
-    if(salesElement){
-
-        salesElement.textContent =
-            sales.toFixed(2) +
-            " د.ل";
-
-    }
-
-
-    const badge =
-        document.getElementById(
-            "ordersBadge"
-        );
-
-
-    if(badge){
-
-        badge.textContent =
-            newOrders > 0
-            ? "(" + newOrders + ")"
-            : "";
-
-    }
-
-}
-
-
-/* =====================================================
-   توحيد الحالات
-===================================================== */
-
-function normalizeStatus(status){
-
-    const value =
-        String(
-            status ||
-            "جديد"
-        ).trim();
-
-
-    if(value === "جديد"){
-
-        return "جديد";
-
-    }
-
-
-    if(
-        value === "مؤكد" ||
-        value === "تم التأكيد"
-    ){
-
-        return "تم التأكيد";
-
-    }
-
-
-    if(
-        value === "قيد التجهيز" ||
-        value === "جاري التجهيز"
-    ){
-
-        return "قيد التجهيز";
-
-    }
-
-
-    if(value === "جاهز"){
-
-        return "جاهز";
-
-    }
-
-
-    if(
-        value === "في الشحن" ||
-        value === "شحن"
-    ){
-
-        return "في الشحن";
-
-    }
-
-
-    if(
-        value === "تم التسليم" ||
-        value === "مكتمل"
-    ){
-
-        return "تم التسليم";
-
-    }
-
-
-    if(
-        value === "ملغي" ||
-        value === "ملغى"
-    ){
-
-        return "ملغي";
-
-    }
-
-
-    return value;
-
-}
-
-
-/* =====================================================
-   العميل
-===================================================== */
-
-function getCustomerName(order){
-
-    return (
-        order.customerName ||
-        order.name ||
-        "-"
-    );
-
-}
-
-
-function getCustomerPhone(order){
-
-    return (
-        order.customerPhone ||
-        order.phone ||
-        "-"
-    );
-
-}
-
-
-/* =====================================================
-   عرض الطلبات
-===================================================== */
-
-function renderOrders(){
-
-    const container =
-        document.getElementById(
-            "ordersList"
-        );
-
-
-    if(!container){
-
-        return;
-
-    }
-
-
-    const searchInput =
-        document.getElementById(
-            "searchOrders"
-        );
-
-
-    const search =
-        searchInput
-        ? searchInput.value
-            .trim()
-            .toLowerCase()
-        : "";
-
-
-    const orders =
-        getOrders();
-
-
-    const filtered =
-        orders.filter(
-            order => {
-
-                const text =
-                    (
-
-                        String(
-                            order.id || ""
-                        ) +
-
-                        " " +
-
-                        String(
-                            getCustomerName(
-                                order
-                            )
-                        ) +
-
-                        " " +
-
-                        String(
-                            getCustomerPhone(
-                                order
-                            )
-                        ) +
-
-                        " " +
-
-                        String(
-                            order.city || ""
-                        ) +
-
-                        " " +
-
-                        String(
-                            order.address || ""
-                        )
-
-                    )
-                    .toLowerCase();
-
-
-                return text.includes(
-                    search
-                );
-
-            }
-        );
-
-
-    if(filtered.length === 0){
-
-        container.innerHTML = `
-
-            <div class="empty">
-
-                ${
-                    ordersLoaded
-                    ?
-                    "🛒 لا توجد طلبات حالياً"
-                    :
-                    "⏳ جاري تحميل الطلبات..."
-                }
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        filtered.map(
-            order =>
-                createOrderCard(
-                    order
-                )
+            product =>
+                createProductCard(product)
         ).join("");
 
 }
 
 
-/* =====================================================
-   أيقونة الحالة
-===================================================== */
+function createProductCard(product){
 
-function getStatusIcon(status){
+    const image =
+        product.image || "";
 
-    const normalized =
-        normalizeStatus(
-            status
+    const quantity =
+        Number(
+            product.quantity || 0
         );
 
-
-    if(normalized === "جديد"){
-
-        return "🆕";
-
-    }
-
-
-    if(normalized === "تم التأكيد"){
-
-        return "👍";
-
-    }
-
-
-    if(normalized === "قيد التجهيز"){
-
-        return "🔧";
-
-    }
-
-
-    if(normalized === "جاهز"){
-
-        return "📦";
-
-    }
-
-
-    if(normalized === "في الشحن"){
-
-        return "🚚";
-
-    }
-
-
-    if(normalized === "تم التسليم"){
-
-        return "✅";
-
-    }
-
-
-    if(normalized === "ملغي"){
-
-        return "❌";
-
-    }
-
-
-    return "📌";
-
-}
-
-
-/* =====================================================
-   بطاقة الطلب
-===================================================== */
-
-function createOrderCard(order){
-
-    const items =
-        Array.isArray(
-            order.items
-        )
-        ? order.items
-        : [];
-
-
-    const date =
-        order.dateText ||
-
-        (
-            order.createdAt
-
-            ?
-
-            new Date(
-                order.createdAt
-            ).toLocaleString(
-                "ar-LY"
-            )
-
-            :
-
-            (
-                order.date
-
-                ?
-
-                new Date(
-                    order.date
-                ).toLocaleString(
-                    "ar-LY"
-                )
-
-                :
-
-                "-"
-            )
+    const price =
+        Number(
+            product.price || 0
         );
-
-
-    const status =
-        normalizeStatus(
-            order.status
-        );
-
-
-    const customerName =
-        getCustomerName(
-            order
-        );
-
-
-    const customerPhone =
-        getCustomerPhone(
-            order
-        );
-
-
-    const orderId =
-        order.id ||
-        order.orderNumber ||
-        "-";
-
 
     return `
 
-        <div class="order-card">
+        <div class="product-card">
 
-            <div class="order-top">
+            <div class="product-image">
 
-                <div>
-
-                    <div class="order-number">
-
-                        🔢 ${escapeHTML(
-                            orderId
-                        )}
-
-                    </div>
-
-                </div>
-
-
-                <div>
-
-                    <div class="order-date">
-
-                        🕐 ${escapeHTML(
-                            date
-                        )}
-
-                    </div>
-
-
-                    <div class="order-status-badge">
-
-                        ${getStatusIcon(
-                            status
-                        )}
-
-                        ${escapeHTML(
-                            status
-                        )}
-
-                    </div>
-
-                </div>
+                ${
+                    image
+                    ?
+                    `<img
+                        src="${escapeHTML(image)}"
+                        alt="${escapeHTML(product.name || "")}"
+                    >`
+                    :
+                    `<span style="font-size:50px">
+                        🏃
+                    </span>`
+                }
 
             </div>
 
 
-            <div class="order-customer">
-
-                <strong>
-                    👤 العميل:
-                </strong>
-
-                ${escapeHTML(
-                    customerName
-                )}
-
-                <br>
-
-
-                <strong>
-                    📱 الهاتف:
-                </strong>
-
-                ${escapeHTML(
-                    customerPhone
-                )}
-
-                <br>
-
-
-                <strong>
-                    📍 المدينة:
-                </strong>
-
-                ${escapeHTML(
-                    order.city || "-"
-                )}
-
-                <br>
-
-
-                <strong>
-                    🏠 العنوان:
-                </strong>
-
-                ${escapeHTML(
-                    order.address || "-"
-                )}
-
+            <div class="product-content">
 
                 ${
-                    order.notes
-
+                    product.category
                     ?
-
-                    `
-                    <br>
-
-                    <strong>
-                        📝 ملاحظات:
-                    </strong>
-
-                    ${escapeHTML(
-                        order.notes
-                    )}
-                    `
-
+                    `<span class="product-category">
+                        ${escapeHTML(product.category)}
+                    </span>`
                     :
-
                     ""
                 }
 
-            </div>
+                <h3>
+                    ${escapeHTML(product.name || "منتج")}
+                </h3>
 
+                <div class="product-price">
+                    ${formatPrice(price)} د.ل
+                </div>
 
-            <div class="order-items">
+                <div class="product-stock">
+                    الكمية:
+                    ${quantity}
+                </div>
 
                 ${
-                    items.length
-
+                    product.description
                     ?
-
-                    items.map(
-                        item => `
-
-                        <div class="order-item">
-
-                            <span>
-
-                                ${escapeHTML(
-                                    item.name || "-"
-                                )}
-
-                                ×
-
-                                ${Number(
-                                    item.quantity || 0
-                                )}
-
-                                <br>
-
-                                <small>
-
-                                    ${
-                                        item.size
-
-                                        ?
-
-                                        "المقاس: " +
-                                        escapeHTML(
-                                            item.size
-                                        )
-
-                                        :
-
-                                        ""
-                                    }
-
-
-                                    ${
-                                        item.color
-
-                                        ?
-
-                                        (
-                                            item.size
-                                            ? " | "
-                                            : ""
-                                        ) +
-
-                                        "اللون: " +
-
-                                        escapeHTML(
-                                            item.color
-                                        )
-
-                                        :
-
-                                        ""
-                                    }
-
-                                </small>
-
-                            </span>
-
-
-                            <strong>
-
-                                ${(
-                                    Number(
-                                        item.price || 0
-                                    ) *
-
-                                    Number(
-                                        item.quantity || 0
-                                    )
-
-                                ).toFixed(2)}
-
-                                د.ل
-
-                            </strong>
-
-                        </div>
-
-                    `
-                    ).join("")
-
+                    `<p style="color:#6b7280;font-size:13px;margin-bottom:10px;">
+                        ${escapeHTML(product.description)}
+                    </p>`
                     :
-
-                    `
-                    <div class="empty">
-
-                        لا توجد منتجات
-
-                    </div>
-                    `
+                    ""
                 }
 
-            </div>
+                <div class="product-actions">
 
-
-            <div class="order-total">
-
-                💰 الإجمالي:
-
-                ${Number(
-                    order.total || 0
-                ).toFixed(2)}
-
-                د.ل
-
-            </div>
-
-
-            <div class="order-controls">
-
-                <select
-                    class="status-select"
-                    onchange="
-                        changeOrderStatus(
-                            '${escapeJS(
-                                orderId
-                            )}',
-                            this.value
-                        )
-                    "
-                >
-
-                    <option
-                        value="جديد"
-                        ${
-                            status === "جديد"
-                            ? "selected"
-                            : ""
-                        }
+                    <button
+                        class="edit-btn"
+                        onclick="editProduct('${escapeJS(product.id)}')"
                     >
-                        🆕 جديد
-                    </option>
+                        ✏️ تعديل
+                    </button>
 
-
-                    <option
-                        value="تم التأكيد"
-                        ${
-                            status === "تم التأكيد"
-                            ? "selected"
-                            : ""
-                        }
+                    <button
+                        class="delete-btn"
+                        onclick="deleteProduct('${escapeJS(product.id)}')"
                     >
-                        👍 تم التأكيد
-                    </option>
+                        🗑️ حذف
+                    </button>
 
-
-                    <option
-                        value="قيد التجهيز"
-                        ${
-                            status === "قيد التجهيز"
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        🔧 قيد التجهيز
-                    </option>
-
-
-                    <option
-                        value="جاهز"
-                        ${
-                            status === "جاهز"
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        📦 جاهز
-                    </option>
-
-
-                    <option
-                        value="في الشحن"
-                        ${
-                            status === "في الشحن"
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        🚚 في الشحن
-                    </option>
-
-
-                    <option
-                        value="تم التسليم"
-                        ${
-                            status === "تم التسليم"
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        ✅ تم التسليم
-                    </option>
-
-
-                    <option
-                        value="ملغي"
-                        ${
-                            status === "ملغي"
-                            ? "selected"
-                            : ""
-                        }
-                    >
-                        ❌ ملغي
-                    </option>
-
-                </select>
-
-
-                <button
-                    class="delete-order"
-                    onclick="
-                        deleteOrder(
-                            '${escapeJS(
-                                orderId
-                            )}'
-                        )
-                    "
-                >
-
-                    🗑️ حذف الطلب
-
-                </button>
+                </div>
 
             </div>
 
@@ -1765,289 +1561,368 @@ function createOrderCard(order){
 
 
 /* =====================================================
-   تغيير حالة الطلب
+   ADD PRODUCT MODAL
 ===================================================== */
 
-async function changeOrderStatus(
-    orderId,
-    status
-){
+function openProductModal(product){
 
-    const normalized =
-        normalizeStatus(
-            status
+    const modal =
+        document.getElementById(
+            "productModal"
         );
 
-
-    const orders =
-        getOrders();
-
-
-    const index =
-        orders.findIndex(
-            order =>
-                String(
-                    order.id
-                ) ===
-                String(
-                    orderId
-                )
+    const form =
+        document.getElementById(
+            "productForm"
         );
 
+    form.reset();
 
-    /*
-        نحدث الواجهة المحلية مباشرة
-    */
+    document
+        .getElementById("productId")
+        .value = "";
 
-    if(index !== -1){
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        "إضافة منتج";
 
-        orders[index].status =
-            normalized;
+    document
+        .getElementById("imagePreview")
+        .style.display = "none";
 
+    document
+        .getElementById("previewImg")
+        .src = "";
 
-        orders[index].updatedAt =
-            new Date().toISOString();
+    if(product){
 
+        document
+            .getElementById("productId")
+            .value =
+            product.id || "";
 
-        firestoreOrders =
-            orders;
+        document
+            .getElementById("productName")
+            .value =
+            product.name || "";
 
+        document
+            .getElementById("productPrice")
+            .value =
+            product.price || "";
 
-        localStorage.setItem(
-            ORDERS_KEY,
-            JSON.stringify(
-                firestoreOrders
-            )
-        );
+        document
+            .getElementById("productQuantity")
+            .value =
+            product.quantity || "";
 
+        document
+            .getElementById("productCategory")
+            .value =
+            product.category || "";
 
-        renderOrders();
+        document
+            .getElementById("productSizes")
+            .value =
+            Array.isArray(product.sizes)
+                ? product.sizes.join(", ")
+                : product.sizes || "";
 
-        updateOrderStats();
+        document
+            .getElementById("productColors")
+            .value =
+            Array.isArray(product.colors)
+                ? product.colors.join(", ")
+                : product.colors || "";
+
+        document
+            .getElementById("productDescription")
+            .value =
+            product.description || "";
+
+        if(product.image){
+
+            document
+                .getElementById("previewImg")
+                .src =
+                product.image;
+
+            document
+                .getElementById("imagePreview")
+                .style.display =
+                "block";
+
+        }
+
+        document
+            .getElementById("modalTitle")
+            .textContent =
+            "تعديل المنتج";
 
     }
 
-
-    /*
-        الحفظ الحقيقي في Firestore
-    */
-
-    try{
-
-        await db
-            .collection(
-                ORDERS_COLLECTION
-            )
-            .doc(
-                String(
-                    orderId
-                )
-            )
-            .set({
-
-                status:
-                    normalized,
-
-                updatedAt:
-                    new Date().toISOString()
-
-            }, {
-
-                merge:true
-
-            });
-
-
-        alert(
-            "تم تحديث حالة الطلب إلى: " +
-            normalized +
-            " ✅"
-        );
-
-
-    }catch(error){
-
-        console.error(
-            error
-        );
-
-
-        alert(
-            "حدث خطأ أثناء تحديث الطلب في Firestore ❌\n\n" +
-            "تأكد من اتصال الإنترنت وقواعد Firestore."
-        );
-
-    }
+    modal.classList.add("show");
 
 }
 
-
-/* =====================================================
-   حذف الطلب
-===================================================== */
-
-async function deleteOrder(
-    orderId
-){
-
-    const orders =
-        getOrders();
-
-
-    const order =
-        orders.find(
-            item =>
-                String(
-                    item.id
-                ) ===
-                String(
-                    orderId
-                )
-        );
-
-
-    if(!order){
-
-        return;
-
-    }
-
-
-    if(
-        !confirm(
-            "هل أنت متأكد من حذف الطلب:\n\n" +
-            order.id +
-            "\n\nلا يمكن التراجع عن هذه العملية."
-        )
-    ){
-
-        return;
-
-    }
-
-
-    try{
-
-        /*
-            حذف من Firestore
-        */
-
-        await db
-            .collection(
-                ORDERS_COLLECTION
-            )
-            .doc(
-                String(
-                    orderId
-                )
-            )
-            .delete();
-
-
-        /*
-            حذف من النسخة المحلية
-        */
-
-        firestoreOrders =
-            firestoreOrders.filter(
-                item =>
-                    String(
-                        item.id
-                    ) !==
-                    String(
-                        orderId
-                    )
-            );
-
-
-        localStorage.setItem(
-            ORDERS_KEY,
-            JSON.stringify(
-                firestoreOrders
-            )
-        );
-
-
-        renderOrders();
-
-        updateOrderStats();
-
-
-        alert(
-            "تم حذف الطلب من قاعدة البيانات ✅"
-        );
-
-
-    }catch(error){
-
-        console.error(
-            error
-        );
-
-
-        alert(
-            "حدث خطأ أثناء حذف الطلب ❌"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   ADD PRODUCT
-   لا تغيير
-===================================================== */
-
-function openProductModal(){
-
-    editingId = null;
-
-    selectedImage = "";
-
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "➕ إضافة منتج جديد";
-
-
-    document.getElementById(
-        "productForm"
-    ).reset();
-
-
-    document.getElementById(
-        "productId"
-    ).value =
-        "";
-
-
-    document.getElementById(
-        "imagePreview"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "productModal"
-    ).classList.add(
-        "show"
-    );
-
-}
-
-
-/* =====================================================
-   CLOSE MODAL
-===================================================== */
 
 function closeProductModal(){
 
-    document.getElementById(
-        "productModal"
-    ).classList.remove(
-        "show"
+    document
+        .getElementById("productModal")
+        .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   IMAGE PREVIEW
+===================================================== */
+
+function previewImage(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e){
+
+        document
+            .getElementById("previewImg")
+            .src =
+            e.target.result;
+
+        document
+            .getElementById("imagePreview")
+            .style.display =
+            "block";
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =====================================================
+   SAVE PRODUCT
+===================================================== */
+
+document
+    .getElementById("productForm")
+    .addEventListener(
+        "submit",
+        function(event){
+
+            event.preventDefault();
+
+            const id =
+                document
+                    .getElementById("productId")
+                    .value
+                    .trim();
+
+            const name =
+                document
+                    .getElementById("productName")
+                    .value
+                    .trim();
+
+            const price =
+                Number(
+                    document
+                        .getElementById("productPrice")
+                        .value
+                );
+
+            const quantity =
+                Number(
+                    document
+                        .getElementById("productQuantity")
+                        .value
+                );
+
+            const category =
+                document
+                    .getElementById("productCategory")
+                    .value
+                    .trim();
+
+            const sizesText =
+                document
+                    .getElementById("productSizes")
+                    .value
+                    .trim();
+
+            const colorsText =
+                document
+                    .getElementById("productColors")
+                    .value
+                    .trim();
+
+            const description =
+                document
+                    .getElementById("productDescription")
+                    .value
+                    .trim();
+
+            const preview =
+                document
+                    .getElementById("previewImg")
+                    .src;
+
+            if(!name){
+
+                alert(
+                    "اكتب اسم المنتج."
+                );
+
+                return;
+
+            }
+
+
+            const products =
+                getProducts();
+
+            const existingIndex =
+                products.findIndex(
+                    p =>
+                        String(p.id)
+                        ===
+                        String(id)
+                );
+
+
+            let image = "";
+
+            if(
+                preview
+                &&
+                preview !==
+                window.location.href
+            ){
+
+                image =
+                    preview;
+
+            }
+
+
+            if(
+                existingIndex !== -1
+                &&
+                !image
+            ){
+
+                image =
+                    products[
+                        existingIndex
+                    ].image || "";
+
+            }
+
+
+            const product = {
+
+                id:
+                    id
+                    ||
+                    generateProductId(),
+
+                name,
+
+                price,
+
+                quantity,
+
+                category,
+
+                sizes:
+                    sizesText
+                    ?
+                    sizesText
+                        .split(",")
+                        .map(x => x.trim())
+                        .filter(Boolean)
+                    :
+                    ["S","M","L","XL"],
+
+                colors:
+                    colorsText
+                    ?
+                    colorsText
+                        .split(",")
+                        .map(x => x.trim())
+                        .filter(Boolean)
+                    :
+                    ["أسود","أبيض"],
+
+                description,
+
+                image
+
+            };
+
+
+            if(existingIndex !== -1){
+
+                products[
+                    existingIndex
+                ] = product;
+
+            }else{
+
+                products.push(product);
+
+            }
+
+
+            saveProducts(
+                products
+            );
+
+            closeProductModal();
+
+            renderProducts();
+
+            updateStats();
+
+            alert(
+                existingIndex !== -1
+                ?
+                "تم تعديل المنتج ✅"
+                :
+                "تمت إضافة المنتج ✅"
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   PRODUCT ID
+===================================================== */
+
+function generateProductId(){
+
+    return (
+        "product_"
+        +
+        Date.now()
+        +
+        "_"
+        +
+        Math.random()
+            .toString(36)
+            .slice(2,8)
     );
 
 }
@@ -2059,362 +1934,32 @@ function closeProductModal(){
 
 function editProduct(id){
 
+    const products =
+        getProducts();
+
     const product =
         products.find(
             p =>
-                String(
-                    p.id
-                ) ===
-                String(
-                    id
-                )
+                String(p.id)
+                ===
+                String(id)
         );
 
-
     if(!product){
+
+        alert(
+            "لم يتم العثور على المنتج."
+        );
 
         return;
 
     }
 
-
-    editingId =
-        id;
-
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "✏️ تعديل المنتج";
-
-
-    document.getElementById(
-        "productId"
-    ).value =
-        product.id;
-
-
-    document.getElementById(
-        "productName"
-    ).value =
-        product.name || "";
-
-
-    document.getElementById(
-        "productPrice"
-    ).value =
-        product.price || 0;
-
-
-    document.getElementById(
-        "productQuantity"
-    ).value =
-        product.quantity || 0;
-
-
-    document.getElementById(
-        "productCategory"
-    ).value =
-        product.category || "";
-
-
-    document.getElementById(
-        "productSizes"
-    ).value =
-        Array.isArray(
-            product.sizes
-        )
-        ? product.sizes.join(", ")
-        : product.sizes || "";
-
-
-    document.getElementById(
-        "productColors"
-    ).value =
-        Array.isArray(
-            product.colors
-        )
-        ? product.colors.join(", ")
-        : product.colors || "";
-
-
-    document.getElementById(
-        "productDescription"
-    ).value =
-        product.description || "";
-
-
-    selectedImage =
-        product.image || "";
-
-
-    if(product.image){
-
-        document.getElementById(
-            "previewImg"
-        ).src =
-            product.image;
-
-
-        document.getElementById(
-            "imagePreview"
-        ).style.display =
-            "block";
-
-    }else{
-
-        document.getElementById(
-            "imagePreview"
-        ).style.display =
-            "none";
-
-    }
-
-
-    document.getElementById(
-        "productModal"
-    ).classList.add(
-        "show"
+    openProductModal(
+        product
     );
 
 }
-
-
-/* =====================================================
-   IMAGE
-===================================================== */
-
-document.getElementById(
-    "productImage"
-).addEventListener(
-    "change",
-    function(){
-
-        const file =
-            this.files[0];
-
-
-        if(!file){
-
-            return;
-
-        }
-
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload =
-            function(e){
-
-                selectedImage =
-                    e.target.result;
-
-
-                document.getElementById(
-                    "previewImg"
-                ).src =
-                    selectedImage;
-
-
-                document.getElementById(
-                    "imagePreview"
-                ).style.display =
-                    "block";
-
-            };
-
-
-        reader.readAsDataURL(
-            file
-        );
-
-    }
-);
-
-
-/* =====================================================
-   SAVE PRODUCT
-===================================================== */
-
-document.getElementById(
-    "productForm"
-).addEventListener(
-    "submit",
-    function(e){
-
-        e.preventDefault();
-
-
-        const name =
-            document.getElementById(
-                "productName"
-            ).value.trim();
-
-
-        const price =
-            Number(
-                document.getElementById(
-                    "productPrice"
-                ).value
-            );
-
-
-        const quantity =
-            Number(
-                document.getElementById(
-                    "productQuantity"
-                ).value
-            );
-
-
-        const category =
-            document.getElementById(
-                "productCategory"
-            ).value;
-
-
-        const sizes =
-            document.getElementById(
-                "productSizes"
-            ).value
-            .split(",")
-            .map(
-                x =>
-                    x.trim()
-            )
-            .filter(Boolean);
-
-
-        const colors =
-            document.getElementById(
-                "productColors"
-            ).value
-            .split(",")
-            .map(
-                x =>
-                    x.trim()
-            )
-            .filter(Boolean);
-
-
-        const description =
-            document.getElementById(
-                "productDescription"
-            ).value.trim();
-
-
-        if(!name){
-
-            alert(
-                "اكتب اسم المنتج"
-            );
-
-            return;
-
-        }
-
-
-        if(
-            price < 0 ||
-            quantity < 0
-        ){
-
-            alert(
-                "السعر والكمية يجب ألا تكون سالبة"
-            );
-
-            return;
-
-        }
-
-
-        if(editingId){
-
-            const index =
-                products.findIndex(
-                    p =>
-                        String(
-                            p.id
-                        ) ===
-                        String(
-                            editingId
-                        )
-                );
-
-
-            if(index !== -1){
-
-                products[index] = {
-
-                    ...products[index],
-
-                    name,
-
-                    price,
-
-                    quantity,
-
-                    category,
-
-                    sizes,
-
-                    colors,
-
-                    description,
-
-                    image:
-                        selectedImage
-
-                };
-
-            }
-
-        }else{
-
-            products.unshift({
-
-                id:
-                    Date.now().toString(),
-
-                name,
-
-                price,
-
-                quantity,
-
-                category,
-
-                sizes,
-
-                colors,
-
-                description,
-
-                image:
-                    selectedImage
-
-            });
-
-        }
-
-
-        saveProducts();
-
-        closeProductModal();
-
-        loadProducts();
-
-
-        alert(
-            editingId
-            ? "تم تعديل المنتج بنجاح ✅"
-            : "تمت إضافة المنتج بنجاح ✅"
-        );
-
-    }
-);
 
 
 /* =====================================================
@@ -2423,187 +1968,71 @@ document.getElementById(
 
 function deleteProduct(id){
 
+    const products =
+        getProducts();
+
     const product =
         products.find(
             p =>
-                String(
-                    p.id
-                ) ===
-                String(
-                    id
-                )
+                String(p.id)
+                ===
+                String(id)
         );
-
 
     if(!product){
-
         return;
-
     }
 
-
-    if(
-        !confirm(
-            "هل أنت متأكد من حذف:\n\n" +
-            product.name +
-            "\n\nلا يمكن التراجع عن هذه العملية."
-        )
-    ){
-
-        return;
-
-    }
-
-
-    products =
-        products.filter(
-            p =>
-                String(
-                    p.id
-                ) !==
-                String(
-                    id
-                )
+    const confirmed =
+        confirm(
+            `هل تريد حذف المنتج "${product.name}"؟`
         );
 
+    if(!confirmed){
+        return;
+    }
 
-    saveProducts();
+    const filtered =
+        products.filter(
+            p =>
+                String(p.id)
+                !==
+                String(id)
+        );
 
-    loadProducts();
+    saveProducts(
+        filtered
+    );
 
+    renderProducts();
+
+    updateStats();
 
     alert(
-        "تم حذف المنتج ✅"
+        "تم حذف المنتج 🗑️"
     );
 
 }
 
 
 /* =====================================================
-   ESCAPE HTML
+   FIRESTORE ORDERS LISTENER
 ===================================================== */
 
-function escapeHTML(text){
+function startOrdersListener(){
 
-    return String(
-        text || ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+    if(!db){
 
-}
+        setFirebaseStatus(
+            "🟠 Firestore غير متاح - التخزين المحلي"
+        );
 
-
-/* =====================================================
-   ESCAPE JS
-===================================================== */
-
-function escapeJS(text){
-
-    return String(
-        text || ""
-    )
-    .replace(
-        /\\/g,
-        "\\\\"
-    )
-    .replace(
-        /'/g,
-        "\\'"
-    )
-    .replace(
-        /"/g,
-        '\\"'
-    )
-    .replace(
-        /\n/g,
-        "\\n"
-    )
-    .replace(
-        /\r/g,
-        "\\r"
-    );
-
-}
-
-
-/* =====================================================
-   CLOSE MODAL
-===================================================== */
-
-document.getElementById(
-    "productModal"
-).addEventListener(
-    "click",
-    function(e){
-
-        if(
-            e.target ===
-            this
-        ){
-
-            closeProductModal();
-
-        }
+        return;
 
     }
-);
 
+    if(ordersUnsubscribe){
 
-/* =====================================================
-   ENTER LOGIN
-===================================================== */
+        ordersUnsubscribe();
 
-document.getElementById(
-    "password"
-).addEventListener(
-    "keydown",
-    function(e){
-
-        if(
-            e.key ===
-            "Enter"
-        ){
-
-            login();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-if(
-    sessionStorage.getItem(
-        "adminLoggedIn"
-    ) ===
-    "true"
-){
-
-    showDashboard();
-
-}
-
-    </script>
+       
