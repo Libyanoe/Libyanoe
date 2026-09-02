@@ -83,7 +83,6 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: .2s;
         }
 
         .google-btn:hover {
@@ -137,7 +136,6 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            direction: ltr;
         }
 
         input {
@@ -247,6 +245,7 @@
     </style>
 </head>
 
+
 <body>
 
 <div class="auth-container">
@@ -254,19 +253,28 @@
     <div class="auth-card">
 
         <div class="logo">
-            <div class="logo-icon">🏆</div>
 
-            <h1>متجر الرياضة</h1>
+            <div class="logo-icon">
+                🏆
+            </div>
 
-            <p>سجّل الدخول إلى حسابك</p>
+            <h1>
+                متجر الرياضة
+            </h1>
+
+            <p>
+                سجّل الدخول إلى حسابك
+            </p>
+
         </div>
+
 
         <h2 class="section-title">
             تسجيل الدخول
         </h2>
 
 
-        <!-- Google -->
+        <!-- GOOGLE -->
 
         <button
             class="google-btn"
@@ -288,7 +296,7 @@
         </div>
 
 
-        <!-- Phone -->
+        <!-- PHONE -->
 
         <div class="input-group">
 
@@ -397,7 +405,6 @@
 
 <script type="module">
 
-
     /* =========================
        Firebase Imports
     ========================= */
@@ -426,7 +433,8 @@
 
     const firebaseConfig = {
 
-        apiKey: "NEW_API_KEY_REDACTED",
+        apiKey:
+            "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
 
         authDomain:
             "suhayeb-25ef9.firebaseapp.com",
@@ -456,8 +464,10 @@
     const app =
         initializeApp(firebaseConfig);
 
+
     const auth =
         getAuth(app);
+
 
     const googleProvider =
         new GoogleAuthProvider();
@@ -579,6 +589,7 @@
             return;
         }
 
+
         const userData = {
 
             uid:
@@ -615,14 +626,15 @@
 
     function goToAccount() {
 
-        window.location.href =
-            "account.html";
+        window.location.replace(
+            "./account.html"
+        );
     }
 
 
 
     /* =========================
-       Firebase Errors
+       Firebase Error
     ========================= */
 
     function getFirebaseError(error) {
@@ -647,65 +659,51 @@
 
                 return "Firebase رفض مفتاح API.";
 
+
             case "auth/api-key-not-valid":
 
                 return "Firebase رفض مفتاح API.";
+
 
             case "auth/operation-not-allowed":
 
                 return "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase Authentication.";
 
+
             case "auth/unauthorized-domain":
 
                 return "هذا الموقع غير مضاف إلى Authorized domains في Firebase.";
 
-            case "auth/app-not-authorized":
-
-                return "هذا التطبيق غير مصرح له باستخدام Firebase Authentication.";
-
-            case "auth/invalid-phone-number":
-
-                return "رقم الهاتف غير صحيح.";
-
-            case "auth/missing-phone-number":
-
-                return "اكتب رقم الهاتف أولاً.";
-
-            case "auth/too-many-requests":
-
-                return "تم إرسال طلبات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.";
-
-            case "auth/quota-exceeded":
-
-                return "تم تجاوز حد رسائل SMS المتاح حاليًا.";
-
-            case "auth/captcha-check-failed":
-
-                return "فشل التحقق من reCAPTCHA.";
-
-            case "auth/invalid-verification-code":
-
-                return "رمز التحقق غير صحيح.";
-
-            case "auth/code-expired":
-
-                return "رمز التحقق انتهت صلاحيته.";
-
-            case "auth/network-request-failed":
-
-                return "حدثت مشكلة في الاتصال بالإنترنت.";
 
             case "auth/popup-blocked":
 
                 return "المتصفح منع نافذة Google.";
 
+
             case "auth/popup-closed-by-user":
 
-                return "تم إغلاق نافذة تسجيل الدخول.";
+                return "تم إغلاق نافذة Google.";
 
-            case "auth/account-exists-with-different-credential":
 
-                return "هذا الحساب موجود مسبقًا بطريقة تسجيل دخول مختلفة.";
+            case "auth/network-request-failed":
+
+                return "حدثت مشكلة في الاتصال بالإنترنت.";
+
+
+            case "auth/invalid-phone-number":
+
+                return "رقم الهاتف غير صحيح.";
+
+
+            case "auth/invalid-verification-code":
+
+                return "رمز التحقق غير صحيح.";
+
+
+            case "auth/code-expired":
+
+                return "رمز التحقق انتهت صلاحيته.";
+
 
             default:
 
@@ -716,6 +714,88 @@
                     originalMessage
                 );
         }
+    }
+
+
+
+    /* =========================
+       GOOGLE LOGIN
+    ========================= */
+
+    googleBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideMessage();
+
+            setLoading(true);
+
+
+            try {
+
+                const result =
+                    await signInWithPopup(
+                        auth,
+                        googleProvider
+                    );
+
+
+                saveCurrentUser(
+                    result.user
+                );
+
+
+                /*
+                 * تسجيل الدخول تم.
+                 * الانتقال إلى الحساب.
+                 */
+
+                goToAccount();
+
+
+            } catch (error) {
+
+                showMessage(
+                    getFirebaseError(error)
+                );
+
+
+            } finally {
+
+                setLoading(false);
+            }
+
+        }
+    );
+
+
+
+    /* =========================
+       Prepare Phone
+    ========================= */
+
+    function preparePhoneNumber(value) {
+
+        let phone =
+            String(value || "")
+                .replace(/\D/g, "");
+
+
+        if (phone.startsWith("218")) {
+
+            phone =
+                phone.substring(3);
+        }
+
+
+        if (phone.startsWith("0")) {
+
+            phone =
+                phone.substring(1);
+        }
+
+
+        return "+218" + phone;
     }
 
 
@@ -778,94 +858,7 @@
 
 
     /* =========================
-       Prepare Libyan Phone
-    ========================= */
-
-    function preparePhoneNumber(value) {
-
-        let phone =
-            String(value || "")
-                .replace(/\D/g, "");
-
-
-        if (phone.startsWith("218")) {
-
-            phone =
-                phone.substring(3);
-        }
-
-
-        if (phone.startsWith("0")) {
-
-            phone =
-                phone.substring(1);
-        }
-
-
-        return "+218" + phone;
-    }
-
-
-
-    /* =========================
-       Google Login
-    ========================= */
-
-    googleBtn.addEventListener(
-        "click",
-        async function () {
-
-            hideMessage();
-
-            setLoading(true);
-
-
-            try {
-
-                const result =
-                    await signInWithPopup(
-                        auth,
-                        googleProvider
-                    );
-
-
-                saveCurrentUser(
-                    result.user
-                );
-
-
-                showMessage(
-                    "تم تسجيل الدخول بنجاح.",
-                    "success"
-                );
-
-
-                /*
-                 * التحويل المباشر
-                 */
-
-                goToAccount();
-
-
-            } catch (error) {
-
-                showMessage(
-                    getFirebaseError(error)
-                );
-
-
-            } finally {
-
-                setLoading(false);
-            }
-
-        }
-    );
-
-
-
-    /* =========================
-       Send Phone Code
+       SEND PHONE CODE
     ========================= */
 
     sendCodeBtn.addEventListener(
@@ -950,7 +943,7 @@
 
 
     /* =========================
-       Verify OTP
+       VERIFY OTP
     ========================= */
 
     verifyCodeBtn.addEventListener(
@@ -1000,12 +993,6 @@
                 );
 
 
-                showMessage(
-                    "تم تسجيل الدخول بنجاح.",
-                    "success"
-                );
-
-
                 goToAccount();
 
 
@@ -1033,7 +1020,7 @@
 
 
     /* =========================
-       Firebase Auth State
+       AUTH STATE
     ========================= */
 
     onAuthStateChanged(
@@ -1046,11 +1033,6 @@
                     user
                 );
 
-                /*
-                 * Firebase أكد أن المستخدم
-                 * مسجل الدخول
-                 */
-
                 goToAccount();
             }
 
@@ -1060,7 +1042,7 @@
 
 
     /* =========================
-       Start reCAPTCHA
+       START reCAPTCHA
     ========================= */
 
     window.addEventListener(
@@ -1071,7 +1053,6 @@
 
         }
     );
-
 
 </script>
 
