@@ -1,1245 +1,11 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
+<script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore-compat.js"></script>
 
-«»
+<script>
 
-<title>لوحة إدارة المتجر</title><style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Tahoma,Arial,sans-serif;
-}
-
-body{
-    background:#f5f6f8;
-    color:#18202b;
-}
-
-/* ================= LOGIN ================= */
-
-.login-page{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#111827;
-    padding:20px;
-}
-
-.login-box{
-    width:100%;
-    max-width:390px;
-    background:#fff;
-    border-radius:24px;
-    padding:35px 25px;
-    text-align:center;
-    box-shadow:0 25px 60px rgba(0,0,0,.3);
-}
-
-.login-logo{
-    width:75px;
-    height:75px;
-    margin:auto auto 18px;
-    border-radius:22px;
-    background:#111827;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:38px;
-}
-
-.login-box h1{
-    font-size:25px;
-    margin-bottom:8px;
-}
-
-.login-box p{
-    color:#777;
-    margin-bottom:25px;
-}
-
-.login-box input{
-    width:100%;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:13px;
-    outline:none;
-    font-size:16px;
-    margin-bottom:12px;
-}
-
-.login-btn{
-    width:100%;
-    padding:15px;
-    border:0;
-    border-radius:13px;
-    background:#111827;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.login-error{
-    display:none;
-    color:#dc2626;
-    margin-top:12px;
-}
-
-/* ================= DASHBOARD ================= */
-
-#dashboard{
-    display:none;
-}
-
-.sidebar{
-    position:fixed;
-    right:0;
-    top:0;
-    bottom:0;
-    width:240px;
-    background:#111827;
-    color:white;
-    padding:25px 15px;
-    z-index:100;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:0 10px 30px;
-    border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-.brand-icon{
-    font-size:28px;
-}
-
-.brand h2{
-    font-size:18px;
-}
-
-.menu{
-    margin-top:25px;
-}
-
-.menu button{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:#cbd5e1;
-    padding:14px;
-    margin-bottom:7px;
-    border-radius:12px;
-    text-align:right;
-    cursor:pointer;
-    font-size:15px;
-}
-
-.menu button:hover,
-.menu button.active{
-    background:#263244;
-    color:white;
-}
-
-.menu .store-btn{
-    margin-top:25px;
-    background:white;
-    color:#111827;
-}
-
-.menu .logout{
-    color:#fca5a5;
-}
-
-.main{
-    margin-right:240px;
-    min-height:100vh;
-}
-
-.topbar{
-    height:75px;
-    background:white;
-    border-bottom:1px solid #e5e7eb;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 35px;
-}
-
-.topbar h1{
-    font-size:22px;
-}
-
-.admin-name{
-    color:#6b7280;
-    font-size:14px;
-}
-
-.content{
-    padding:30px;
-    max-width:1400px;
-    margin:auto;
-}
-
-/* ================= STATS ================= */
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px;
-    margin-bottom:30px;
-}
-
-.stat-card{
-    background:white;
-    padding:22px;
-    border-radius:18px;
-    border:1px solid #e8eaee;
-}
-
-.stat-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:18px;
-}
-
-.stat-icon{
-    width:45px;
-    height:45px;
-    border-radius:13px;
-    background:#f0f2f5;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:23px;
-}
-
-.stat-title{
-    color:#737b87;
-    font-size:13px;
-}
-
-.stat-number{
-    font-size:28px;
-    font-weight:bold;
-}
-
-/* ================= SECTIONS ================= */
-
-.admin-section{
-    display:none;
-}
-
-.admin-section.active-section{
-    display:block;
-}
-
-/* ================= PRODUCTS ================= */
-
-.products-box,
-.orders-box{
-    background:white;
-    border-radius:20px;
-    border:1px solid #e7e9ed;
-    padding:25px;
-}
-
-.products-header,
-.orders-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:22px;
-}
-
-.products-header h2,
-.orders-header h2{
-    font-size:21px;
-}
-
-.add-product{
-    background:#111827;
-    color:white;
-    border:0;
-    padding:13px 18px;
-    border-radius:12px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.search-box{
-    width:100%;
-    padding:14px;
-    border:1px solid #ddd;
-    border-radius:12px;
-    outline:none;
-    font-size:15px;
-    margin-bottom:22px;
-}
-
-/* ================= PRODUCT GRID ================= */
-
-.products-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
-}
-
-.product-card{
-    border:1px solid #e5e7eb;
-    border-radius:17px;
-    overflow:hidden;
-    background:white;
-}
-
-.product-img{
-    height:210px;
-    background:#f1f2f4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.product-img img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.no-img{
-    font-size:50px;
-    opacity:.5;
-}
-
-.product-details{
-    padding:16px;
-}
-
-.product-category{
-    display:inline-block;
-    font-size:12px;
-    background:#f0f2f5;
-    padding:5px 9px;
-    border-radius:8px;
-    color:#4b5563;
-    margin-bottom:9px;
-}
-
-.product-name{
-    font-size:17px;
-    margin-bottom:8px;
-}
-
-.product-price{
-    font-weight:bold;
-    font-size:18px;
-    margin-bottom:7px;
-}
-
-.product-stock{
-    font-size:13px;
-    color:#667085;
-    margin-bottom:14px;
-}
-
-.product-stock.out{
-    color:#dc2626;
-    font-weight:bold;
-}
-
-.product-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-}
-
-.action{
-    border:0;
-    padding:11px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.edit{
-    background:#eef0f3;
-}
-
-.delete{
-    background:#fee2e2;
-    color:#b91c1c;
-}
-
-/* ================= ORDERS ================= */
-
-.orders-list{
-    display:grid;
-    gap:15px;
-}
-
-.order-card{
-    border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:20px;
-    background:#fff;
-}
-
-.order-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
-    margin-bottom:15px;
-    flex-wrap:wrap;
-}
-
-.order-number{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.order-date{
-    color:#6b7280;
-    font-size:13px;
-}
-
-.order-status-badge{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:7px 11px;
-    border-radius:9px;
-    background:#f0f2f5;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.order-customer{
-    background:#f8fafc;
-    border-radius:12px;
-    padding:15px;
-    margin-bottom:15px;
-    line-height:1.9;
-}
-
-.order-items{
-    display:grid;
-    gap:8px;
-    margin-bottom:15px;
-}
-
-.order-item{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    background:#f8fafc;
-    padding:10px 12px;
-    border-radius:10px;
-}
-
-.order-total{
-    font-size:19px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-.order-controls{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.status-select{
-    flex:1;
-    min-width:180px;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    background:white;
-    font-size:14px;
-}
-
-.delete-order{
-    border:0;
-    background:#fee2e2;
-    color:#b91c1c;
-    padding:12px 18px;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.empty{
-    text-align:center;
-    padding:50px 15px;
-    color:#777;
-}
-
-/* ================= MODAL ================= */
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.65);
-    z-index:1000;
-    padding:20px;
-    align-items:center;
-    justify-content:center;
-}
-
-.modal.show{
-    display:flex;
-}
-
-.modal-box{
-    width:100%;
-    max-width:650px;
-    max-height:92vh;
-    overflow-y:auto;
-    background:white;
-    border-radius:20px;
-    padding:25px;
-}
-
-.modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:22px;
-}
-
-.close{
-    width:38px;
-    height:38px;
-    border:0;
-    border-radius:50%;
-    background:#f0f1f3;
-    font-size:22px;
-    cursor:pointer;
-}
-
-.form-group{
-    margin-bottom:15px;
-}
-
-.form-group label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:7px;
-    font-size:14px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-    width:100%;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:11px;
-    outline:none;
-    font-size:15px;
-}
-
-.form-group textarea{
-    min-height:90px;
-    resize:vertical;
-}
-
-.form-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.image-preview{
-    display:none;
-    width:140px;
-    height:140px;
-    margin-top:10px;
-    border-radius:12px;
-    overflow:hidden;
-    background:#eee;
-}
-
-.image-preview img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.form-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:20px;
-}
-
-.form-actions button{
-    padding:13px;
-    border:0;
-    border-radius:11px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-.cancel{
-    background:#e5e7eb;
-}
-
-.save{
-    background:#111827;
-    color:white;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:1000px){
-
-    .sidebar{
-        width:210px;
-    }
-
-    .main{
-        margin-right:210px;
-    }
-
-    .stats{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .products-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-@media(max-width:700px){
-
-    .sidebar{
-        position:relative;
-        width:100%;
-        height:auto;
-        padding:15px;
-    }
-
-    .brand{
-        padding-bottom:15px;
-    }
-
-    .menu{
-        display:flex;
-        gap:5px;
-        overflow-x:auto;
-        margin-top:15px;
-    }
-
-    .menu button{
-        min-width:max-content;
-        margin:0;
-        text-align:center;
-    }
-
-    .menu .store-btn,
-    .menu .logout{
-        margin-top:0;
-    }
-
-    .main{
-        margin-right:0;
-    }
-
-    .topbar{
-        padding:0 18px;
-    }
-
-    .content{
-        padding:18px;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-    }
-
-    .products-grid{
-        grid-template-columns:1fr;
-    }
-
-    .products-header,
-    .orders-header{
-        align-items:stretch;
-        flex-direction:column;
-    }
-
-    .add-product{
-        width:100%;
-    }
-
-    .order-controls{
-        flex-direction:column;
-    }
-
-    .status-select,
-    .delete-order{
-        width:100%;
-    }
-}
-
-@media(max-width:450px){
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .form-row{
-        grid-template-columns:1fr;
-    }
-
-    .modal{
-        padding:10px;
-    }
-
-    .modal-box{
-        padding:18px;
-    }
-}
-
-</style></head><body><!-- ================= LOGIN ================= --><div class="login-page" id="loginPage"><div class="login-box">
-
-    <div class="login-logo">
-        🏆
-    </div>
-
-    <h1>
-        لوحة الإدارة
-    </h1>
-
-    <p>
-        متجري الرياضي
-    </p>
-
-    <input
-        type="password"
-        id="password"
-        placeholder="كلمة مرور الإدارة"
-    >
-
-    <button
-        class="login-btn"
-        onclick="login()"
-    >
-        🔐 دخول
-    </button>
-
-    <div
-        class="login-error"
-        id="loginError"
-    >
-        كلمة المرور غير صحيحة
-    </div>
-
-</div>
-
-</div><!-- ================= DASHBOARD ================= --><div id="dashboard"><aside class="sidebar">
-
-    <div class="brand">
-
-        <div class="brand-icon">
-            🏆
-        </div>
-
-        <h2>
-            متجري الرياضي
-        </h2>
-
-    </div>
-
-
-    <div class="menu">
-
-        <button
-            id="productsMenu"
-            class="active"
-            onclick="showProducts()"
-        >
-            📦 إدارة المنتجات
-        </button>
-
-
-        <button
-            id="ordersMenu"
-            onclick="showOrders()"
-        >
-            🛒 الطلبات
-            <span id="ordersBadge"></span>
-        </button>
-
-
-        <button
-            onclick="openProductModal()"
-        >
-            ➕ إضافة منتج
-        </button>
-
-
-        <button
-            class="store-btn"
-            onclick="goToStore()"
-        >
-            🛍️ فتح المتجر
-        </button>
-
-
-        <button
-            class="logout"
-            onclick="logout()"
-        >
-            🚪 تسجيل الخروج
-        </button>
-
-    </div>
-
-</aside>
-
-
-<main class="main">
-
-    <div class="topbar">
-
-        <h1 id="pageTitle">
-            إدارة المنتجات
-        </h1>
-
-        <div class="admin-name">
-            مدير المتجر 👤
-        </div>
-
-    </div>
-
-
-    <div class="content">
-
-
-        <!-- ================= STATS ================= -->
-
-        <div class="stats">
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <div class="stat-title">
-                        إجمالي المنتجات
-                    </div>
-
-                    <div class="stat-icon">
-                        📦
-                    </div>
-
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalProducts"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <div class="stat-title">
-                        المنتجات المتوفرة
-                    </div>
-
-                    <div class="stat-icon">
-                        ✅
-                    </div>
-
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="availableProducts"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <div class="stat-title">
-                        الطلبات الجديدة
-                    </div>
-
-                    <div class="stat-icon">
-                        🛒
-                    </div>
-
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="newOrders"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <div class="stat-title">
-                        قيمة المبيعات
-                    </div>
-
-                    <div class="stat-icon">
-                        💰
-                    </div>
-
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="salesValue"
-                >
-                    0 د.ل
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= PRODUCTS ================= -->
-
-        <section
-            id="productsSection"
-            class="admin-section active-section"
-        >
-
-            <section class="products-box">
-
-                <div class="products-header">
-
-                    <h2>
-                        📦 المنتجات
-                    </h2>
-
-                    <button
-                        class="add-product"
-                        onclick="openProductModal()"
-                    >
-                        ➕ إضافة منتج جديد
-                    </button>
-
-                </div>
-
-
-                <input
-                    type="text"
-                    class="search-box"
-                    id="searchProducts"
-                    placeholder="🔎 ابحث عن اسم المنتج..."
-                    oninput="renderProducts()"
-                >
-
-
-                <div
-                    class="products-grid"
-                    id="productsGrid"
-                ></div>
-
-            </section>
-
-        </section>
-
-
-        <!-- ================= ORDERS ================= -->
-
-        <section
-            id="ordersSection"
-            class="admin-section"
-        >
-
-            <section class="orders-box">
-
-                <div class="orders-header">
-
-                    <h2>
-                        🛒 طلبات العملاء
-                    </h2>
-
-                    <button
-                        class="add-product"
-                        onclick="renderOrders(); updateOrderStats();"
-                    >
-                        🔄 تحديث
-                    </button>
-
-                </div>
-
-
-                <input
-                    type="text"
-                    class="search-box"
-                    id="searchOrders"
-                    placeholder="🔎 ابحث برقم الطلب أو اسم العميل أو الهاتف..."
-                    oninput="renderOrders()"
-                >
-
-
-                <div
-                    class="orders-list"
-                    id="ordersList"
-                ></div>
-
-            </section>
-
-        </section>
-
-    </div>
-
-</main>
-
-</div><!-- ================= PRODUCT MODAL ================= --><div
-    class="modal"
-    id="productModal"
-><div class="modal-box">
-
-    <div class="modal-header">
-
-        <h2 id="modalTitle">
-            ➕ إضافة منتج جديد
-        </h2>
-
-        <button
-            class="close"
-            onclick="closeProductModal()"
-        >
-            ×
-        </button>
-
-    </div>
-
-
-    <form id="productForm">
-
-        <input
-            type="hidden"
-            id="productId"
-        >
-
-
-        <div class="form-group">
-
-            <label>
-                اسم المنتج
-            </label>
-
-            <input
-                type="text"
-                id="productName"
-                placeholder="مثال: قميص الأرجنتين"
-                required
-            >
-
-        </div>
-
-
-        <div class="form-row">
-
-            <div class="form-group">
-
-                <label>
-                    السعر بالدينار
-                </label>
-
-                <input
-                    type="number"
-                    id="productPrice"
-                    min="0"
-                    step="0.01"
-                    required
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    الكمية
-                </label>
-
-                <input
-                    type="number"
-                    id="productQuantity"
-                    min="0"
-                    required
-                >
-
-            </div>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                القسم
-            </label>
-
-            <select
-                id="productCategory"
-                required
-            >
-
-                <option value="">
-                    اختر القسم
-                </option>
-
-                <option value="قمصان">
-                    قمصان
-                </option>
-
-                <option value="بناطيل">
-                    بناطيل
-                </option>
-
-                <option value="أحذية">
-                    أحذية
-                </option>
-
-                <option value="إكسسوارات">
-                    إكسسوارات
-                </option>
-
-                <option value="بدلات">
-                    بدلات
-                </option>
-
-                <option value="شورتات">
-                    شورتات
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                المقاسات
-            </label>
-
-            <input
-                type="text"
-                id="productSizes"
-                placeholder="S, M, L, XL"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                الألوان
-            </label>
-
-            <input
-                type="text"
-                id="productColors"
-                placeholder="أسود, أبيض, أزرق"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                وصف المنتج
-            </label>
-
-            <textarea
-                id="productDescription"
-                placeholder="اكتب وصف المنتج..."
-            ></textarea>
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                صورة المنتج
-            </label>
-
-            <input
-                type="file"
-                id="productImage"
-                accept="image/*"
-            >
-
-            <div
-                class="image-preview"
-                id="imagePreview"
-            >
-
-                <img
-                    id="previewImg"
-                >
-
-            </div>
-
-        </div>
-
-
-        <div class="form-actions">
-
-            <button
-                type="button"
-                class="cancel"
-                onclick="closeProductModal()"
-            >
-                إلغاء
-            </button>
-
-            <button
-                type="submit"
-                class="save"
-            >
-                💾 حفظ المنتج
-            </button>
-
-        </div>
-
-    </form>
-
-</div>
-
-</div><script>
+/* =====================================================
+   الإعدادات
+===================================================== */
 
 const STORAGE_KEY =
     "myStoreProducts";
@@ -1250,16 +16,67 @@ const ORDERS_KEY =
 const PASSWORD =
     "1234";
 
+
+/* =====================================================
+   FIREBASE
+===================================================== */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyDbdvEYLluTTT7Ti8gikDCBHkf53_07kMs",
+
+    authDomain:
+        "suhayeb-25ef9.firebaseapp.com",
+
+    projectId:
+        "suhayeb-25ef9",
+
+    storageBucket:
+        "suhayeb-25ef9.firebasestorage.app",
+
+    messagingSenderId:
+        "904310961712",
+
+    appId:
+        "1:904310961712:web:178e457e45db1136d85ff5",
+
+    measurementId:
+        "G-KXMD8DQS2X"
+
+};
+
+
+firebase.initializeApp(firebaseConfig);
+
+const db =
+    firebase.firestore();
+
+
+const ORDERS_COLLECTION =
+    "orders";
+
+
+/* =====================================================
+   المتغيرات
+===================================================== */
+
 let products = [];
 
 let editingId = null;
 
 let selectedImage = "";
 
+let firestoreOrders = [];
 
-// ========================================
-// LOGIN
-// ========================================
+let ordersLoaded = false;
+
+let ordersUnsubscribe = null;
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
 
 function login(){
 
@@ -1290,6 +107,10 @@ function login(){
 }
 
 
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
 function showDashboard(){
 
     document.getElementById(
@@ -1297,28 +118,49 @@ function showDashboard(){
     ).style.display =
         "none";
 
+
     document.getElementById(
         "dashboard"
     ).style.display =
         "block";
 
+
     loadProducts();
 
-    updateOrderStats();
+
+    startOrdersListener();
 
 }
 
 
+/* =====================================================
+   LOGOUT
+===================================================== */
+
 function logout(){
+
+    if(ordersUnsubscribe){
+
+        ordersUnsubscribe();
+
+        ordersUnsubscribe = null;
+
+    }
+
 
     sessionStorage.removeItem(
         "adminLoggedIn"
     );
 
+
     location.reload();
 
 }
 
+
+/* =====================================================
+   STORE
+===================================================== */
 
 function goToStore(){
 
@@ -1328,9 +170,9 @@ function goToStore(){
 }
 
 
-// ========================================
-// الأقسام
-// ========================================
+/* =====================================================
+   الأقسام
+===================================================== */
 
 function showProducts(){
 
@@ -1339,6 +181,7 @@ function showProducts(){
     ).classList.add(
         "active-section"
     );
+
 
     document.getElementById(
         "ordersSection"
@@ -1352,6 +195,7 @@ function showProducts(){
     ).classList.add(
         "active"
     );
+
 
     document.getElementById(
         "ordersMenu"
@@ -1371,6 +215,10 @@ function showProducts(){
 }
 
 
+/* =====================================================
+   عرض الطلبات
+===================================================== */
+
 function showOrders(){
 
     document.getElementById(
@@ -1378,6 +226,7 @@ function showOrders(){
     ).classList.remove(
         "active-section"
     );
+
 
     document.getElementById(
         "ordersSection"
@@ -1391,6 +240,7 @@ function showOrders(){
     ).classList.remove(
         "active"
     );
+
 
     document.getElementById(
         "ordersMenu"
@@ -1412,9 +262,10 @@ function showOrders(){
 }
 
 
-// ========================================
-// PRODUCTS
-// ========================================
+/* =====================================================
+   PRODUCTS
+   لا تغيير - تبقى LocalStorage
+===================================================== */
 
 function loadProducts(){
 
@@ -1432,6 +283,7 @@ function loadProducts(){
         products = [];
 
     }
+
 
     renderProducts();
 
@@ -1457,7 +309,9 @@ function renderProducts(){
 
 
     if(!grid){
+
         return;
+
     }
 
 
@@ -1504,9 +358,11 @@ function renderProducts(){
 
         `;
 
+
         updateStats();
 
         return;
+
     }
 
 
@@ -1528,6 +384,7 @@ function renderProducts(){
 
                 const image =
                     product.image
+
                     ?
 
                     `
@@ -1648,9 +505,9 @@ function renderProducts(){
 }
 
 
-// ========================================
-// STATS
-// ========================================
+/* =====================================================
+   STATS
+===================================================== */
 
 function updateStats(){
 
@@ -1665,22 +522,440 @@ function updateStats(){
         ).length;
 
 
-    document.getElementById(
-        "totalProducts"
-    ).textContent =
-        total;
+    const totalElement =
+        document.getElementById(
+            "totalProducts"
+        );
 
 
-    document.getElementById(
-        "availableProducts"
-    ).textContent =
-        available;
+    const availableElement =
+        document.getElementById(
+            "availableProducts"
+        );
+
+
+    if(totalElement){
+
+        totalElement.textContent =
+            total;
+
+    }
+
+
+    if(availableElement){
+
+        availableElement.textContent =
+            available;
+
+    }
 
 
     updateOrderStats();
 
 }
 
+
+/* =====================================================
+   FIRESTORE - الطلبات
+===================================================== */
+
+
+/*
+    هذه الدالة تبدأ مراقبة Collection اسمها:
+
+    orders
+
+    أي طلب جديد أو تغيير حالة أو حذف
+    سيظهر في لوحة الإدارة تلقائياً.
+*/
+
+function startOrdersListener(){
+
+    if(ordersUnsubscribe){
+
+        ordersUnsubscribe();
+
+        ordersUnsubscribe = null;
+
+    }
+
+
+    console.log(
+        "بدء الاتصال بـ Firestore..."
+    );
+
+
+    ordersUnsubscribe =
+        db.collection(
+            ORDERS_COLLECTION
+        )
+        .onSnapshot(
+
+            async snapshot => {
+
+                const orders = [];
+
+
+                snapshot.forEach(
+                    doc => {
+
+                        const data =
+                            doc.data();
+
+
+                        orders.push({
+
+                            ...data,
+
+                            id:
+                                data.id ||
+                                doc.id
+
+                        });
+
+                    }
+                );
+
+
+                /*
+                    ترتيب الأحدث أولاً
+                */
+
+                orders.sort(
+                    (a,b) => {
+
+                        const dateA =
+                            new Date(
+                                a.createdAt ||
+                                a.date ||
+                                0
+                            ).getTime();
+
+
+                        const dateB =
+                            new Date(
+                                b.createdAt ||
+                                b.date ||
+                                0
+                            ).getTime();
+
+
+                        return dateB - dateA;
+
+                    }
+                );
+
+
+                firestoreOrders =
+                    orders;
+
+
+                ordersLoaded =
+                    true;
+
+
+                /*
+                    نحفظ نسخة محلية أيضاً
+                    كنسخة احتياطية
+                */
+
+                localStorage.setItem(
+                    ORDERS_KEY,
+                    JSON.stringify(
+                        firestoreOrders
+                    )
+                );
+
+
+                renderOrders();
+
+                updateOrderStats();
+
+
+                console.log(
+                    "Firestore orders:",
+                    firestoreOrders
+                );
+
+
+                /*
+                    إذا Firestore فارغ
+                    وكانت هناك طلبات قديمة في LocalStorage
+                    نحاول نقلها إلى Firestore
+                */
+
+                if(
+                    snapshot.empty
+                ){
+
+                    await migrateOldOrders();
+
+                }
+
+            },
+
+            error => {
+
+                console.error(
+                    "Firestore error:",
+                    error
+                );
+
+
+                ordersLoaded =
+                    false;
+
+
+                /*
+                    في حالة وجود مشكلة
+                    نرجع للنسخة المحلية
+                */
+
+                try{
+
+                    firestoreOrders =
+                        JSON.parse(
+                            localStorage.getItem(
+                                ORDERS_KEY
+                            )
+                        ) || [];
+
+                }catch(e){
+
+                    firestoreOrders = [];
+
+                }
+
+
+                renderOrders();
+
+                updateOrderStats();
+
+
+                alert(
+                    "تعذر الاتصال بقاعدة البيانات حالياً، سيتم عرض النسخة المحلية."
+                );
+
+            }
+
+        );
+
+}
+
+
+/* =====================================================
+   نقل الطلبات القديمة من LocalStorage
+   إلى Firestore
+===================================================== */
+
+async function migrateOldOrders(){
+
+    let localOrders = [];
+
+
+    try{
+
+        localOrders =
+            JSON.parse(
+                localStorage.getItem(
+                    ORDERS_KEY
+                )
+            ) || [];
+
+    }catch(e){
+
+        localOrders = [];
+
+    }
+
+
+    if(
+        !Array.isArray(localOrders) ||
+        localOrders.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    console.log(
+        "محاولة نقل الطلبات القديمة إلى Firestore..."
+    );
+
+
+    let migrated =
+        0;
+
+
+    for(
+        const order of localOrders
+    ){
+
+        if(!order){
+
+            continue;
+
+        }
+
+
+        const orderId =
+            String(
+                order.id ||
+                generateOrderId()
+            );
+
+
+        try{
+
+            await db
+                .collection(
+                    ORDERS_COLLECTION
+                )
+                .doc(orderId)
+                .set({
+
+                    ...order,
+
+                    id:
+                        orderId,
+
+                    migratedAt:
+                        new Date().toISOString()
+
+                }, {
+
+                    merge:true
+
+                });
+
+
+            migrated++;
+
+        }catch(error){
+
+            console.error(
+                "فشل نقل الطلب:",
+                orderId,
+                error
+            );
+
+        }
+
+    }
+
+
+    if(migrated > 0){
+
+        console.log(
+            "تم نقل " +
+            migrated +
+            " طلب إلى Firestore."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   توليد ID احتياطي
+===================================================== */
+
+function generateOrderId(){
+
+    return (
+        "LYB-" +
+        Date.now() +
+        "-" +
+        Math.floor(
+            1000 +
+            Math.random() *
+            9000
+        )
+    );
+
+}
+
+
+/* =====================================================
+   getOrders
+===================================================== */
+
+function getOrders(){
+
+    /*
+        إذا Firestore اشتغل،
+        نستخدم بيانات Firestore.
+    */
+
+    if(ordersLoaded){
+
+        return firestoreOrders;
+
+    }
+
+
+    /*
+        fallback إلى LocalStorage
+    */
+
+    try{
+
+        const data =
+            localStorage.getItem(
+                ORDERS_KEY
+            );
+
+
+        if(!data){
+
+            return [];
+
+        }
+
+
+        const parsed =
+            JSON.parse(data);
+
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+    }catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   saveOrders
+   نحتفظ بها للتوافق مع النظام القديم
+===================================================== */
+
+function saveOrders(orders){
+
+    localStorage.setItem(
+        ORDERS_KEY,
+        JSON.stringify(orders)
+    );
+
+
+    firestoreOrders =
+        Array.isArray(orders)
+        ? orders
+        : [];
+
+}
+
+
+/* =====================================================
+   الإحصائيات
+===================================================== */
 
 function updateOrderStats(){
 
@@ -1691,18 +966,25 @@ function updateOrderStats(){
     const newOrders =
         orders.filter(
             order =>
-                normalizeStatus(order.status) ===
+                normalizeStatus(
+                    order.status
+                ) ===
                 "جديد"
         ).length;
 
 
     const sales =
         orders.reduce(
-            (sum, order) =>
-                sum +
-                Number(
-                    order.total || 0
-                ),
+            (sum, order) => {
+
+                return (
+                    sum +
+                    Number(
+                        order.total || 0
+                    )
+                );
+
+            },
             0
         );
 
@@ -1754,66 +1036,23 @@ function updateOrderStats(){
 }
 
 
-// ========================================
-// ORDERS
-// ========================================
-
-function getOrders(){
-
-    try{
-
-        const data =
-            localStorage.getItem(
-                ORDERS_KEY
-            );
-
-
-        if(!data){
-
-            return [];
-
-        }
-
-
-        const parsed =
-            JSON.parse(data);
-
-
-        return Array.isArray(parsed)
-            ? parsed
-            : [];
-
-    }catch(error){
-
-        return [];
-
-    }
-
-}
-
-
-function saveOrders(orders){
-
-    localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify(orders)
-    );
-
-}
-
-
-// ========================================
-// توحيد الحالات القديمة والجديدة
-// ========================================
+/* =====================================================
+   توحيد الحالات
+===================================================== */
 
 function normalizeStatus(status){
 
     const value =
-        String(status || "جديد").trim();
+        String(
+            status ||
+            "جديد"
+        ).trim();
 
 
     if(value === "جديد"){
+
         return "جديد";
+
     }
 
 
@@ -1821,7 +1060,9 @@ function normalizeStatus(status){
         value === "مؤكد" ||
         value === "تم التأكيد"
     ){
+
         return "تم التأكيد";
+
     }
 
 
@@ -1829,14 +1070,16 @@ function normalizeStatus(status){
         value === "قيد التجهيز" ||
         value === "جاري التجهيز"
     ){
+
         return "قيد التجهيز";
+
     }
 
 
-    if(
-        value === "جاهز"
-    ){
+    if(value === "جاهز"){
+
         return "جاهز";
+
     }
 
 
@@ -1844,7 +1087,9 @@ function normalizeStatus(status){
         value === "في الشحن" ||
         value === "شحن"
     ){
+
         return "في الشحن";
+
     }
 
 
@@ -1852,7 +1097,9 @@ function normalizeStatus(status){
         value === "تم التسليم" ||
         value === "مكتمل"
     ){
+
         return "تم التسليم";
+
     }
 
 
@@ -1860,7 +1107,9 @@ function normalizeStatus(status){
         value === "ملغي" ||
         value === "ملغى"
     ){
+
         return "ملغي";
+
     }
 
 
@@ -1869,10 +1118,9 @@ function normalizeStatus(status){
 }
 
 
-// ========================================
-// اسم العميل والهاتف
-// يدعم الطلبات القديمة والجديدة
-// ========================================
+/* =====================================================
+   العميل
+===================================================== */
 
 function getCustomerName(order){
 
@@ -1896,9 +1144,9 @@ function getCustomerPhone(order){
 }
 
 
-// ========================================
-// عرض الطلبات
-// ========================================
+/* =====================================================
+   عرض الطلبات
+===================================================== */
 
 function renderOrders(){
 
@@ -1939,6 +1187,7 @@ function renderOrders(){
 
                 const text =
                     (
+
                         String(
                             order.id || ""
                         ) +
@@ -1946,13 +1195,17 @@ function renderOrders(){
                         " " +
 
                         String(
-                            getCustomerName(order)
+                            getCustomerName(
+                                order
+                            )
                         ) +
 
                         " " +
 
                         String(
-                            getCustomerPhone(order)
+                            getCustomerPhone(
+                                order
+                            )
                         ) +
 
                         " " +
@@ -1966,6 +1219,7 @@ function renderOrders(){
                         String(
                             order.address || ""
                         )
+
                     )
                     .toLowerCase();
 
@@ -1984,7 +1238,13 @@ function renderOrders(){
 
             <div class="empty">
 
-                🛒 لا توجد طلبات حالياً
+                ${
+                    ordersLoaded
+                    ?
+                    "🛒 لا توجد طلبات حالياً"
+                    :
+                    "⏳ جاري تحميل الطلبات..."
+                }
 
             </div>
 
@@ -2006,48 +1266,64 @@ function renderOrders(){
 }
 
 
-// ========================================
-// أيقونة حالة الطلب
-// ========================================
+/* =====================================================
+   أيقونة الحالة
+===================================================== */
 
 function getStatusIcon(status){
 
     const normalized =
-        normalizeStatus(status);
+        normalizeStatus(
+            status
+        );
 
 
     if(normalized === "جديد"){
+
         return "🆕";
+
     }
 
 
     if(normalized === "تم التأكيد"){
+
         return "👍";
+
     }
 
 
     if(normalized === "قيد التجهيز"){
+
         return "🔧";
+
     }
 
 
     if(normalized === "جاهز"){
+
         return "📦";
+
     }
 
 
     if(normalized === "في الشحن"){
+
         return "🚚";
+
     }
 
 
     if(normalized === "تم التسليم"){
+
         return "✅";
+
     }
 
 
     if(normalized === "ملغي"){
+
         return "❌";
+
     }
 
 
@@ -2056,28 +1332,51 @@ function getStatusIcon(status){
 }
 
 
-// ========================================
-// بطاقة الطلب
-// ========================================
+/* =====================================================
+   بطاقة الطلب
+===================================================== */
 
 function createOrderCard(order){
 
     const items =
-        Array.isArray(order.items)
+        Array.isArray(
+            order.items
+        )
         ? order.items
         : [];
 
 
     const date =
         order.dateText ||
+
         (
-            order.date
-            ? new Date(
-                order.date
+            order.createdAt
+
+            ?
+
+            new Date(
+                order.createdAt
             ).toLocaleString(
                 "ar-LY"
             )
-            : "-"
+
+            :
+
+            (
+                order.date
+
+                ?
+
+                new Date(
+                    order.date
+                ).toLocaleString(
+                    "ar-LY"
+                )
+
+                :
+
+                "-"
+            )
         );
 
 
@@ -2099,10 +1398,15 @@ function createOrderCard(order){
         );
 
 
+    const orderId =
+        order.id ||
+        order.orderNumber ||
+        "-";
+
+
     return `
 
         <div class="order-card">
-
 
             <div class="order-top">
 
@@ -2111,7 +1415,7 @@ function createOrderCard(order){
                     <div class="order-number">
 
                         🔢 ${escapeHTML(
-                            order.id || "-"
+                            orderId
                         )}
 
                     </div>
@@ -2129,11 +1433,16 @@ function createOrderCard(order){
 
                     </div>
 
+
                     <div class="order-status-badge">
 
-                        ${getStatusIcon(status)}
+                        ${getStatusIcon(
+                            status
+                        )}
 
-                        ${escapeHTML(status)}
+                        ${escapeHTML(
+                            status
+                        )}
 
                     </div>
 
@@ -2241,24 +1550,39 @@ function createOrderCard(order){
 
                                     ${
                                         item.size
+
                                         ?
+
                                         "المقاس: " +
-                                        escapeHTML(item.size)
+                                        escapeHTML(
+                                            item.size
+                                        )
+
                                         :
+
                                         ""
                                     }
 
+
                                     ${
                                         item.color
+
                                         ?
+
                                         (
                                             item.size
                                             ? " | "
                                             : ""
                                         ) +
+
                                         "اللون: " +
-                                        escapeHTML(item.color)
+
+                                        escapeHTML(
+                                            item.color
+                                        )
+
                                         :
+
                                         ""
                                     }
 
@@ -2277,6 +1601,7 @@ function createOrderCard(order){
                                     Number(
                                         item.quantity || 0
                                     )
+
                                 ).toFixed(2)}
 
                                 د.ل
@@ -2292,7 +1617,9 @@ function createOrderCard(order){
 
                     `
                     <div class="empty">
+
                         لا توجد منتجات
+
                     </div>
                     `
                 }
@@ -2315,12 +1642,13 @@ function createOrderCard(order){
 
             <div class="order-controls">
 
-
                 <select
                     class="status-select"
                     onchange="
                         changeOrderStatus(
-                            '${escapeJS(order.id || "")}',
+                            '${escapeJS(
+                                orderId
+                            )}',
                             this.value
                         )
                     "
@@ -2329,8 +1657,7 @@ function createOrderCard(order){
                     <option
                         value="جديد"
                         ${
-                            status ===
-                            "جديد"
+                            status === "جديد"
                             ? "selected"
                             : ""
                         }
@@ -2342,8 +1669,7 @@ function createOrderCard(order){
                     <option
                         value="تم التأكيد"
                         ${
-                            status ===
-                            "تم التأكيد"
+                            status === "تم التأكيد"
                             ? "selected"
                             : ""
                         }
@@ -2355,8 +1681,7 @@ function createOrderCard(order){
                     <option
                         value="قيد التجهيز"
                         ${
-                            status ===
-                            "قيد التجهيز"
+                            status === "قيد التجهيز"
                             ? "selected"
                             : ""
                         }
@@ -2368,8 +1693,7 @@ function createOrderCard(order){
                     <option
                         value="جاهز"
                         ${
-                            status ===
-                            "جاهز"
+                            status === "جاهز"
                             ? "selected"
                             : ""
                         }
@@ -2381,8 +1705,7 @@ function createOrderCard(order){
                     <option
                         value="في الشحن"
                         ${
-                            status ===
-                            "في الشحن"
+                            status === "في الشحن"
                             ? "selected"
                             : ""
                         }
@@ -2394,8 +1717,7 @@ function createOrderCard(order){
                     <option
                         value="تم التسليم"
                         ${
-                            status ===
-                            "تم التسليم"
+                            status === "تم التسليم"
                             ? "selected"
                             : ""
                         }
@@ -2407,8 +1729,7 @@ function createOrderCard(order){
                     <option
                         value="ملغي"
                         ${
-                            status ===
-                            "ملغي"
+                            status === "ملغي"
                             ? "selected"
                             : ""
                         }
@@ -2423,11 +1744,15 @@ function createOrderCard(order){
                     class="delete-order"
                     onclick="
                         deleteOrder(
-                            '${escapeJS(order.id || "")}'
+                            '${escapeJS(
+                                orderId
+                            )}'
                         )
                     "
                 >
+
                     🗑️ حذف الطلب
+
                 </button>
 
             </div>
@@ -2439,14 +1764,20 @@ function createOrderCard(order){
 }
 
 
-// ========================================
-// تغيير حالة الطلب
-// ========================================
+/* =====================================================
+   تغيير حالة الطلب
+===================================================== */
 
-function changeOrderStatus(
+async function changeOrderStatus(
     orderId,
     status
 ){
+
+    const normalized =
+        normalizeStatus(
+            status
+        );
+
 
     const orders =
         getOrders();
@@ -2455,50 +1786,109 @@ function changeOrderStatus(
     const index =
         orders.findIndex(
             order =>
-                String(order.id) ===
-                String(orderId)
+                String(
+                    order.id
+                ) ===
+                String(
+                    orderId
+                )
         );
 
 
-    if(index === -1){
+    /*
+        نحدث الواجهة المحلية مباشرة
+    */
 
-        alert(
-            "لم يتم العثور على الطلب."
+    if(index !== -1){
+
+        orders[index].status =
+            normalized;
+
+
+        orders[index].updatedAt =
+            new Date().toISOString();
+
+
+        firestoreOrders =
+            orders;
+
+
+        localStorage.setItem(
+            ORDERS_KEY,
+            JSON.stringify(
+                firestoreOrders
+            )
         );
 
-        return;
+
+        renderOrders();
+
+        updateOrderStats();
 
     }
 
 
-    orders[index].status =
-        normalizeStatus(status);
+    /*
+        الحفظ الحقيقي في Firestore
+    */
+
+    try{
+
+        await db
+            .collection(
+                ORDERS_COLLECTION
+            )
+            .doc(
+                String(
+                    orderId
+                )
+            )
+            .set({
+
+                status:
+                    normalized,
+
+                updatedAt:
+                    new Date().toISOString()
+
+            }, {
+
+                merge:true
+
+            });
 
 
-    saveOrders(
-        orders
-    );
+        alert(
+            "تم تحديث حالة الطلب إلى: " +
+            normalized +
+            " ✅"
+        );
 
 
-    renderOrders();
+    }catch(error){
 
-    updateOrderStats();
+        console.error(
+            error
+        );
 
 
-    alert(
-        "تم تحديث حالة الطلب إلى: " +
-        orders[index].status +
-        " ✅"
-    );
+        alert(
+            "حدث خطأ أثناء تحديث الطلب في Firestore ❌\n\n" +
+            "تأكد من اتصال الإنترنت وقواعد Firestore."
+        );
+
+    }
 
 }
 
 
-// ========================================
-// حذف الطلب
-// ========================================
+/* =====================================================
+   حذف الطلب
+===================================================== */
 
-function deleteOrder(orderId){
+async function deleteOrder(
+    orderId
+){
 
     const orders =
         getOrders();
@@ -2507,8 +1897,12 @@ function deleteOrder(orderId){
     const order =
         orders.find(
             item =>
-                String(item.id) ===
-                String(orderId)
+                String(
+                    item.id
+                ) ===
+                String(
+                    orderId
+                )
         );
 
 
@@ -2532,34 +1926,78 @@ function deleteOrder(orderId){
     }
 
 
-    const filtered =
-        orders.filter(
-            item =>
-                String(item.id) !==
-                String(orderId)
+    try{
+
+        /*
+            حذف من Firestore
+        */
+
+        await db
+            .collection(
+                ORDERS_COLLECTION
+            )
+            .doc(
+                String(
+                    orderId
+                )
+            )
+            .delete();
+
+
+        /*
+            حذف من النسخة المحلية
+        */
+
+        firestoreOrders =
+            firestoreOrders.filter(
+                item =>
+                    String(
+                        item.id
+                    ) !==
+                    String(
+                        orderId
+                    )
+            );
+
+
+        localStorage.setItem(
+            ORDERS_KEY,
+            JSON.stringify(
+                firestoreOrders
+            )
         );
 
 
-    saveOrders(
-        filtered
-    );
+        renderOrders();
+
+        updateOrderStats();
 
 
-    renderOrders();
+        alert(
+            "تم حذف الطلب من قاعدة البيانات ✅"
+        );
 
-    updateOrderStats();
+
+    }catch(error){
+
+        console.error(
+            error
+        );
 
 
-    alert(
-        "تم حذف الطلب ✅"
-    );
+        alert(
+            "حدث خطأ أثناء حذف الطلب ❌"
+        );
+
+    }
 
 }
 
 
-// ========================================
-// ADD PRODUCT
-// ========================================
+/* =====================================================
+   ADD PRODUCT
+   لا تغيير
+===================================================== */
 
 function openProductModal(){
 
@@ -2600,9 +2038,9 @@ function openProductModal(){
 }
 
 
-// ========================================
-// CLOSE MODAL
-// ========================================
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
 
 function closeProductModal(){
 
@@ -2615,17 +2053,21 @@ function closeProductModal(){
 }
 
 
-// ========================================
-// EDIT PRODUCT
-// ========================================
+/* =====================================================
+   EDIT PRODUCT
+===================================================== */
 
 function editProduct(id){
 
     const product =
         products.find(
             p =>
-                String(p.id) ===
-                String(id)
+                String(
+                    p.id
+                ) ===
+                String(
+                    id
+                )
         );
 
 
@@ -2738,9 +2180,9 @@ function editProduct(id){
 }
 
 
-// ========================================
-// IMAGE
-// ========================================
+/* =====================================================
+   IMAGE
+===================================================== */
 
 document.getElementById(
     "productImage"
@@ -2792,9 +2234,9 @@ document.getElementById(
 );
 
 
-// ========================================
-// SAVE PRODUCT
-// ========================================
+/* =====================================================
+   SAVE PRODUCT
+===================================================== */
 
 document.getElementById(
     "productForm"
@@ -2839,7 +2281,8 @@ document.getElementById(
             ).value
             .split(",")
             .map(
-                x => x.trim()
+                x =>
+                    x.trim()
             )
             .filter(Boolean);
 
@@ -2850,7 +2293,8 @@ document.getElementById(
             ).value
             .split(",")
             .map(
-                x => x.trim()
+                x =>
+                    x.trim()
             )
             .filter(Boolean);
 
@@ -2891,8 +2335,12 @@ document.getElementById(
             const index =
                 products.findIndex(
                     p =>
-                        String(p.id) ===
-                        String(editingId)
+                        String(
+                            p.id
+                        ) ===
+                        String(
+                            editingId
+                        )
                 );
 
 
@@ -2969,17 +2417,21 @@ document.getElementById(
 );
 
 
-// ========================================
-// DELETE PRODUCT
-// ========================================
+/* =====================================================
+   DELETE PRODUCT
+===================================================== */
 
 function deleteProduct(id){
 
     const product =
         products.find(
             p =>
-                String(p.id) ===
-                String(id)
+                String(
+                    p.id
+                ) ===
+                String(
+                    id
+                )
         );
 
 
@@ -3006,8 +2458,12 @@ function deleteProduct(id){
     products =
         products.filter(
             p =>
-                String(p.id) !==
-                String(id)
+                String(
+                    p.id
+                ) !==
+                String(
+                    id
+                )
         );
 
 
@@ -3023,71 +2479,75 @@ function deleteProduct(id){
 }
 
 
-// ========================================
-// ESCAPE HTML
-// ========================================
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
 function escapeHTML(text){
 
-    return String(text || "")
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return String(
+        text || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
 
 }
 
 
-// ========================================
-// حماية النص عند وضعه داخل onclick
-// ========================================
+/* =====================================================
+   ESCAPE JS
+===================================================== */
 
 function escapeJS(text){
 
-    return String(text || "")
-        .replace(
-            /\\/g,
-            "\\\\"
-        )
-        .replace(
-            /'/g,
-            "\\'"
-        )
-        .replace(
-            /"/g,
-            '\\"'
-        )
-        .replace(
-            /\n/g,
-            "\\n"
-        )
-        .replace(
-            /\r/g,
-            "\\r"
-        );
+    return String(
+        text || ""
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /"/g,
+        '\\"'
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    );
 
 }
 
 
-// ========================================
-// CLOSE MODAL
-// ========================================
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
 
 document.getElementById(
     "productModal"
@@ -3108,9 +2568,9 @@ document.getElementById(
 );
 
 
-// ========================================
-// ENTER LOGIN
-// ========================================
+/* =====================================================
+   ENTER LOGIN
+===================================================== */
 
 document.getElementById(
     "password"
@@ -3131,9 +2591,9 @@ document.getElementById(
 );
 
 
-// ========================================
-// START
-// ========================================
+/* =====================================================
+   START
+===================================================== */
 
 if(
     sessionStorage.getItem(
@@ -3146,4 +2606,4 @@ if(
 
 }
 
-</script></body></html>
+    </script>
