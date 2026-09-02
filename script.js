@@ -1572,6 +1572,55 @@ function renderCheckoutItems() {
 
 
 /* =========================
+   إنشاء رقم الطلب
+========================= */
+
+function generateOrderNumber() {
+
+    const random =
+        Math.floor(
+            1000 + Math.random() * 9000
+        );
+
+    const time =
+        Date.now()
+            .toString()
+            .slice(-6);
+
+    return "LYB-" + time + random;
+
+}
+
+
+/* =========================
+   الحصول على المستخدم الحالي
+========================= */
+
+function getCurrentUser() {
+
+    try {
+
+        const savedUser =
+            localStorage.getItem(
+                CURRENT_USER_KEY
+            );
+
+        if (!savedUser) {
+            return null;
+        }
+
+        return JSON.parse(savedUser);
+
+    } catch (error) {
+
+        return null;
+
+    }
+
+}
+
+
+/* =========================
    إرسال الطلب
 ========================= */
 
@@ -1757,6 +1806,22 @@ function setupCheckoutForm() {
             });
 
 
+            /*
+               إنشاء رقم الطلب قبل الحفظ
+            */
+
+            const orderNumber =
+                generateOrderNumber();
+
+
+            message +=
+                "%0A🔢 *رقم الطلب: " +
+                encodeURIComponent(
+                    orderNumber
+                ) +
+                "*";
+
+
             message +=
                 "%0A💰 *الإجمالي: " +
                 encodeURIComponent(
@@ -1765,13 +1830,18 @@ function setupCheckoutForm() {
                 "*";
 
 
+            /*
+               حفظ الطلب
+            */
+
             saveOrder(
                 name,
                 phone,
                 city,
                 address,
                 notes,
-                total
+                total,
+                orderNumber
             );
 
 
@@ -1790,6 +1860,15 @@ function setupCheckoutForm() {
 
 
             closeCheckout();
+
+
+            alert(
+                "تم تسجيل طلبك بنجاح ✅\n\n" +
+                "رقم الطلب: " +
+                orderNumber +
+                "\n\n" +
+                "سيتم تحويلك إلى واتساب لإرسال الطلب."
+            );
 
 
             window.open(
@@ -1813,7 +1892,8 @@ function saveOrder(
     city,
     address,
     notes,
-    total
+    total,
+    orderNumber
 ) {
 
     try {
@@ -1830,26 +1910,69 @@ function saveOrder(
                 : [];
 
 
+        const user =
+            getCurrentUser();
+
+
+        const now =
+            new Date();
+
+
         const order = {
 
+            /*
+               رقم الطلب
+            */
+
             id:
+                orderNumber ||
+                generateOrderNumber(),
+
+
+            /*
+               رقم داخلي إضافي
+            */
+
+            orderId:
                 "ORD-" +
                 Date.now(),
+
+
+            /*
+               المستخدم صاحب الطلب
+            */
+
+            userId:
+                user
+                    ? (
+                        user.uid ||
+                        user.id ||
+                        user.email ||
+                        user.phone ||
+                        ""
+                    )
+                    : "",
+
 
             customerName:
                 name,
 
+
             customerPhone:
                 phone,
+
 
             city:
                 city,
 
+
             address:
                 address,
 
+
             notes:
                 notes,
+
 
             items:
                 cart.map(function (item) {
@@ -1863,32 +1986,55 @@ function saveOrder(
                             item.name,
 
                         price:
-                            item.price,
+                            Number(
+                                item.price || 0
+                            ),
 
                         quantity:
-                            item.quantity,
+                            Number(
+                                item.quantity || 0
+                            ),
 
                         size:
                             item.size || "",
 
                         color:
-                            item.color || ""
+                            item.color || "",
+
+                        image:
+                            item.image || ""
 
                     };
 
                 }),
 
+
             total:
-                total,
+                Number(total || 0),
+
+
+            /*
+               حالة الطلب
+            */
 
             status:
                 "جديد",
 
+
+            /*
+               التاريخ بصيغة تقنية
+            */
+
             date:
-                new Date().toISOString(),
+                now.toISOString(),
+
+
+            /*
+               التاريخ المعروض
+            */
 
             dateText:
-                new Date().toLocaleString(
+                now.toLocaleString(
                     "ar-LY"
                 )
 
@@ -1904,6 +2050,42 @@ function saveOrder(
         );
 
 
+        /*
+           حفظ نسخة خاصة بالمستخدم
+           حتى نقدر نعرض طلباته في حسابه
+        */
+
+        if (user) {
+
+            const userKey =
+                getUserOrdersKey(user);
+
+
+            const userOrders =
+                JSON.parse(
+                    localStorage.getItem(
+                        userKey
+                    ) || "[]"
+                );
+
+
+            userOrders.unshift(order);
+
+
+            localStorage.setItem(
+                userKey,
+                JSON.stringify(userOrders)
+            );
+
+        }
+
+
+        console.log(
+            "تم حفظ الطلب:",
+            order
+        );
+
+
     } catch (error) {
 
         console.error(
@@ -1912,6 +2094,156 @@ function saveOrder(
         );
 
     }
+
+}
+
+
+/* =========================
+   مفتاح طلبات المستخدم
+========================= */
+
+function getUserOrdersKey(user) {
+
+    const identifier =
+        user.uid ||
+        user.id ||
+        user.email ||
+        user.phone;
+
+
+    return (
+        "myStoreUserOrders_" +
+        String(identifier || "guest")
+    );
+
+}
+
+
+/* =========================
+   جلب طلبات المستخدم
+========================= */
+
+function getUserOrders() {
+
+    try {
+
+        const user =
+            getCurrentUser();
+
+
+        if (!user) {
+            return [];
+        }
+
+
+        /*
+           أولاً نحاول جلب النسخة الخاصة بالمستخدم
+        */
+
+        const userKey =
+            getUserOrdersKey(user);
+
+
+        const savedUserOrders =
+            localStorage.getItem(
+                userKey
+            );
+
+
+        if (savedUserOrders) {
+
+            return JSON.parse(
+                savedUserOrders
+            );
+
+        }
+
+
+        /*
+           إذا لم توجد نسخة خاصة،
+           نبحث داخل جميع الطلبات
+        */
+
+        const savedOrders =
+            localStorage.getItem(
+                ORDERS_KEY
+            );
+
+
+        const orders =
+            savedOrders
+                ? JSON.parse(savedOrders)
+                : [];
+
+
+        const identifier =
+            String(
+                user.uid ||
+                user.id ||
+                user.email ||
+                user.phone ||
+                ""
+            );
+
+
+        return orders.filter(
+            function (order) {
+
+                return (
+                    String(
+                        order.userId || ""
+                    ) === identifier
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "خطأ في جلب الطلبات:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================
+   الحصول على اسم حالة الطلب
+========================= */
+
+function getOrderStatusText(status) {
+
+    const statuses = {
+
+        "جديد":
+            "جديد",
+
+        "قيد التجهيز":
+            "قيد التجهيز",
+
+        "تم الشحن":
+            "تم الشحن",
+
+        "تم التسليم":
+            "تم التسليم",
+
+        "ملغي":
+            "ملغي"
+
+    };
+
+
+    return (
+        statuses[status] ||
+        status ||
+        "جديد"
+    );
 
 }
 
