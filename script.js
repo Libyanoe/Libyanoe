@@ -456,11 +456,6 @@ function addToCart(productId) {
         normalizeOptions(product.colors);
 
 
-    /*
-       إذا كان المنتج عنده مقاسات أو ألوان
-       نفتح نافذة الاختيار.
-    */
-
     if (
         sizes.length > 0 ||
         colors.length > 0
@@ -472,11 +467,6 @@ function addToCart(productId) {
 
     }
 
-
-    /*
-       إذا ما عندهش خيارات
-       نضيفه مباشرة.
-    */
 
     addProductVariantToCart(
         product,
@@ -748,10 +738,6 @@ function confirmProductOptions() {
         );
 
 
-    /*
-       التأكد من اختيار المقاس
-    */
-
     if (
         sizes.length > 0 &&
         !selectedSize
@@ -771,10 +757,6 @@ function confirmProductOptions() {
 
     }
 
-
-    /*
-       التأكد من اختيار اللون
-    */
 
     if (
         colors.length > 0 &&
@@ -836,11 +818,6 @@ function addProductVariantToCart(
 
     }
 
-
-    /*
-       نفس المنتج + نفس المقاس + نفس اللون
-       = نفس العنصر في السلة
-    */
 
     const existing =
         cart.find(function (item) {
@@ -959,11 +936,6 @@ function loadCart() {
                 ? JSON.parse(savedCart)
                 : [];
 
-
-        /*
-           إصلاح السلة القديمة
-           التي لم يكن فيها size/color
-        */
 
         cart = cart.map(function (item) {
 
@@ -1793,10 +1765,6 @@ function setupCheckoutForm() {
                 "*";
 
 
-            /*
-               حفظ الطلب قبل فتح واتساب
-            */
-
             saveOrder(
                 name,
                 phone,
@@ -1813,10 +1781,6 @@ function setupCheckoutForm() {
                 "&text=" +
                 message;
 
-
-            /*
-               تفريغ السلة
-            */
 
             cart = [];
 
@@ -1953,7 +1917,7 @@ function saveOrder(
 
 
 /* =========================
-   أزرار الإدارة
+   زر إدارة المتجر
 ========================= */
 
 function setupAdminButton() {
@@ -1964,23 +1928,9 @@ function setupAdminButton() {
         );
 
 
-    const addProductButton =
-        document.getElementById(
-            "add-product-button"
-        );
-
-
     if (adminButton) {
 
         adminButton.style.display =
-            "flex";
-
-    }
-
-
-    if (addProductButton) {
-
-        addProductButton.style.display =
             "flex";
 
     }
