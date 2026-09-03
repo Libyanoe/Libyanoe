@@ -74,6 +74,7 @@ function renderProducts() {
         return;
     }
 
+
     let filteredProducts =
         products.filter(function (product) {
 
@@ -124,7 +125,11 @@ function renderProducts() {
 
 
             return `
-                <div class="product-card">
+                <div
+                    class="product-card"
+                    data-name="${escapeHtml(product.name || "")}"
+                    data-category="${escapeHtml(product.category || "")}"
+                >
 
                     <div class="product-image-box">
 
@@ -244,7 +249,7 @@ function renderProducts() {
                                         <button
                                             type="button"
                                             class="add-cart-button"
-                                            onclick="addProductFromCard('${escapeJs(product.id)}')"
+                                            data-product-id="${escapeHtml(product.id)}"
                                         >
                                             🛒 أضف للسلة
                                         </button>
@@ -262,6 +267,40 @@ function renderProducts() {
 
 
     setupProductOptions();
+    setupAddToCartButtons();
+}
+
+
+/* =========================
+   أزرار إضافة للسلة
+========================= */
+
+function setupAddToCartButtons() {
+
+    const buttons =
+        document.querySelectorAll(
+            ".add-cart-button[data-product-id]"
+        );
+
+
+    buttons.forEach(function (button) {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                const productId =
+                    button.dataset.productId;
+
+
+                addProductFromCard(
+                    productId
+                );
+
+            }
+        );
+
+    });
 }
 
 
@@ -278,7 +317,9 @@ function normalizeOptions(
         Array.isArray(options) &&
         options.length
     ) {
+
         return options;
+
     }
 
     return fallback;
@@ -324,6 +365,7 @@ function setupProductOptions() {
                 const parent =
                     button.parentElement;
 
+
                 parent
                     .querySelectorAll(
                         ".product-option-button"
@@ -355,7 +397,10 @@ function setupProductOptions() {
 function setupSearch() {
 
     const searchInput =
-        document.getElementById("search-input");
+        document.getElementById(
+            "search-input"
+        );
+
 
     if (!searchInput) {
         return;
@@ -397,18 +442,25 @@ function setupSearch() {
                     .toLowerCase();
 
 
+                const category =
+                    (
+                        card.dataset.category ||
+                        ""
+                    )
+                    .toLowerCase();
+
+
                 if (
                     name.includes(value) ||
-                    description.includes(value)
+                    description.includes(value) ||
+                    category.includes(value)
                 ) {
 
-                    card.style.display =
-                        "";
+                    card.style.display = "";
 
                 } else {
 
-                    card.style.display =
-                        "none";
+                    card.style.display = "none";
 
                 }
 
@@ -430,12 +482,84 @@ function filterProducts(category) {
 
     renderProducts();
 
+
+    const searchInput =
+        document.getElementById(
+            "search-input"
+        );
+
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
 }
 
 
-function filterByCategory(category) {
+function filterByCategory(
+    category,
+    button
+) {
 
-    filterProducts(category);
+    filterProducts(
+        category
+    );
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".filter-btn"
+        );
+
+
+    buttons.forEach(function (item) {
+
+        item.classList.remove(
+            "active"
+        );
+
+    });
+
+
+    if (button) {
+
+        button.classList.add(
+            "active"
+        );
+
+    } else {
+
+        buttons.forEach(function (item) {
+
+            if (
+                item.dataset.category ===
+                category
+            ) {
+
+                item.classList.add(
+                    "active"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    const productsSection =
+        document.getElementById(
+            "products"
+        );
+
+
+    if (productsSection) {
+
+        productsSection.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
 
 }
 
@@ -450,6 +574,7 @@ function loadCart() {
 
         const user =
             getCurrentUser();
+
 
         const key =
             user
@@ -489,6 +614,7 @@ function saveCart() {
 
         const user =
             getCurrentUser();
+
 
         const key =
             user
@@ -536,6 +662,7 @@ function updateCartCount() {
             "cart-count"
         );
 
+
     if (!count) {
         return;
     }
@@ -570,17 +697,13 @@ function addProductFromCard(
     productId
 ) {
 
-    const card =
-        document.querySelector(
-            `.product-card button[onclick*="${escapeCss(productId)}"]`
-        )?.closest(".product-card");
-
-
     const product =
         products.find(function (item) {
 
-            return String(item.id) ===
-                String(productId);
+            return (
+                String(item.id) ===
+                String(productId)
+            );
 
         });
 
@@ -596,7 +719,9 @@ function addProductFromCard(
 
 
     const quantity =
-        Number(product.quantity || 0);
+        Number(
+            product.quantity || 0
+        );
 
 
     if (quantity <= 0) {
@@ -607,6 +732,34 @@ function addProductFromCard(
 
         return;
     }
+
+
+    /*
+       نبحث عن كرت المنتج
+    */
+
+    const cards =
+        document.querySelectorAll(
+            ".product-card"
+        );
+
+
+    let card = null;
+
+
+    cards.forEach(function (item) {
+
+        const button =
+            item.querySelector(
+                `[data-product-id="${cssEscape(productId)}"]`
+            );
+
+
+        if (button) {
+            card = item;
+        }
+
+    });
 
 
     let size = "";
@@ -620,6 +773,7 @@ function addProductFromCard(
                 '[data-option-type="size"].active'
             );
 
+
         const activeColor =
             card.querySelector(
                 '[data-option-type="color"].active'
@@ -627,14 +781,18 @@ function addProductFromCard(
 
 
         if (activeSize) {
+
             size =
                 activeSize.dataset.value || "";
+
         }
 
 
         if (activeColor) {
+
             color =
                 activeColor.dataset.value || "";
+
         }
 
     }
@@ -651,6 +809,10 @@ function addProductFromCard(
 }
 
 
+/* =========================
+   إضافة للسلة
+========================= */
+
 function addToCart(
     productId,
     name,
@@ -663,8 +825,10 @@ function addToCart(
     const product =
         products.find(function (item) {
 
-            return String(item.id) ===
-                String(productId);
+            return (
+                String(item.id) ===
+                String(productId)
+            );
 
         });
 
@@ -680,7 +844,9 @@ function addToCart(
 
 
     const stock =
-        Number(product.quantity || 0);
+        Number(
+            product.quantity || 0
+        );
 
 
     if (stock <= 0) {
@@ -697,12 +863,20 @@ function addToCart(
         cart.find(function (item) {
 
             return (
+
                 String(item.id) ===
-                String(productId) &&
+                String(productId)
+
+                &&
+
                 String(item.size || "") ===
-                String(size || "") &&
+                String(size || "")
+
+                &&
+
                 String(item.color || "") ===
                 String(color || "")
+
             );
 
         });
@@ -711,8 +885,9 @@ function addToCart(
     if (existing) {
 
         if (
-            Number(existing.quantity || 0)
-            >= stock
+            Number(
+                existing.quantity || 0
+            ) >= stock
         ) {
 
             alert(
@@ -724,18 +899,24 @@ function addToCart(
 
 
         existing.quantity =
-            Number(existing.quantity || 0) + 1;
+            Number(
+                existing.quantity || 0
+            ) + 1;
 
     } else {
 
         cart.push({
 
-            id: productId,
+            id:
+                productId,
 
-            name: name,
+            name:
+                name,
 
             price:
-                Number(price || 0),
+                Number(
+                    price || 0
+                ),
 
             image:
                 image || "",
@@ -756,6 +937,7 @@ function addToCart(
 
     saveCart();
     updateCartCount();
+
 
     alert(
         "تمت إضافة المنتج للسلة ✅"
@@ -782,6 +964,7 @@ function openCart() {
 
     renderCart();
 
+
     modal.classList.add(
         "active"
     );
@@ -807,12 +990,17 @@ function closeCart() {
 }
 
 
+/* =========================
+   عرض السلة
+========================= */
+
 function renderCart() {
 
     const container =
         document.getElementById(
             "cart-items"
         );
+
 
     const totalElement =
         document.getElementById(
@@ -835,8 +1023,10 @@ function renderCart() {
 
 
         if (totalElement) {
+
             totalElement.textContent =
                 formatPrice(0);
+
         }
 
         return;
@@ -850,8 +1040,12 @@ function renderCart() {
         cart.map(function (item, index) {
 
             const itemTotal =
-                Number(item.price || 0) *
-                Number(item.quantity || 0);
+                Number(
+                    item.price || 0
+                ) *
+                Number(
+                    item.quantity || 0
+                );
 
 
             total += itemTotal;
@@ -870,7 +1064,9 @@ function renderCart() {
                                         alt="${escapeHtml(item.name || "")}"
                                     >
                                   `
-                                : ""
+                                : `
+                                    🛍️
+                                  `
                         }
 
                     </div>
@@ -879,7 +1075,9 @@ function renderCart() {
                     <div class="cart-item-info">
 
                         <h4>
-                            ${escapeHtml(item.name || "منتج")}
+                            ${escapeHtml(
+                                item.name || "منتج"
+                            )}
                         </h4>
 
 
@@ -922,7 +1120,7 @@ function renderCart() {
                             </button>
 
                             <span>
-                                ${item.quantity}
+                                ${Number(item.quantity || 0)}
                             </span>
 
                             <button
@@ -958,6 +1156,10 @@ function renderCart() {
 }
 
 
+/* =========================
+   تغيير كمية السلة
+========================= */
+
 function changeCartQuantity(
     index,
     amount
@@ -971,22 +1173,27 @@ function changeCartQuantity(
     const product =
         products.find(function (item) {
 
-            return String(item.id) ===
-                String(cart[index].id);
+            return (
+                String(item.id) ===
+                String(cart[index].id)
+            );
 
         });
 
 
     const stock =
         product
-            ? Number(product.quantity || 0)
+            ? Number(
+                product.quantity || 0
+            )
             : 999999;
 
 
     const newQuantity =
         Number(
             cart[index].quantity || 0
-        ) + amount;
+        ) +
+        amount;
 
 
     if (newQuantity <= 0) {
@@ -1020,7 +1227,9 @@ function changeCartQuantity(
 }
 
 
-function removeFromCart(index) {
+function removeFromCart(
+    index
+) {
 
     if (!cart[index]) {
         return;
@@ -1100,6 +1309,11 @@ function closeCheckout() {
 }
 
 
+/* =========================
+   تحميل بيانات المستخدم
+   مهم جداً
+========================= */
+
 function loadUserData() {
 
     const user =
@@ -1111,15 +1325,20 @@ function loadUserData() {
     }
 
 
+    /*
+       هذه هي IDs الصحيحة الموجودة
+       في index.html
+    */
+
     const nameInput =
         document.getElementById(
-            "checkout-name"
+            "customer-name"
         );
 
 
     const phoneInput =
         document.getElementById(
-            "checkout-phone"
+            "customer-phone"
         );
 
 
@@ -1129,7 +1348,9 @@ function loadUserData() {
     ) {
 
         nameInput.value =
-            user.name || "";
+            user.name ||
+            user.displayName ||
+            "";
 
     }
 
@@ -1140,11 +1361,18 @@ function loadUserData() {
     ) {
 
         phoneInput.value =
-            user.phone || "";
+            user.phone ||
+            user.phoneNumber ||
+            "";
 
     }
+
 }
 
+
+/* =========================
+   ملخص الطلب
+========================= */
 
 function renderCheckoutItems() {
 
@@ -1166,7 +1394,32 @@ function renderCheckoutItems() {
                 <div class="checkout-item">
 
                     <span>
-                        ${escapeHtml(item.name || "منتج")}
+                        ${escapeHtml(
+                            item.name || "منتج"
+                        )}
+
+                        ${
+                            item.size
+                                ? `
+                                    <small class="checkout-item-options">
+                                        المقاس:
+                                        ${escapeHtml(item.size)}
+                                    </small>
+                                  `
+                                : ""
+                        }
+
+                        ${
+                            item.color
+                                ? `
+                                    <small class="checkout-item-options">
+                                        اللون:
+                                        ${escapeHtml(item.color)}
+                                    </small>
+                                  `
+                                : ""
+                        }
+
                     </span>
 
                     <span>
@@ -1334,33 +1587,37 @@ function setupCheckoutForm() {
             }
 
 
+            /*
+               IDs الصحيحة من index.html
+            */
+
             const name =
                 document.getElementById(
-                    "checkout-name"
+                    "customer-name"
                 )?.value.trim() || "";
 
 
             const phone =
                 document.getElementById(
-                    "checkout-phone"
+                    "customer-phone"
                 )?.value.trim() || "";
 
 
             const city =
                 document.getElementById(
-                    "checkout-city"
+                    "customer-city"
                 )?.value.trim() || "";
 
 
             const address =
                 document.getElementById(
-                    "checkout-address"
+                    "customer-address"
                 )?.value.trim() || "";
 
 
             const notes =
                 document.getElementById(
-                    "checkout-notes"
+                    "customer-notes"
                 )?.value.trim() || "";
 
 
@@ -1385,8 +1642,12 @@ function setupCheckoutForm() {
 
                         return (
                             sum +
-                            Number(item.price || 0) *
-                            Number(item.quantity || 0)
+                            Number(
+                                item.price || 0
+                            ) *
+                            Number(
+                                item.quantity || 0
+                            )
                         );
 
                     },
@@ -1397,6 +1658,10 @@ function setupCheckoutForm() {
             const orderNumber =
                 generateOrderNumber();
 
+
+            /*
+               تجهيز رسالة واتساب
+            */
 
             let message =
                 "🛍️ *طلب جديد من متجر الرياضة*";
@@ -1489,7 +1754,7 @@ function setupCheckoutForm() {
 
 
             /*
-               حفظ الطلب قبل فتح واتساب
+               حفظ الطلب أولاً
             */
 
             const savedOrder =
@@ -1504,8 +1769,14 @@ function setupCheckoutForm() {
                 );
 
 
+            /*
+               إذا فشل الحفظ لا نفرغ السلة
+            */
+
             if (!savedOrder) {
+
                 return;
+
             }
 
 
@@ -1552,7 +1823,6 @@ function setupCheckoutForm() {
 
 /* =========================
    حفظ الطلب
-   الإصلاح الأساسي هنا
 ========================= */
 
 function saveOrder(
@@ -1567,6 +1837,10 @@ function saveOrder(
 
     try {
 
+        /*
+           جميع الطلبات
+        */
+
         const savedOrders =
             localStorage.getItem(
                 ORDERS_KEY
@@ -1580,20 +1854,22 @@ function saveOrder(
 
 
         if (!Array.isArray(orders)) {
+
             orders = [];
+
         }
 
+
+        /*
+           المستخدم الحالي
+        */
 
         const user =
             getCurrentUser();
 
 
-        const now =
-            new Date();
-
-
         /*
-           معرف المستخدم
+           بيانات المستخدم
         */
 
         const userId =
@@ -1606,10 +1882,6 @@ function saveOrder(
                 : "";
 
 
-        /*
-           إيميل الحساب
-        */
-
         const customerEmail =
             user
                 ? String(
@@ -1621,17 +1893,14 @@ function saveOrder(
                 : "";
 
 
-        /*
-           رقم الهاتف الموجود في الحساب
-        */
-
         const accountPhone =
             user
                 ? String(
                     user.phone ||
                     user.phoneNumber ||
                     ""
-                ).trim()
+                )
+                .trim()
                 : "";
 
 
@@ -1645,7 +1914,19 @@ function saveOrder(
 
 
         /*
-           نسخ المنتجات الموجودة في السلة
+           الوقت
+        */
+
+        const now =
+            new Date();
+
+
+        const createdAt =
+            now.toISOString();
+
+
+        /*
+           نسخ المنتجات
         */
 
         const orderItems =
@@ -1684,7 +1965,7 @@ function saveOrder(
 
 
         /*
-           بيانات الطلب
+           إنشاء الطلب
         */
 
         const order = {
@@ -1702,17 +1983,17 @@ function saveOrder(
             userId:
                 userId,
 
-            customerEmail:
-                customerEmail,
+            customerName:
+                name,
 
             customerPhone:
                 phone,
 
+            customerEmail:
+                customerEmail,
+
             accountPhone:
                 accountPhone,
-
-            customerName:
-                name,
 
             city:
                 city,
@@ -1732,8 +2013,7 @@ function saveOrder(
                 ),
 
             /*
-               الحالة الجديدة
-               حتى تتعرف عليها صفحة الحساب
+               الحالة الافتراضية
             */
 
             status:
@@ -1744,10 +2024,10 @@ function saveOrder(
             */
 
             createdAt:
-                now.toISOString(),
+                createdAt,
 
             date:
-                now.toISOString(),
+                createdAt,
 
             dateText:
                 now.toLocaleString(
@@ -1758,7 +2038,7 @@ function saveOrder(
 
 
         /*
-           حفظ الطلب في جميع الطلبات
+           إضافة الطلب في البداية
         */
 
         orders.unshift(
@@ -1766,20 +2046,28 @@ function saveOrder(
         );
 
 
+        /*
+           حفظ جميع الطلبات
+        */
+
         localStorage.setItem(
             ORDERS_KEY,
-            JSON.stringify(orders)
+            JSON.stringify(
+                orders
+            )
         );
 
 
         /*
-           حفظ نسخة خاصة بالمستخدم
+           حفظ نسخة للمستخدم
         */
 
         if (user) {
 
             const userKey =
-                getUserOrdersKey(user);
+                getUserOrdersKey(
+                    user
+                );
 
 
             let userOrders = [];
@@ -1833,9 +2121,45 @@ function saveOrder(
         }
 
 
+        /*
+           تأكيد في Console
+        */
+
         console.log(
-            "✅ تم حفظ الطلب:",
+            "================================"
+        );
+
+        console.log(
+            "✅ تم حفظ الطلب بنجاح"
+        );
+
+        console.log(
+            "رقم الطلب:",
+            finalOrderNumber
+        );
+
+        console.log(
+            "UID:",
+            userId
+        );
+
+        console.log(
+            "Email:",
+            customerEmail
+        );
+
+        console.log(
+            "Phone:",
+            phone
+        );
+
+        console.log(
+            "الطلب:",
             order
+        );
+
+        console.log(
+            "================================"
         );
 
 
@@ -1851,12 +2175,14 @@ function saveOrder(
 
 
         alert(
-            "حدث خطأ أثناء حفظ الطلب."
+            "حدث خطأ أثناء حفظ الطلب. لم يتم تفريغ السلة."
         );
 
 
         return null;
+
     }
+
 }
 
 
@@ -1864,7 +2190,9 @@ function saveOrder(
    مفتاح طلبات المستخدم
 ========================= */
 
-function getUserOrdersKey(user) {
+function getUserOrdersKey(
+    user
+) {
 
     const identifier =
         user.uid ||
@@ -1883,7 +2211,6 @@ function getUserOrdersKey(user) {
 
 /* =========================
    جلب طلبات المستخدم
-   الإصلاح الأساسي هنا
 ========================= */
 
 function getUserOrders() {
@@ -1895,13 +2222,11 @@ function getUserOrders() {
 
 
         if (!user) {
+
             return [];
+
         }
 
-
-        /*
-           بيانات الحساب
-        */
 
         const userId =
             String(
@@ -1921,20 +2246,12 @@ function getUserOrders() {
 
 
         const userPhone =
-            String(
+            normalizePhone(
                 user.phone ||
                 user.phoneNumber ||
                 ""
-            )
-            .replace(
-                /[^0-9]/g,
-                ""
             );
 
-
-        /*
-           جميع الطلبات
-        */
 
         const savedOrders =
             localStorage.getItem(
@@ -1961,11 +2278,6 @@ function getUserOrders() {
         }
 
 
-        /*
-           البحث عن طلبات هذا الحساب
-           بالـ UID أو الإيميل أو الهاتف
-        */
-
         const matchedOrders =
             orders.filter(
                 function (order) {
@@ -1988,20 +2300,16 @@ function getUserOrders() {
 
 
                     const orderPhone =
-                        String(
+                        normalizePhone(
                             order.customerPhone ||
                             order.phone ||
                             order.accountPhone ||
-                            ""
-                        )
-                        .replace(
-                            /[^0-9]/g,
                             ""
                         );
 
 
                     /*
-                       UID
+                       المطابقة بـ UID
                     */
 
                     if (
@@ -2017,7 +2325,7 @@ function getUserOrders() {
 
 
                     /*
-                       Email
+                       المطابقة بالإيميل
                     */
 
                     if (
@@ -2033,7 +2341,7 @@ function getUserOrders() {
 
 
                     /*
-                       الهاتف
+                       المطابقة بالهاتف
                     */
 
                     if (
@@ -2054,10 +2362,6 @@ function getUserOrders() {
             );
 
 
-        /*
-           ترتيب الأحدث أولاً
-        */
-
         matchedOrders.sort(
             function (a, b) {
 
@@ -2077,7 +2381,10 @@ function getUserOrders() {
                     ).getTime();
 
 
-                return dateB - dateA;
+                return (
+                    dateB -
+                    dateA
+                );
 
             }
         );
@@ -2089,13 +2396,69 @@ function getUserOrders() {
     } catch (error) {
 
         console.error(
-            "❌ خطأ في جلب طلبات المستخدم:",
+            "❌ خطأ في جلب الطلبات:",
             error
         );
 
 
         return [];
+
     }
+
+}
+
+
+/* =========================
+   تطبيع رقم الهاتف
+========================= */
+
+function normalizePhone(
+    phone
+) {
+
+    let value =
+        String(
+            phone || ""
+        )
+        .replace(
+            /[^0-9]/g,
+            ""
+        );
+
+
+    if (
+        value.startsWith("00218")
+    ) {
+
+        value =
+            value.substring(2);
+
+    }
+
+
+    if (
+        value.startsWith("218")
+    ) {
+
+        return value;
+
+    }
+
+
+    if (
+        value.startsWith("0")
+    ) {
+
+        return (
+            "218" +
+            value.substring(1)
+        );
+
+    }
+
+
+    return value;
+
 }
 
 
@@ -2126,6 +2489,9 @@ function getOrderStatusText(
         preparing:
             "📦 جاري التجهيز",
 
+        ready:
+            "📦 جاهز",
+
         shipping:
             "🚚 في التوصيل",
 
@@ -2143,7 +2509,6 @@ function getOrderStatusText(
 
     return (
         statuses[value] ||
-        status ||
         "⏳ قيد المراجعة"
     );
 }
@@ -2167,6 +2532,7 @@ function setupAdminButton() {
             "flex";
 
     }
+
 }
 
 
@@ -2179,7 +2545,9 @@ function formatPrice(
 ) {
 
     const number =
-        Number(price || 0);
+        Number(
+            price || 0
+        );
 
 
     return (
@@ -2188,6 +2556,7 @@ function formatPrice(
         ) +
         " د.ل"
     );
+
 }
 
 
@@ -2222,6 +2591,7 @@ function escapeHtml(
         /'/g,
         "&#039;"
     );
+
 }
 
 
@@ -2248,16 +2618,30 @@ function escapeJs(
         /"/g,
         '\\"'
     );
+
 }
 
 
 /* =========================
-   حماية CSS selector
+   حماية CSS
 ========================= */
 
-function escapeCss(
+function cssEscape(
     value
 ) {
+
+    if (
+        window.CSS &&
+        typeof window.CSS.escape ===
+        "function"
+    ) {
+
+        return window.CSS.escape(
+            String(value)
+        );
+
+    }
+
 
     return String(
         value ?? ""
@@ -2269,13 +2653,17 @@ function escapeCss(
     .replace(
         /"/g,
         '\\"'
+    )
+    .replace(
+        /([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g,
+        "\\$1"
     );
+
 }
 
 
 /* =========================
-   إغلاق النوافذ عند الضغط
-   خارجها
+   إغلاق النوافذ
 ========================= */
 
 document.addEventListener(
@@ -2294,9 +2682,16 @@ document.addEventListener(
             );
 
 
+        const optionsModal =
+            document.getElementById(
+                "product-options-modal"
+            );
+
+
         if (
             cartModal &&
-            event.target === cartModal
+            event.target ===
+            cartModal
         ) {
 
             closeCart();
@@ -2306,10 +2701,22 @@ document.addEventListener(
 
         if (
             checkoutModal &&
-            event.target === checkoutModal
+            event.target ===
+            checkoutModal
         ) {
 
             closeCheckout();
+
+        }
+
+
+        if (
+            optionsModal &&
+            event.target ===
+            optionsModal
+        ) {
+
+            closeProductOptions();
 
         }
 
