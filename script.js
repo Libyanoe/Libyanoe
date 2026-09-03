@@ -63,14 +63,11 @@ function loadProducts() {
 
 function renderProducts() {
 
-    const container = document.getElementById(
-        "products-container"
-    );
+    const container = document.getElementById("products-container");
 
     if (!container) {
         return;
     }
-
 
     const filteredProducts = products.filter(function (product) {
 
@@ -138,7 +135,6 @@ function renderProducts() {
                               `
                     }
 
-
                     ${
                         outOfStock
                             ? `
@@ -181,7 +177,6 @@ function renderProducts() {
                     ${
                         !outOfStock
                             ? `
-
                                 <div class="product-options">
 
                                     <div class="option-title">
@@ -212,7 +207,6 @@ function renderProducts() {
                                     </div>
 
                                 </div>
-
                               `
                             : ""
                     }
@@ -311,7 +305,6 @@ function setupProductOptions() {
 
             const parent = button.parentElement;
 
-
             parent.querySelectorAll(
                 ".product-option-button"
             ).forEach(function (item) {
@@ -346,7 +339,6 @@ function setupAddToCartButtons() {
 
             const productId =
                 button.dataset.productId;
-
 
             addProductFromCard(productId);
 
@@ -389,10 +381,6 @@ function addProductFromCard(productId) {
         return;
     }
 
-
-    /*
-       البحث عن كرت المنتج
-    */
 
     const cards =
         document.querySelectorAll(
@@ -443,18 +431,12 @@ function addProductFromCard(productId) {
 
 
         if (activeSize) {
-
-            size =
-                activeSize.dataset.value || "";
-
+            size = activeSize.dataset.value || "";
         }
 
 
         if (activeColor) {
-
-            color =
-                activeColor.dataset.value || "";
-
+            color = activeColor.dataset.value || "";
         }
 
     }
@@ -484,10 +466,6 @@ function addToCart(
     color
 ) {
 
-    /*
-       محاولة العثور على المنتج
-    */
-
     let product =
         products.find(function (item) {
 
@@ -496,11 +474,6 @@ function addToCart(
 
         });
 
-
-    /*
-       إذا لم نجد المنتج بالـ ID
-       نحاول البحث بالاسم
-    */
 
     if (!product && name) {
 
@@ -515,22 +488,15 @@ function addToCart(
     }
 
 
-    /*
-       إذا وجد المنتج
-    */
-
     if (product) {
 
         productId = product.id;
 
-        name =
-            product.name || name;
+        name = product.name || name;
 
-        price =
-            product.price ?? price;
+        price = product.price ?? price;
 
-        image =
-            product.image || image || "";
+        image = product.image || image || "";
 
 
         const stock =
@@ -545,29 +511,13 @@ function addToCart(
         }
 
 
-        /*
-           البحث عن المنتج الموجود
-           مسبقاً في السلة
-        */
-
         const existing =
             cart.find(function (item) {
 
                 return (
-
-                    String(item.id) ===
-                    String(productId)
-
-                    &&
-
-                    String(item.size || "") ===
-                    String(size || "")
-
-                    &&
-
-                    String(item.color || "") ===
-                    String(color || "")
-
+                    String(item.id) === String(productId) &&
+                    String(item.size || "") === String(size || "") &&
+                    String(item.color || "") === String(color || "")
                 );
 
             });
@@ -616,10 +566,6 @@ function addToCart(
 
     } else {
 
-        /*
-           دعم المنتجات القديمة
-        */
-
         cart.push({
 
             id: productId || name,
@@ -640,10 +586,6 @@ function addToCart(
 
     }
 
-
-    /*
-       حفظ السلة
-    */
 
     if (!saveCart()) {
 
@@ -681,9 +623,7 @@ function extractImageSrc(value) {
 
 
     if (match) {
-
         return match[1];
-
     }
 
 
@@ -720,9 +660,7 @@ function loadCart() {
 
 
         if (!Array.isArray(cart)) {
-
             cart = [];
-
         }
 
     } catch (error) {
@@ -836,10 +774,8 @@ function updateCartCount() {
 
 function openCart() {
 
-    /*
-       نعيد تحميل السلة
-       للتأكد من آخر نسخة
-    */
+    console.log("🛒 فتح السلة");
+
 
     loadCart();
 
@@ -853,7 +789,11 @@ function openCart() {
     if (!modal) {
 
         console.error(
-            "❌ cart-modal غير موجود"
+            "❌ cart-modal غير موجود في الصفحة"
+        );
+
+        alert(
+            "حدث خطأ: نافذة السلة غير موجودة."
         );
 
         return;
@@ -863,9 +803,25 @@ function openCart() {
     renderCart();
 
 
-    modal.classList.add(
-        "active"
+    /*
+       فتح السلة بالقوة
+       حتى لو كان CSS يمنع ظهورها
+    */
+
+    modal.classList.add("active");
+    modal.classList.add("show");
+
+    modal.style.setProperty(
+        "display",
+        "flex",
+        "important"
     );
+
+    modal.style.visibility = "visible";
+    modal.style.opacity = "1";
+
+
+    document.body.style.overflow = "hidden";
 }
 
 
@@ -886,9 +842,17 @@ function closeCart() {
     }
 
 
-    modal.classList.remove(
-        "active"
-    );
+    modal.classList.remove("active");
+    modal.classList.remove("show");
+
+
+    modal.style.removeProperty("display");
+
+    modal.style.visibility = "";
+    modal.style.opacity = "";
+
+
+    document.body.style.overflow = "";
 }
 
 
@@ -973,6 +937,12 @@ function renderCart() {
                                     <img
                                         src="${escapeHtml(item.image)}"
                                         alt="${escapeHtml(item.name || "")}"
+                                        style="
+                                            width:100%;
+                                            height:100%;
+                                            object-fit:cover;
+                                            border-radius:10px;
+                                        "
                                     >
                                   `
                                 : `
@@ -1213,9 +1183,20 @@ function checkout() {
     updateCheckoutSummary();
 
 
-    modal.classList.add(
-        "active"
+    modal.classList.add("active");
+    modal.classList.add("show");
+
+    modal.style.setProperty(
+        "display",
+        "flex",
+        "important"
     );
+
+    modal.style.visibility = "visible";
+    modal.style.opacity = "1";
+
+
+    document.body.style.overflow = "hidden";
 }
 
 
@@ -1236,9 +1217,17 @@ function closeCheckout() {
     }
 
 
-    modal.classList.remove(
-        "active"
-    );
+    modal.classList.remove("active");
+    modal.classList.remove("show");
+
+
+    modal.style.removeProperty("display");
+
+    modal.style.visibility = "";
+    modal.style.opacity = "";
+
+
+    document.body.style.overflow = "";
 }
 
 
@@ -1325,7 +1314,6 @@ function renderCheckoutItems() {
                             item.name || "منتج"
                         )}
 
-
                         ${
                             item.size
                                 ? `
@@ -1336,7 +1324,6 @@ function renderCheckoutItems() {
                                   `
                                 : ""
                         }
-
 
                         ${
                             item.color
@@ -1598,10 +1585,6 @@ function setupCheckoutForm() {
                 generateOrderNumber();
 
 
-            /*
-               رسالة واتساب
-            */
-
             let message =
                 "🛍️ *طلب جديد من متجر الرياضة*";
 
@@ -1643,22 +1626,16 @@ function setupCheckoutForm() {
 
                 message +=
                     "%0A• " +
-                    encodeURIComponent(
-                        item.name
-                    ) +
+                    encodeURIComponent(item.name) +
                     " × " +
-                    encodeURIComponent(
-                        item.quantity
-                    );
+                    encodeURIComponent(item.quantity);
 
 
                 if (item.size) {
 
                     message +=
                         " | مقاس: " +
-                        encodeURIComponent(
-                            item.size
-                        );
+                        encodeURIComponent(item.size);
 
                 }
 
@@ -1667,9 +1644,7 @@ function setupCheckoutForm() {
 
                     message +=
                         " | لون: " +
-                        encodeURIComponent(
-                            item.color
-                        );
+                        encodeURIComponent(item.color);
 
                 }
 
@@ -1678,21 +1653,13 @@ function setupCheckoutForm() {
 
             message +=
                 "%0A🔢 *رقم الطلب:* " +
-                encodeURIComponent(
-                    orderNumber
-                );
+                encodeURIComponent(orderNumber);
 
 
             message +=
                 "%0A💰 *الإجمالي:* " +
-                encodeURIComponent(
-                    formatPrice(total)
-                );
+                encodeURIComponent(formatPrice(total));
 
-
-            /*
-               حفظ الطلب
-            */
 
             const savedOrder =
                 saveOrder(
@@ -1707,21 +1674,15 @@ function setupCheckoutForm() {
 
 
             if (!savedOrder) {
-
                 return;
             }
 
-
-            /*
-               تفريغ السلة
-            */
 
             cart = [];
 
             saveCart();
 
             updateCartCount();
-
 
             closeCheckout();
 
@@ -1732,10 +1693,6 @@ function setupCheckoutForm() {
                 " ✅"
             );
 
-
-            /*
-               فتح واتساب
-            */
 
             const whatsappUrl =
                 "https://api.whatsapp.com/send?phone=" +
@@ -1796,9 +1753,7 @@ function saveOrder(
 
 
         if (!Array.isArray(orders)) {
-
             orders = [];
-
         }
 
 
@@ -1861,14 +1816,10 @@ function saveOrder(
                     name: item.name,
 
                     price:
-                        Number(
-                            item.price || 0
-                        ),
+                        Number(item.price || 0),
 
                     quantity:
-                        Number(
-                            item.quantity || 0
-                        ),
+                        Number(item.quantity || 0),
 
                     size:
                         item.size || "",
@@ -1893,8 +1844,7 @@ function saveOrder(
                 finalOrderNumber,
 
             orderId:
-                "ORD-" +
-                Date.now(),
+                "ORD-" + Date.now(),
 
             userId:
                 userId,
@@ -1924,9 +1874,7 @@ function saveOrder(
                 orderItems,
 
             total:
-                Number(
-                    total || 0
-                ),
+                Number(total || 0),
 
             status:
                 "pending",
@@ -1938,9 +1886,7 @@ function saveOrder(
                 createdAt,
 
             dateText:
-                now.toLocaleString(
-                    "ar-LY"
-                )
+                now.toLocaleString("ar-LY")
 
         };
 
@@ -1948,19 +1894,11 @@ function saveOrder(
         orders.unshift(order);
 
 
-        /*
-           حفظ الطلبات
-        */
-
         localStorage.setItem(
             ORDERS_KEY,
             JSON.stringify(orders)
         );
 
-
-        /*
-           التحقق من الحفظ
-        */
 
         const verify =
             localStorage.getItem(
@@ -1976,16 +1914,10 @@ function saveOrder(
         }
 
 
-        /*
-           نسخة خاصة بالمستخدم
-        */
-
         if (user) {
 
             const userKey =
-                getUserOrdersKey(
-                    user
-                );
+                getUserOrdersKey(user);
 
 
             let userOrders = [];
@@ -2001,20 +1933,12 @@ function saveOrder(
 
                 userOrders =
                     savedUserOrders
-                        ? JSON.parse(
-                            savedUserOrders
-                        )
+                        ? JSON.parse(savedUserOrders)
                         : [];
 
 
-                if (
-                    !Array.isArray(
-                        userOrders
-                    )
-                ) {
-
+                if (!Array.isArray(userOrders)) {
                     userOrders = [];
-
                 }
 
             } catch (error) {
@@ -2029,9 +1953,7 @@ function saveOrder(
 
             localStorage.setItem(
                 userKey,
-                JSON.stringify(
-                    userOrders
-                )
+                JSON.stringify(userOrders)
             );
 
         }
@@ -2140,9 +2062,7 @@ function getUserOrders() {
 
 
         if (!Array.isArray(orders)) {
-
             return [];
-
         }
 
 
@@ -2180,9 +2100,7 @@ function getUserOrders() {
                     orderUserId &&
                     userId === orderUserId
                 ) {
-
                     return true;
-
                 }
 
 
@@ -2191,9 +2109,7 @@ function getUserOrders() {
                     orderEmail &&
                     userEmail === orderEmail
                 ) {
-
                     return true;
-
                 }
 
 
@@ -2202,9 +2118,7 @@ function getUserOrders() {
                     orderPhone &&
                     userPhone === orderPhone
                 ) {
-
                     return true;
-
                 }
 
 
@@ -2259,34 +2173,20 @@ function normalizePhone(phone) {
 
     let value =
         String(phone || "")
-            .replace(
-                /[^0-9]/g,
-                ""
-            );
+            .replace(/[^0-9]/g, "");
 
 
-    if (
-        value.startsWith("00218")
-    ) {
-
-        value =
-            value.substring(2);
-
+    if (value.startsWith("00218")) {
+        value = value.substring(2);
     }
 
 
-    if (
-        value.startsWith("218")
-    ) {
-
+    if (value.startsWith("218")) {
         return value;
-
     }
 
 
-    if (
-        value.startsWith("0")
-    ) {
+    if (value.startsWith("0")) {
 
         return (
             "218" +
@@ -2410,18 +2310,13 @@ function openProductOptions(productId) {
 
 
     if (nameElement) {
-
         nameElement.textContent =
             product.name || "المنتج";
-
     }
 
 
     if (errorElement) {
-
-        errorElement.style.display =
-            "none";
-
+        errorElement.style.display = "none";
     }
 
 
@@ -2515,9 +2410,19 @@ function openProductOptions(productId) {
     `;
 
 
-    modal.classList.add(
-        "active"
+    modal.classList.add("active");
+    modal.classList.add("show");
+
+    modal.style.setProperty(
+        "display",
+        "flex",
+        "important"
     );
+
+    modal.style.visibility = "visible";
+    modal.style.opacity = "1";
+
+    document.body.style.overflow = "hidden";
 }
 
 
@@ -2553,8 +2458,7 @@ function selectProductOption(button) {
 
     if (type === "size") {
 
-        selectedSize =
-            value;
+        selectedSize = value;
 
 
         const text =
@@ -2576,8 +2480,7 @@ function selectProductOption(button) {
 
     if (type === "color") {
 
-        selectedColor =
-            value;
+        selectedColor = value;
 
 
         const text =
@@ -2710,9 +2613,17 @@ function closeProductOptions() {
     }
 
 
-    modal.classList.remove(
-        "active"
-    );
+    modal.classList.remove("active");
+    modal.classList.remove("show");
+
+
+    modal.style.removeProperty("display");
+
+    modal.style.visibility = "";
+    modal.style.opacity = "";
+
+
+    document.body.style.overflow = "";
 
 
     selectedProduct = null;
@@ -2785,13 +2696,11 @@ function setupSearch() {
                     category.includes(value)
                 ) {
 
-                    card.style.display =
-                        "";
+                    card.style.display = "";
 
                 } else {
 
-                    card.style.display =
-                        "none";
+                    card.style.display = "none";
 
                 }
 
@@ -2822,10 +2731,7 @@ function filterProducts(category) {
 
 
     if (searchInput) {
-
-        searchInput.value =
-            "";
-
+        searchInput.value = "";
     }
 }
 
@@ -2835,9 +2741,7 @@ function filterByCategory(
     button
 ) {
 
-    filterProducts(
-        category
-    );
+    filterProducts(category);
 
 
     const buttons =
@@ -2929,9 +2833,7 @@ function formatPrice(price) {
 
 
     return (
-        number.toLocaleString(
-            "ar-LY"
-        ) +
+        number.toLocaleString("ar-LY") +
         " د.ل"
     );
 }
@@ -2947,30 +2849,15 @@ function escapeHtml(value) {
         value ?? ""
     )
 
-    .replace(
-        /&/g,
-        "&amp;"
-    )
+    .replace(/&/g, "&amp;")
 
-    .replace(
-        /</g,
-        "&lt;"
-    )
+    .replace(/</g, "&lt;")
 
-    .replace(
-        />/g,
-        "&gt;"
-    )
+    .replace(/>/g, "&gt;")
 
-    .replace(
-        /"/g,
-        "&quot;"
-    )
+    .replace(/"/g, "&quot;")
 
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+    .replace(/'/g, "&#039;");
 }
 
 
