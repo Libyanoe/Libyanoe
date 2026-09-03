@@ -8,7 +8,6 @@ let products = [];
 let cart = [];
 let currentCategory = "الكل";
 
-/* المنتج الذي نختار له المقاس واللون */
 let selectedProduct = null;
 let selectedSize = "";
 let selectedColor = "";
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setupSearch();
     setupCheckoutForm();
-
     setupAdminButton();
 
 });
@@ -49,6 +47,10 @@ function loadProducts() {
             savedProducts
                 ? JSON.parse(savedProducts)
                 : [];
+
+        if (!Array.isArray(products)) {
+            products = [];
+        }
 
     } catch (error) {
 
@@ -164,7 +166,7 @@ function renderProducts() {
             product.image
 
                 ? `<img
-                    src="${product.image}"
+                    src="${escapeHtml(product.image)}"
                     alt="${escapeHtml(product.name || "منتج")}"
                     class="product-image"
                   >`
@@ -176,8 +178,8 @@ function renderProducts() {
 
         const stock =
             Number(
-                product.stock ||
-                product.quantity ||
+                product.stock ??
+                product.quantity ??
                 0
             );
 
@@ -248,7 +250,7 @@ function renderProducts() {
                 ${
                     optionsNote
                         ? `<div class="product-option-note">
-                            ${optionsNote}
+                            ${escapeHtml(optionsNote)}
                            </div>`
                         : ""
                 }
@@ -331,23 +333,26 @@ function filterByCategory(category, button) {
         });
 
 
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(function (btn) {
-
-            if (
-                btn.dataset.category === category
-            ) {
-
-                btn.classList.add("active");
-
-            }
-
-        });
-
-
     if (button) {
+
         button.classList.add("active");
+
+    } else {
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(function (btn) {
+
+                if (
+                    btn.dataset.category === category
+                ) {
+
+                    btn.classList.add("active");
+
+                }
+
+            });
+
     }
 
 
@@ -370,7 +375,7 @@ function filterByCategory(category, button) {
 
 
 /* =========================
-   تجهيز المقاسات والألوان
+   المقاسات والألوان
 ========================= */
 
 function normalizeOptions(value) {
@@ -431,8 +436,8 @@ function addToCart(productId) {
 
     const stock =
         Number(
-            product.stock ||
-            product.quantity ||
+            product.stock ??
+            product.quantity ??
             0
         );
 
@@ -478,7 +483,7 @@ function addToCart(productId) {
 
 
 /* =========================
-   فتح خيارات المنتج
+   خيارات المنتج
 ========================= */
 
 function openProductOptions(product) {
@@ -543,8 +548,6 @@ function openProductOptions(product) {
     const colors =
         normalizeOptions(product.colors);
 
-
-    /* المقاسات */
 
     if (sizes.length > 0) {
 
@@ -623,8 +626,6 @@ function openProductOptions(product) {
 
     }
 
-
-    /* الألوان */
 
     if (colors.length > 0) {
 
@@ -791,7 +792,7 @@ function confirmProductOptions() {
 
 
 /* =========================
-   إضافة نسخة المنتج للسلة
+   إضافة نسخة للسلة
 ========================= */
 
 function addProductVariantToCart(
@@ -802,8 +803,8 @@ function addProductVariantToCart(
 
     const stock =
         Number(
-            product.stock ||
-            product.quantity ||
+            product.stock ??
+            product.quantity ??
             0
         );
 
@@ -858,9 +859,11 @@ function addProductVariantToCart(
 
         cart.push({
 
-            id: product.id,
+            id:
+                product.id,
 
-            name: product.name,
+            name:
+                product.name,
 
             price:
                 Number(product.price || 0),
@@ -868,11 +871,14 @@ function addProductVariantToCart(
             image:
                 product.image || "",
 
-            quantity: 1,
+            quantity:
+                1,
 
-            size: size || "",
+            size:
+                size || "",
 
-            color: color || ""
+            color:
+                color || ""
 
         });
 
@@ -906,7 +912,11 @@ function closeProductOptions() {
 
 
     if (modal) {
-        modal.classList.remove("show");
+
+        modal.classList.remove(
+            "show"
+        );
+
     }
 
 
@@ -937,19 +947,27 @@ function loadCart() {
                 : [];
 
 
-        cart = cart.map(function (item) {
+        if (!Array.isArray(cart)) {
+            cart = [];
+        }
 
-            return {
 
-                ...item,
+        cart =
+            cart.map(function (item) {
 
-                size: item.size || "",
+                return {
 
-                color: item.color || ""
+                    ...item,
 
-            };
+                    size:
+                        item.size || "",
 
-        });
+                    color:
+                        item.color || ""
+
+                };
+
+            });
 
 
     } catch (error) {
@@ -1118,7 +1136,7 @@ function renderCart() {
             item.image
 
                 ? `<img
-                    src="${item.image}"
+                    src="${escapeHtml(item.image)}"
                     class="cart-item-image"
                     alt=""
                   >`
@@ -1265,8 +1283,8 @@ function changeCartQuantity(
     const stock =
         product
             ? Number(
-                product.stock ||
-                product.quantity ||
+                product.stock ??
+                product.quantity ??
                 0
             )
             : 999999;
@@ -1587,13 +1605,15 @@ function generateOrderNumber() {
             .toString()
             .slice(-6);
 
-    return "LYB-" + time + random;
+    return "LYB-" +
+        time +
+        random;
 
 }
 
 
 /* =========================
-   الحصول على المستخدم الحالي
+   المستخدم الحالي
 ========================= */
 
 function getCurrentUser() {
@@ -1605,13 +1625,25 @@ function getCurrentUser() {
                 CURRENT_USER_KEY
             );
 
+
         if (!savedUser) {
             return null;
         }
 
-        return JSON.parse(savedUser);
+
+        const user =
+            JSON.parse(savedUser);
+
+
+        return user || null;
+
 
     } catch (error) {
+
+        console.error(
+            "خطأ في بيانات المستخدم:",
+            error
+        );
 
         return null;
 
@@ -1651,49 +1683,64 @@ function setupCheckoutForm() {
             }
 
 
+            const nameElement =
+                document.getElementById(
+                    "customer-name"
+                );
+
+
+            const phoneElement =
+                document.getElementById(
+                    "customer-phone"
+                );
+
+
+            const cityElement =
+                document.getElementById(
+                    "customer-city"
+                );
+
+
+            const addressElement =
+                document.getElementById(
+                    "customer-address"
+                );
+
+
+            const notesElement =
+                document.getElementById(
+                    "customer-notes"
+                );
+
+
             const name =
-                document
-                    .getElementById(
-                        "customer-name"
-                    )
-                    .value
-                    .trim();
+                nameElement
+                    ? nameElement.value.trim()
+                    : "";
 
 
             const phone =
-                document
-                    .getElementById(
-                        "customer-phone"
-                    )
-                    .value
-                    .trim();
+                phoneElement
+                    ? phoneElement.value.trim()
+                    : "";
 
 
             const city =
-                document
-                    .getElementById(
-                        "customer-city"
-                    )
-                    .value
-                    .trim();
+                cityElement
+                    ? cityElement.value.trim()
+                    : "";
 
 
             const address =
-                document
-                    .getElementById(
-                        "customer-address"
-                    )
-                    .value
-                    .trim();
+                addressElement
+                    ? addressElement.value.trim()
+                    : "";
 
 
             const notes =
-                document
-                    .getElementById(
-                        "customer-notes"
-                    )
-                    .value
-                    .trim();
+                notesElement
+                    ? notesElement.value.trim()
+                    : "";
 
 
             if (
@@ -1807,7 +1854,7 @@ function setupCheckoutForm() {
 
 
             /*
-               إنشاء رقم الطلب قبل الحفظ
+               إنشاء رقم الطلب
             */
 
             const orderNumber =
@@ -1831,26 +1878,31 @@ function setupCheckoutForm() {
 
 
             /*
-               حفظ الطلب
+               حفظ الطلب أولاً
             */
 
-            saveOrder(
-                name,
-                phone,
-                city,
-                address,
-                notes,
-                total,
-                orderNumber
-            );
+            const savedOrder =
+                saveOrder(
+                    name,
+                    phone,
+                    city,
+                    address,
+                    notes,
+                    total,
+                    orderNumber
+                );
 
 
-            const whatsappUrl =
-                "https://api.whatsapp.com/send?phone=" +
-                WHATSAPP_NUMBER +
-                "&text=" +
-                message;
+            if (!savedOrder) {
 
+                return;
+
+            }
+
+
+            /*
+               تنظيف السلة بعد نجاح الحفظ
+            */
 
             cart = [];
 
@@ -1871,6 +1923,13 @@ function setupCheckoutForm() {
             );
 
 
+            const whatsappUrl =
+                "https://api.whatsapp.com/send?phone=" +
+                WHATSAPP_NUMBER +
+                "&text=" +
+                message;
+
+
             window.open(
                 whatsappUrl,
                 "_blank"
@@ -1884,6 +1943,7 @@ function setupCheckoutForm() {
 
 /* =========================
    حفظ الطلب
+   النسخة المصححة
 ========================= */
 
 function saveOrder(
@@ -1904,10 +1964,15 @@ function saveOrder(
             );
 
 
-        const orders =
+        let orders =
             savedOrders
                 ? JSON.parse(savedOrders)
                 : [];
+
+
+        if (!Array.isArray(orders)) {
+            orders = [];
+        }
 
 
         const user =
@@ -1918,120 +1983,158 @@ function saveOrder(
             new Date();
 
 
+        /*
+           UID المستخدم
+        */
+
+        const userId =
+            user
+                ? String(
+                    user.uid ||
+                    user.id ||
+                    ""
+                )
+                : "";
+
+
+        /*
+           إيميل المستخدم
+        */
+
+        const customerEmail =
+            user
+                ? String(
+                    user.email ||
+                    ""
+                )
+                .trim()
+                .toLowerCase()
+                : "";
+
+
+        /*
+           رقم الهاتف المرتبط بالحساب
+        */
+
+        const accountPhone =
+            user
+                ? String(
+                    user.phone ||
+                    user.phoneNumber ||
+                    ""
+                ).trim()
+                : "";
+
+
+        /*
+           رقم الطلب
+        */
+
+        const finalOrderNumber =
+            orderNumber ||
+            generateOrderNumber();
+
+
+        /*
+           نسخ المنتجات قبل تفريغ السلة
+        */
+
+        const orderItems =
+            cart.map(function (item) {
+
+                return {
+
+                    id:
+                        item.id,
+
+                    name:
+                        item.name,
+
+                    price:
+                        Number(
+                            item.price || 0
+                        ),
+
+                    quantity:
+                        Number(
+                            item.quantity || 0
+                        ),
+
+                    size:
+                        item.size || "",
+
+                    color:
+                        item.color || "",
+
+                    image:
+                        item.image || ""
+
+                };
+
+            });
+
+
+        /*
+           الطلب
+        */
+
         const order = {
 
-            /*
-               رقم الطلب
-            */
-
             id:
-                orderNumber ||
-                generateOrderNumber(),
+                finalOrderNumber,
 
-
-            /*
-               رقم داخلي إضافي
-            */
+            orderNumber:
+                finalOrderNumber,
 
             orderId:
                 "ORD-" +
                 Date.now(),
 
-
-            /*
-               المستخدم صاحب الطلب
-            */
-
             userId:
-                user
-                    ? (
-                        user.uid ||
-                        user.id ||
-                        user.email ||
-                        user.phone ||
-                        ""
-                    )
-                    : "",
+                userId,
 
-
-            customerName:
-                name,
-
+            customerEmail:
+                customerEmail,
 
             customerPhone:
                 phone,
 
+            accountPhone:
+                accountPhone,
+
+            customerName:
+                name,
 
             city:
                 city,
 
-
             address:
                 address,
-
 
             notes:
                 notes,
 
-
             items:
-                cart.map(function (item) {
-
-                    return {
-
-                        id:
-                            item.id,
-
-                        name:
-                            item.name,
-
-                        price:
-                            Number(
-                                item.price || 0
-                            ),
-
-                        quantity:
-                            Number(
-                                item.quantity || 0
-                            ),
-
-                        size:
-                            item.size || "",
-
-                        color:
-                            item.color || "",
-
-                        image:
-                            item.image || ""
-
-                    };
-
-                }),
-
+                orderItems,
 
             total:
-                Number(total || 0),
-
+                Number(
+                    total || 0
+                ),
 
             /*
-               حالة الطلب
+               نستخدم pending
+               حتى تتوافق مع لوحة الإدارة
             */
 
             status:
-                "جديد",
+                "pending",
 
-
-            /*
-               التاريخ بصيغة تقنية
-            */
+            createdAt:
+                now.toISOString(),
 
             date:
                 now.toISOString(),
-
-
-            /*
-               التاريخ المعروض
-            */
 
             dateText:
                 now.toLocaleString(
@@ -2041,57 +2144,109 @@ function saveOrder(
         };
 
 
-        orders.unshift(order);
+        /*
+           حفظ في جميع الطلبات
+        */
+
+        orders.unshift(
+            order
+        );
 
 
         localStorage.setItem(
             ORDERS_KEY,
-            JSON.stringify(orders)
+            JSON.stringify(
+                orders
+            )
         );
 
 
         /*
            حفظ نسخة خاصة بالمستخدم
-           حتى نقدر نعرض طلباته في حسابه
         */
 
         if (user) {
 
             const userKey =
-                getUserOrdersKey(user);
-
-
-            const userOrders =
-                JSON.parse(
-                    localStorage.getItem(
-                        userKey
-                    ) || "[]"
+                getUserOrdersKey(
+                    user
                 );
 
 
-            userOrders.unshift(order);
+            let userOrders = [];
+
+
+            try {
+
+                const savedUserOrders =
+                    localStorage.getItem(
+                        userKey
+                    );
+
+
+                userOrders =
+                    savedUserOrders
+                        ? JSON.parse(
+                            savedUserOrders
+                        )
+                        : [];
+
+
+                if (
+                    !Array.isArray(
+                        userOrders
+                    )
+                ) {
+
+                    userOrders = [];
+
+                }
+
+            } catch (error) {
+
+                userOrders = [];
+
+            }
+
+
+            userOrders.unshift(
+                order
+            );
 
 
             localStorage.setItem(
                 userKey,
-                JSON.stringify(userOrders)
+                JSON.stringify(
+                    userOrders
+                )
             );
 
         }
 
 
         console.log(
-            "تم حفظ الطلب:",
+            "✅ تم حفظ الطلب:",
             order
         );
+
+
+        return order;
 
 
     } catch (error) {
 
         console.error(
-            "خطأ في حفظ الطلب:",
+            "❌ خطأ في حفظ الطلب:",
             error
         );
+
+
+        alert(
+            "حدث خطأ أثناء حفظ الطلب."
+        );
+
+
+        return null;
 
     }
 
@@ -2105,15 +2260,20 @@ function saveOrder(
 function getUserOrdersKey(user) {
 
     const identifier =
-        user.uid ||
-        user.id ||
-        user.email ||
-        user.phone;
+        user
+            ? (
+                user.uid ||
+                user.id ||
+                user.email ||
+                user.phone ||
+                "guest"
+            )
+            : "guest";
 
 
     return (
         "myStoreUserOrders_" +
-        String(identifier || "guest")
+        String(identifier)
     );
 
 }
@@ -2136,33 +2296,34 @@ function getUserOrders() {
         }
 
 
-        /*
-           أولاً نحاول جلب النسخة الخاصة بالمستخدم
-        */
-
-        const userKey =
-            getUserOrdersKey(user);
-
-
-        const savedUserOrders =
-            localStorage.getItem(
-                userKey
+        const userId =
+            String(
+                user.uid ||
+                user.id ||
+                ""
             );
 
 
-        if (savedUserOrders) {
+        const userEmail =
+            String(
+                user.email ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
 
-            return JSON.parse(
-                savedUserOrders
+
+        const userPhone =
+            String(
+                user.phone ||
+                user.phoneNumber ||
+                ""
+            )
+            .replace(
+                /[^0-9]/g,
+                ""
             );
 
-        }
-
-
-        /*
-           إذا لم توجد نسخة خاصة،
-           نبحث داخل جميع الطلبات
-        */
 
         const savedOrders =
             localStorage.getItem(
@@ -2172,28 +2333,86 @@ function getUserOrders() {
 
         const orders =
             savedOrders
-                ? JSON.parse(savedOrders)
+                ? JSON.parse(
+                    savedOrders
+                )
                 : [];
 
 
-        const identifier =
-            String(
-                user.uid ||
-                user.id ||
-                user.email ||
-                user.phone ||
-                ""
-            );
+        if (!Array.isArray(orders)) {
+            return [];
+        }
 
 
         return orders.filter(
             function (order) {
 
-                return (
+                const orderUserId =
                     String(
-                        order.userId || ""
-                    ) === identifier
-                );
+                        order.userId ||
+                        ""
+                    );
+
+
+                const orderEmail =
+                    String(
+                        order.customerEmail ||
+                        order.email ||
+                        ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                const orderPhone =
+                    String(
+                        order.customerPhone ||
+                        order.phone ||
+                        ""
+                    )
+                    .replace(
+                        /[^0-9]/g,
+                        ""
+                    );
+
+
+                if (
+                    userId &&
+                    orderUserId &&
+                    userId ===
+                    orderUserId
+                ) {
+
+                    return true;
+
+                }
+
+
+                if (
+                    userEmail &&
+                    orderEmail &&
+                    userEmail ===
+                    orderEmail
+                ) {
+
+                    return true;
+
+                }
+
+
+                if (
+                    userPhone &&
+                    orderPhone &&
+                    userPhone ===
+                    orderPhone
+                ) {
+
+                    return true;
+
+                }
+
+
+                return false;
 
             }
         );
@@ -2214,35 +2433,120 @@ function getUserOrders() {
 
 
 /* =========================
-   الحصول على اسم حالة الطلب
+   حالة الطلب
 ========================= */
 
 function getOrderStatusText(status) {
 
+    const normalized =
+        normalizeOrderStatus(
+            status
+        );
+
+
     const statuses = {
 
-        "جديد":
-            "جديد",
+        pending:
+            "⏳ قيد المراجعة",
 
-        "قيد التجهيز":
-            "قيد التجهيز",
+        confirmed:
+            "✅ تم التأكيد",
 
-        "تم الشحن":
-            "تم الشحن",
+        preparing:
+            "📦 جاري التجهيز",
 
-        "تم التسليم":
-            "تم التسليم",
+        ready:
+            "📦 جاهز",
 
-        "ملغي":
-            "ملغي"
+        shipping:
+            "🚚 في التوصيل",
+
+        delivered:
+            "🎉 تم التسليم",
+
+        cancelled:
+            "❌ ملغي"
 
     };
 
 
     return (
-        statuses[status] ||
-        status ||
-        "جديد"
+        statuses[normalized] ||
+        "⏳ قيد المراجعة"
+    );
+
+}
+
+
+function normalizeOrderStatus(status) {
+
+    const value =
+        String(
+            status || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const map = {
+
+        "جديد":
+            "pending",
+
+        "قيد المراجعة":
+            "pending",
+
+        "pending":
+            "pending",
+
+        "تم التأكيد":
+            "confirmed",
+
+        "confirmed":
+            "confirmed",
+
+        "قيد التجهيز":
+            "preparing",
+
+        "جاري التجهيز":
+            "preparing",
+
+        "preparing":
+            "preparing",
+
+        "جاهز":
+            "ready",
+
+        "ready":
+            "ready",
+
+        "تم الشحن":
+            "shipping",
+
+        "في التوصيل":
+            "shipping",
+
+        "shipping":
+            "shipping",
+
+        "تم التسليم":
+            "delivered",
+
+        "delivered":
+            "delivered",
+
+        "ملغي":
+            "cancelled",
+
+        "cancelled":
+            "cancelled"
+
+    };
+
+
+    return (
+        map[value] ||
+        "pending"
     );
 
 }
@@ -2277,11 +2581,15 @@ function setupAdminButton() {
 function formatPrice(price) {
 
     const number =
-        Number(price || 0);
+        Number(
+            price || 0
+        );
 
 
     return (
-        number.toLocaleString("ar-LY") +
+        number.toLocaleString(
+            "ar-LY"
+        ) +
         " د.ل"
     );
 
@@ -2294,7 +2602,9 @@ function formatPrice(price) {
 
 function escapeHtml(value) {
 
-    return String(value || "")
+    return String(
+        value ?? ""
+    )
 
         .replace(
             /&/g,
@@ -2330,18 +2640,35 @@ function escapeHtml(value) {
 
 function escapeJs(value) {
 
-    return String(value || "")
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r");
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        )
+        .replace(
+            /"/g,
+            '\\"'
+        )
+        .replace(
+            /\n/g,
+            "\\n"
+        )
+        .replace(
+            /\r/g,
+            "\\r"
+        );
 
 }
 
 
 /* =========================
-   إغلاق المودال بالضغط خارجه
+   إغلاق المودالات
 ========================= */
 
 document.addEventListener(
@@ -2397,3 +2724,45 @@ document.addEventListener(
 
     }
 );
+
+
+/* =========================
+   جعل الدوال متاحة للأزرار
+   الموجودة داخل HTML
+========================= */
+
+window.addToCart =
+    addToCart;
+
+window.openCart =
+    openCart;
+
+window.closeCart =
+    closeCart;
+
+window.checkout =
+    checkout;
+
+window.closeCheckout =
+    closeCheckout;
+
+window.confirmProductOptions =
+    confirmProductOptions;
+
+window.closeProductOptions =
+    closeProductOptions;
+
+window.changeCartQuantity =
+    changeCartQuantity;
+
+window.removeFromCart =
+    removeFromCart;
+
+window.filterByCategory =
+    filterByCategory;
+
+window.getUserOrders =
+    getUserOrders;
+
+window.getOrderStatusText =
+    getOrderStatusText;
