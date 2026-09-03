@@ -2452,4 +2452,1019 @@ async function markNotificationAsRead(
     } catch(error) {
 
         console.error(
-            "Mark notification
+            "Mark notification read error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   🔔 DELETE NOTIFICATION
+===================================================== */
+
+window.deleteNotification =
+async function(
+    notificationId
+) {
+
+    if (
+        !notificationId
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "notifications",
+                notificationId
+            )
+        );
+
+    } catch(error) {
+
+        console.error(
+            "Delete notification error:",
+            error
+        );
+
+
+        showError(
+            "تعذر حذف الإشعار."
+        );
+
+    }
+
+};
+
+
+/* =====================================================
+   🔔 MARK ALL READ
+===================================================== */
+
+markAllButton.addEventListener(
+    "click",
+    async function() {
+
+
+        const unread =
+            currentNotifications.filter(
+                function(notification) {
+
+                    return (
+                        notification.read !== true
+                    );
+
+                }
+            );
+
+
+        if (
+            unread.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const batch =
+                writeBatch(
+                    db
+                );
+
+
+            unread.forEach(
+                function(notification) {
+
+                    const ref =
+                        doc(
+                            db,
+                            "notifications",
+                            notification.id
+                        );
+
+
+                    batch.update(
+                        ref,
+                        {
+                            read: true
+                        }
+                    );
+
+                }
+            );
+
+
+            await batch.commit();
+
+
+        } catch(error) {
+
+            console.error(
+                "Mark all notifications error:",
+                error
+            );
+
+
+            showError(
+                "تعذر تحديد الإشعارات كمقروءة."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   🔔 OPEN/CLOSE NOTIFICATIONS
+===================================================== */
+
+notificationButton.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+        notificationsPanel.classList.toggle(
+            "show"
+        );
+
+    }
+);
+
+
+notificationsPanel.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+    }
+);
+
+
+document.addEventListener(
+    "click",
+    function() {
+
+        notificationsPanel.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   LOGIN METHOD
+===================================================== */
+
+function getLoginMethod(
+    user
+) {
+
+    const providers =
+        user.providerData || [];
+
+
+    if (
+        providers.some(
+            function(provider) {
+
+                return (
+                    provider.providerId ===
+                    "google.com"
+                );
+
+            }
+        )
+    ) {
+
+        return "Google 🔵";
+
+    }
+
+
+    if (
+        providers.some(
+            function(provider) {
+
+                return (
+                    provider.providerId ===
+                    "phone"
+                );
+
+            }
+        )
+    ) {
+
+        return "رقم الهاتف 📱";
+
+    }
+
+
+    return "Firebase";
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+logoutButton.addEventListener(
+    "click",
+    async function() {
+
+
+        if (
+            !confirm(
+                "هل تريد تسجيل الخروج؟"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            stopListeners();
+
+
+            await signOut(
+                auth
+            );
+
+
+            localStorage.removeItem(
+                "myStoreCurrentUser"
+            );
+
+
+            window.location.href =
+                "auth.html";
+
+
+        } catch(error) {
+
+            console.error(
+                error
+            );
+
+
+            showError(
+                "حدث خطأ أثناء تسجيل الخروج."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   EDIT NAME
+===================================================== */
+
+editNameButton.addEventListener(
+    "click",
+    async function() {
+
+
+        if (
+            !currentUser
+        ) {
+
+            return;
+
+        }
+
+
+        const newName =
+            prompt(
+                "اكتب الاسم الجديد:",
+                currentUser.displayName ||
+                ""
+            );
+
+
+        if (
+            !newName ||
+            !newName.trim()
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            await updateProfile(
+                currentUser,
+                {
+                    displayName:
+                        newName.trim()
+                }
+            );
+
+
+            saveCurrentUser(
+                currentUser
+            );
+
+
+            showAccount(
+                currentUser
+            );
+
+
+            showSuccess(
+                "تم تحديث الاسم بنجاح ✅"
+            );
+
+
+        } catch(error) {
+
+            console.error(
+                error
+            );
+
+
+            showError(
+                "حدث خطأ أثناء تحديث الاسم."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   STATUS NORMALIZATION
+===================================================== */
+
+function normalizeStatus(
+    status
+) {
+
+    const value =
+        String(
+            status ||
+            "جديد"
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        value.includes("جديد") ||
+        value.includes("انتظار") ||
+        value.includes("مراجعة") ||
+        value === "pending"
+    ) {
+
+        return "pending";
+
+    }
+
+
+    if (
+        value.includes("تأكيد") ||
+        value.includes("مؤكد") ||
+        value === "confirmed"
+    ) {
+
+        return "confirmed";
+
+    }
+
+
+    if (
+        value.includes("تجهيز") ||
+        value === "preparing"
+    ) {
+
+        return "preparing";
+
+    }
+
+
+    if (
+        value.includes("جاهز") ||
+        value === "ready"
+    ) {
+
+        return "ready";
+
+    }
+
+
+    if (
+        value.includes("شحن") ||
+        value.includes("توصيل") ||
+        value === "shipping"
+    ) {
+
+        return "shipping";
+
+    }
+
+
+    if (
+        value.includes("تسليم") ||
+        value.includes("مكتمل") ||
+        value === "delivered"
+    ) {
+
+        return "delivered";
+
+    }
+
+
+    if (
+        value.includes("إلغاء") ||
+        value.includes("ملغي") ||
+        value.includes("ملغى") ||
+        value === "cancelled"
+    ) {
+
+        return "cancelled";
+
+    }
+
+
+    return "pending";
+
+}
+
+
+/* =====================================================
+   STATUS TEXT
+===================================================== */
+
+function getStatusText(
+    status
+) {
+
+    const statuses = {
+
+        pending:
+            "⏳ قيد المراجعة",
+
+        confirmed:
+            "✅ تم التأكيد",
+
+        preparing:
+            "📦 جاري التجهيز",
+
+        ready:
+            "🟢 جاهز",
+
+        shipping:
+            "🚚 في التوصيل",
+
+        delivered:
+            "🎉 تم التسليم",
+
+        cancelled:
+            "❌ ملغي"
+
+    };
+
+
+    return (
+        statuses[status]
+        ||
+        "⏳ قيد المراجعة"
+    );
+
+}
+
+
+/* =====================================================
+   STATUS CLASS
+===================================================== */
+
+function getStatusClass(
+    status
+) {
+
+    const classes = {
+
+        pending:
+            "status-pending",
+
+        confirmed:
+            "status-confirmed",
+
+        preparing:
+            "status-preparing",
+
+        ready:
+            "status-ready",
+
+        shipping:
+            "status-shipping",
+
+        delivered:
+            "status-delivered",
+
+        cancelled:
+            "status-cancelled"
+
+    };
+
+
+    return (
+        classes[status]
+        ||
+        "status-pending"
+    );
+
+}
+
+
+/* =====================================================
+   ORDER DATE
+===================================================== */
+
+function getOrderDateValue(
+    order
+) {
+
+    const value =
+        order.createdAt ||
+        order.date;
+
+
+    return getTimestampValue(
+        value
+    );
+
+}
+
+
+/* =====================================================
+   TIMESTAMP VALUE
+===================================================== */
+
+function getTimestampValue(
+    value
+) {
+
+    if (!value) {
+
+        return 0;
+
+    }
+
+
+    /*
+       Firestore Timestamp
+    */
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        return value
+            .toDate()
+            .getTime();
+
+    }
+
+
+    /*
+       Firestore timestamp object
+    */
+
+    if (
+        value.seconds
+    ) {
+
+        return (
+            Number(
+                value.seconds
+            )
+            *
+            1000
+        );
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    return (
+        isNaN(
+            date.getTime()
+        )
+            ? 0
+            : date.getTime()
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return "تاريخ غير معروف";
+
+    }
+
+
+    let date;
+
+
+    if (
+        typeof value.toDate ===
+        "function"
+    ) {
+
+        date =
+            value.toDate();
+
+    } else if (
+        value.seconds
+    ) {
+
+        date =
+            new Date(
+                Number(
+                    value.seconds
+                ) *
+                1000
+            );
+
+    } else {
+
+        date =
+            new Date(
+                value
+            );
+
+    }
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "تاريخ غير معروف";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "ar-LY",
+        {
+            year:
+                "numeric",
+
+            month:
+                "long",
+
+            day:
+                "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NOTIFICATION TIME
+===================================================== */
+
+function formatNotificationTime(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return "الآن";
+
+    }
+
+
+    const timestamp =
+        getTimestampValue(
+            value
+        );
+
+
+    if (
+        !timestamp
+    ) {
+
+        return "الآن";
+
+    }
+
+
+    const date =
+        new Date(
+            timestamp
+        );
+
+
+    return date.toLocaleString(
+        "ar-LY",
+        {
+            year:
+                "numeric",
+
+            month:
+                "2-digit",
+
+            day:
+                "2-digit",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PHONE
+===================================================== */
+
+function normalizePhone(
+    phone
+) {
+
+    return String(
+        phone || ""
+    )
+        .replace(
+            /\D/g,
+            ""
+        )
+        .replace(
+            /^218/,
+            ""
+        )
+        .replace(
+            /^0/,
+            ""
+        );
+
+}
+
+
+/* =====================================================
+   PRICE
+===================================================== */
+
+function formatPrice(
+    price
+) {
+
+    return (
+        Number(
+            price || 0
+        )
+            .toLocaleString(
+                "ar-LY"
+            )
+        +
+        " د.ل"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJs(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /'/g,
+            "\\'"
+        )
+
+        .replace(
+            /"/g,
+            '\\"'
+        )
+
+        .replace(
+            /\n/g,
+            "\\n"
+        )
+
+        .replace(
+            /\r/g,
+            "\\r"
+        );
+
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+function showError(
+    text
+) {
+
+    const box =
+        document.getElementById(
+            "error-box"
+        );
+
+
+    box.style.background =
+        "";
+
+
+    box.style.color =
+        "";
+
+
+    box.style.borderColor =
+        "";
+
+
+    box.textContent =
+        text;
+
+
+    box.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        function() {
+
+            box.classList.remove(
+                "show"
+            );
+
+        },
+        4000
+    );
+
+}
+
+
+/* =====================================================
+   SUCCESS
+===================================================== */
+
+function showSuccess(
+    text
+) {
+
+    const box =
+        document.getElementById(
+            "error-box"
+        );
+
+
+    box.textContent =
+        text;
+
+
+    box.style.background =
+        "#ecfdf5";
+
+
+    box.style.color =
+        "#047857";
+
+
+    box.style.borderColor =
+        "#a7f3d0";
+
+
+    box.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        function() {
+
+            box.classList.remove(
+                "show"
+            );
+
+
+            box.style.background =
+                "";
+
+            box.style.color =
+                "";
+
+            box.style.borderColor =
+                "";
+
+        },
+        3000
+    );
+
+}
+
+
+</script>
+
+</body>
+
+</html>
