@@ -93,6 +93,190 @@ body {
     gap: 10px;
 }
 
+
+/* =========================
+   زر الإشعارات
+========================= */
+
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-button {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+.notification-button:hover {
+    background: #f3f4f6;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    background: #ef4444;
+    color: #ffffff;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+}
+
+.notification-badge.show {
+    display: flex;
+}
+
+
+/* =========================
+   قائمة الإشعارات
+========================= */
+
+.notifications-panel {
+    position: absolute;
+    top: 55px;
+    left: 0;
+    width: 350px;
+    max-width: calc(100vw - 30px);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.15);
+    overflow: hidden;
+    display: none;
+    z-index: 500;
+}
+
+.notifications-panel.show {
+    display: block;
+}
+
+.notifications-head {
+    padding: 15px;
+    border-bottom: 1px solid #eef0f3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.notifications-head strong {
+    font-size: 16px;
+}
+
+.mark-all-button {
+    border: 0;
+    background: transparent;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.notifications-list {
+    max-height: 390px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    gap: 10px;
+    padding: 14px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.notification-item:hover {
+    background: #f8fafc;
+}
+
+.notification-item.unread {
+    background: #eff6ff;
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #111827;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.notification-message {
+    color: #4b5563;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.notification-time {
+    color: #9ca3af;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.notification-delete {
+    border: 0;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.notification-delete:hover {
+    color: #ef4444;
+}
+
+.empty-notifications {
+    text-align: center;
+    padding: 35px 15px;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.empty-notifications-icon {
+    font-size: 35px;
+    margin-bottom: 7px;
+}
+
+
+/* =========================
+   أزرار الهيدر
+========================= */
+
 .back-button,
 .logout-button {
     padding: 10px 15px;
@@ -324,6 +508,11 @@ body {
     color: #b91c1c;
 }
 
+.status-ready {
+    background: #ecfdf5;
+    color: #047857;
+}
+
 .order-items {
     border-top: 1px solid #eef0f3;
     padding-top: 12px;
@@ -490,6 +679,34 @@ body {
         display: none;
     }
 
+    .notifications-panel {
+        left: -45px;
+        width: 330px;
+    }
+
+}
+
+@media (max-width:450px) {
+
+    .header-actions {
+        gap: 6px;
+    }
+
+    .logout-button {
+        padding: 9px 10px;
+        font-size: 12px;
+    }
+
+    .notification-button {
+        width: 42px;
+        height: 42px;
+    }
+
+    .notifications-panel {
+        left: -70px;
+        width: calc(100vw - 25px);
+    }
+
 }
 
 </style>
@@ -498,6 +715,11 @@ body {
 
 
 <body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <header class="header">
 
@@ -526,12 +748,86 @@ SPORT STORE
 
 <div class="header-actions">
 
+
+<!-- 🔔 الإشعارات -->
+
+<div
+    class="notification-wrapper"
+    id="notification-wrapper"
+>
+
+<button
+    type="button"
+    class="notification-button"
+    id="notification-button"
+    aria-label="الإشعارات"
+>
+
+🔔
+
+<span
+    class="notification-badge"
+    id="notification-badge"
+>
+0
+</span>
+
+</button>
+
+
+<div
+    class="notifications-panel"
+    id="notifications-panel"
+>
+
+
+<div class="notifications-head">
+
+<strong>
+🔔 الإشعارات
+</strong>
+
+<button
+    type="button"
+    class="mark-all-button"
+    id="mark-all-button"
+>
+تحديد الكل كمقروء
+</button>
+
+</div>
+
+
+<div
+    class="notifications-list"
+    id="notifications-list"
+>
+
+<div class="empty-notifications">
+
+<div class="empty-notifications-icon">
+🔄
+</div>
+
+جاري تحميل الإشعارات...
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
 <a
 href="index.html"
 class="back-button"
 >
 ← <span>المتجر</span>
 </a>
+
 
 <button
 type="button"
@@ -541,6 +837,7 @@ id="logout-button"
 🚪 تسجيل الخروج
 </button>
 
+
 </div>
 
 </div>
@@ -548,9 +845,14 @@ id="logout-button"
 </header>
 
 
+<!-- =========================
+     PAGE
+========================= -->
+
 <main class="page">
 
 <div class="container">
+
 
 <div class="page-title">
 
@@ -570,6 +872,10 @@ class="error-box"
 id="error-box"
 ></div>
 
+
+<!-- =========================
+     ACCOUNT
+========================= -->
 
 <section class="account-card">
 
@@ -621,7 +927,9 @@ id="profile-provider"
 
 <span>الاسم</span>
 
-<strong id="account-name">—</strong>
+<strong id="account-name">
+—
+</strong>
 
 </div>
 
@@ -630,7 +938,9 @@ id="profile-provider"
 
 <span>رقم الهاتف</span>
 
-<strong id="account-phone">—</strong>
+<strong id="account-phone">
+—
+</strong>
 
 </div>
 
@@ -639,7 +949,9 @@ id="profile-provider"
 
 <span>البريد الإلكتروني</span>
 
-<strong id="account-email">—</strong>
+<strong id="account-email">
+—
+</strong>
 
 </div>
 
@@ -648,7 +960,9 @@ id="profile-provider"
 
 <span>طريقة الدخول</span>
 
-<strong id="account-login-method">—</strong>
+<strong id="account-login-method">
+—
+</strong>
 
 </div>
 
@@ -656,6 +970,10 @@ id="profile-provider"
 
 </section>
 
+
+<!-- =========================
+     ORDERS
+========================= -->
 
 <section>
 
@@ -682,10 +1000,15 @@ id="orders-list"
 
 </section>
 
+
 </div>
 
 </main>
 
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer class="footer">
 
@@ -704,7 +1027,16 @@ id="orders-list"
 </footer>
 
 
+<!-- =========================
+     FIREBASE + ACCOUNT SCRIPT
+========================= -->
+
 <script type="module">
+
+
+/* =====================================================
+   FIREBASE
+===================================================== */
 
 import {
     initializeApp
@@ -722,6 +1054,26 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    orderBy,
+    onSnapshot,
+    doc,
+    updateDoc,
+    deleteDoc,
+    writeBatch
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* =====================================================
+   FIREBASE CONFIG
+===================================================== */
 
 const firebaseConfig = {
 
@@ -749,15 +1101,44 @@ const firebaseConfig = {
 };
 
 
+/* =====================================================
+   INIT
+===================================================== */
+
 const app =
-    initializeApp(firebaseConfig);
+    initializeApp(
+        firebaseConfig
+    );
+
 
 const auth =
     getAuth(app);
 
 
+const db =
+    getFirestore(app);
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
 let currentUser = null;
 
+let notificationsUnsubscribe =
+    null;
+
+let ordersUnsubscribe =
+    null;
+
+let currentNotifications = [];
+
+let currentOrders = [];
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const profileImage =
     document.getElementById(
@@ -815,15 +1196,46 @@ const editNameButton =
     );
 
 
-/* =========================
-   التحقق من الحساب
-========================= */
+/* Notifications */
+
+const notificationButton =
+    document.getElementById(
+        "notification-button"
+    );
+
+const notificationBadge =
+    document.getElementById(
+        "notification-badge"
+    );
+
+const notificationsPanel =
+    document.getElementById(
+        "notifications-panel"
+    );
+
+const notificationsList =
+    document.getElementById(
+        "notifications-list"
+    );
+
+const markAllButton =
+    document.getElementById(
+        "mark-all-button"
+    );
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
 
 onAuthStateChanged(
     auth,
     function(user) {
 
+
         if (!user) {
+
+            stopListeners();
 
             localStorage.removeItem(
                 "myStoreCurrentUser"
@@ -836,21 +1248,77 @@ onAuthStateChanged(
 
         }
 
-        currentUser = user;
 
-        saveCurrentUser(user);
+        currentUser =
+            user;
 
-        showAccount(user);
 
-        loadOrders(user);
+        saveCurrentUser(
+            user
+        );
+
+
+        showAccount(
+            user
+        );
+
+
+        /*
+           تشغيل الطلبات
+        */
+
+        loadOrdersFromFirestore(
+            user
+        );
+
+
+        /*
+           تشغيل الإشعارات
+        */
+
+        loadNotifications(
+            user
+        );
 
     }
 );
 
 
-/* =========================
-   حفظ المستخدم
-========================= */
+/* =====================================================
+   STOP LISTENERS
+===================================================== */
+
+function stopListeners() {
+
+    if (
+        notificationsUnsubscribe
+    ) {
+
+        notificationsUnsubscribe();
+
+        notificationsUnsubscribe =
+            null;
+
+    }
+
+
+    if (
+        ordersUnsubscribe
+    ) {
+
+        ordersUnsubscribe();
+
+        ordersUnsubscribe =
+            null;
+
+    }
+
+}
+
+
+/* =====================================================
+   SAVE USER
+===================================================== */
 
 function saveCurrentUser(user) {
 
@@ -860,10 +1328,12 @@ function saveCurrentUser(user) {
             ? user.providerData[0]
             : null;
 
+
     const providerId =
         providerData
             ? providerData.providerId
             : "";
+
 
     const userData = {
 
@@ -891,17 +1361,20 @@ function saveCurrentUser(user) {
 
     };
 
+
     localStorage.setItem(
         "myStoreCurrentUser",
-        JSON.stringify(userData)
+        JSON.stringify(
+            userData
+        )
     );
 
 }
 
 
-/* =========================
-   عرض الحساب
-========================= */
+/* =====================================================
+   SHOW ACCOUNT
+===================================================== */
 
 function showAccount(user) {
 
@@ -909,30 +1382,43 @@ function showAccount(user) {
         user.displayName ||
         "مستخدم المتجر";
 
+
     profileName.textContent =
         name;
 
+
     accountName.textContent =
         name;
+
 
     accountPhone.textContent =
         user.phoneNumber ||
         "غير مرتبط";
 
+
     accountEmail.textContent =
         user.email ||
         "غير مرتبط";
 
+
     accountLoginMethod.textContent =
-        getLoginMethod(user);
+        getLoginMethod(
+            user
+        );
+
 
     profileProvider.textContent =
-        getLoginMethod(user);
+        getLoginMethod(
+            user
+        );
 
 
-    if (user.photoURL) {
+    if (
+        user.photoURL
+    ) {
 
         profileImage.innerHTML =
+
             `<img
                 src="${escapeHtml(
                     user.photoURL
@@ -950,13 +1436,154 @@ function showAccount(user) {
 }
 
 
-/* =========================
-   الطلبات
-========================= */
+/* =====================================================
+   FIRESTORE ORDERS
+===================================================== */
 
-function loadOrders(user) {
+function loadOrdersFromFirestore(
+    user
+) {
+
+
+    /*
+       البحث باستخدام userId
+    */
+
+    try {
+
+        const ordersQuery =
+            query(
+                collection(
+                    db,
+                    "orders"
+                ),
+                where(
+                    "userId",
+                    "==",
+                    user.uid
+                )
+            );
+
+
+        ordersUnsubscribe =
+            onSnapshot(
+                ordersQuery,
+
+                function(snapshot) {
+
+
+                    currentOrders =
+                        snapshot.docs
+                            .map(
+                                function(
+                                    item
+                                ) {
+
+                                    return {
+
+                                        id:
+                                            item.id,
+
+                                        ...item.data()
+
+                                    };
+
+                                }
+                            );
+
+
+                    /*
+                       ترتيب الأحدث أولًا
+                    */
+
+                    currentOrders.sort(
+                        function(a,b) {
+
+                            return (
+                                getOrderDateValue(b)
+                                -
+                                getOrderDateValue(a)
+                            );
+
+                        }
+                    );
+
+
+                    /*
+                       حفظ نسخة محلية
+                    */
+
+                    try {
+
+                        localStorage.setItem(
+                            "myStoreOrders",
+                            JSON.stringify(
+                                currentOrders
+                            )
+                        );
+
+                    } catch(error) {
+
+                        console.warn(
+                            "تعذر حفظ الطلبات محليًا.",
+                            error
+                        );
+
+                    }
+
+
+                    renderOrders(
+                        currentOrders
+                    );
+
+                },
+
+                function(error) {
+
+                    console.error(
+                        "Orders Firestore error:",
+                        error
+                    );
+
+
+                    /*
+                       fallback
+                    */
+
+                    loadOrdersFromLocalStorage(
+                        user
+                    );
+
+                }
+            );
+
+
+    } catch(error) {
+
+        console.error(
+            error
+        );
+
+
+        loadOrdersFromLocalStorage(
+            user
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FALLBACK ORDERS
+===================================================== */
+
+function loadOrdersFromLocalStorage(
+    user
+) {
 
     let orders = [];
+
 
     try {
 
@@ -967,7 +1594,7 @@ function loadOrders(user) {
                 )
             ) || [];
 
-    } catch (error) {
+    } catch(error) {
 
         orders = [];
 
@@ -975,69 +1602,103 @@ function loadOrders(user) {
 
 
     const userOrders =
-        orders.filter(function(order) {
+        orders.filter(
+            function(order) {
 
-            if (
-                order.userId &&
-                order.userId ===
-                user.uid
-            ) {
 
-                return true;
+                if (
+                    order.userId &&
+                    order.userId ===
+                    user.uid
+                ) {
+
+                    return true;
+
+                }
+
+
+                if (
+                    order.customerEmail &&
+                    user.email &&
+                    order.customerEmail
+                        .toLowerCase() ===
+                    user.email.toLowerCase()
+                ) {
+
+                    return true;
+
+                }
+
+
+                if (
+                    order.customerPhone &&
+                    user.phoneNumber &&
+                    normalizePhone(
+                        order.customerPhone
+                    ) ===
+                    normalizePhone(
+                        user.phoneNumber
+                    )
+                ) {
+
+                    return true;
+
+                }
+
+
+                return false;
 
             }
-
-
-            if (
-                order.customerEmail &&
-                user.email &&
-                order.customerEmail
-                    .toLowerCase() ===
-                user.email.toLowerCase()
-            ) {
-
-                return true;
-
-            }
-
-
-            if (
-                order.customerPhone &&
-                user.phoneNumber &&
-                normalizePhone(
-                    order.customerPhone
-                ) ===
-                normalizePhone(
-                    user.phoneNumber
-                )
-            ) {
-
-                return true;
-
-            }
-
-
-            return false;
-
-        });
-
-
-    userOrders.sort(function(a,b) {
-
-        return (
-            getOrderDateValue(b) -
-            getOrderDateValue(a)
         );
 
-    });
+
+    userOrders.sort(
+        function(a,b) {
+
+            return (
+                getOrderDateValue(b)
+                -
+                getOrderDateValue(a)
+            );
+
+        }
+    );
+
+
+    currentOrders =
+        userOrders;
+
+
+    renderOrders(
+        userOrders
+    );
+
+}
+
+
+/* =====================================================
+   RENDER ORDERS
+===================================================== */
+
+function renderOrders(
+    orders
+) {
+
+
+    orders =
+        Array.isArray(orders)
+            ? orders
+            : [];
 
 
     ordersCount.textContent =
-        userOrders.length +
+        orders.length +
         " طلب";
 
 
-    if (userOrders.length === 0) {
+    if (
+        orders.length === 0
+    ) {
 
         ordersList.innerHTML = `
 
@@ -1075,33 +1736,45 @@ function loadOrders(user) {
 
 
     ordersList.innerHTML =
-        userOrders
-            .map(renderOrder)
+        orders
+            .map(
+                renderOrder
+            )
             .join("");
 
 }
 
 
-/* =========================
-   عرض الطلب
-========================= */
+/* =====================================================
+   RENDER ORDER
+===================================================== */
 
-function renderOrder(order) {
+function renderOrder(
+    order
+) {
 
     const status =
         normalizeStatus(
             order.status
         );
 
+
     const statusText =
-        getStatusText(status);
+        getStatusText(
+            status
+        );
+
 
     const statusClass =
-        getStatusClass(status);
+        getStatusClass(
+            status
+        );
+
 
     const orderNumber =
         order.orderNumber ||
         order.id ||
+        order.orderId ||
         "طلب";
 
 
@@ -1113,7 +1786,9 @@ function renderOrder(order) {
 
 
     const items =
-        Array.isArray(order.items)
+        Array.isArray(
+            order.items
+        )
             ? order.items
             : [];
 
@@ -1121,121 +1796,159 @@ function renderOrder(order) {
     const itemsHtml =
         items.length
 
-            ? items.map(function(item) {
+            ?
 
-                const quantity =
-                    Number(
-                        item.quantity || 1
-                    );
+            items
+                .map(
+                    function(item) {
 
-                const price =
-                    Number(
-                        item.price || 0
-                    );
-
-                return `
-
-                    <div class="order-item">
-
-                        <div class="order-item-left">
-
-                            ${
-                                item.image
-
-                                    ? `<img
-                                        class="order-item-image"
-                                        src="${escapeHtml(
-                                            item.image
-                                        )}"
-                                        alt=""
-                                      >`
-
-                                    : `<div
-                                        class="order-item-image"
-                                        style="
-                                            display:flex;
-                                            align-items:center;
-                                            justify-content:center;
-                                            font-size:24px;
-                                        "
-                                      >
-                                        🛍️
-                                      </div>`
-                            }
+                        const quantity =
+                            Number(
+                                item.quantity ||
+                                1
+                            );
 
 
-                            <div>
+                        const price =
+                            Number(
+                                item.price ||
+                                0
+                            );
 
-                                <div class="order-item-name">
 
-                                    ${escapeHtml(
-                                        item.name ||
-                                        "منتج"
-                                    )}
+                        return `
+
+                            <div class="order-item">
+
+                                <div class="order-item-left">
+
+                                    ${
+                                        item.image
+
+                                            ?
+
+                                            `<img
+                                                class="order-item-image"
+                                                src="${escapeHtml(
+                                                    item.image
+                                                )}"
+                                                alt=""
+                                            >`
+
+                                            :
+
+                                            `<div
+                                                class="order-item-image"
+                                                style="
+                                                    display:flex;
+                                                    align-items:center;
+                                                    justify-content:center;
+                                                    font-size:24px;
+                                                "
+                                            >
+                                                🛍️
+                                            </div>`
+                                    }
+
+
+                                    <div>
+
+                                        <div class="order-item-name">
+
+                                            ${escapeHtml(
+                                                item.name ||
+                                                "منتج"
+                                            )}
+
+                                        </div>
+
+
+                                        <div class="order-item-details">
+
+                                            الكمية:
+                                            ${quantity}
+
+                                            ${
+                                                item.size
+                                                    ?
+
+                                                    " | المقاس: "
+                                                    +
+                                                    escapeHtml(
+                                                        item.size
+                                                    )
+
+                                                    :
+                                                    ""
+                                            }
+
+                                            ${
+                                                item.color
+                                                    ?
+
+                                                    " | اللون: "
+                                                    +
+                                                    escapeHtml(
+                                                        item.color
+                                                    )
+
+                                                    :
+                                                    ""
+                                            }
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
 
-                                <div class="order-item-details">
+                                <div class="order-item-price">
 
-                                    الكمية:
-                                    ${quantity}
-
-                                    ${
-                                        item.size
-                                            ? " | المقاس: " +
-                                              escapeHtml(
-                                                  item.size
-                                              )
-                                            : ""
-                                    }
-
-                                    ${
-                                        item.color
-                                            ? " | اللون: " +
-                                              escapeHtml(
-                                                  item.color
-                                              )
-                                            : ""
-                                    }
+                                    ${formatPrice(
+                                        price *
+                                        quantity
+                                    )}
 
                                 </div>
 
                             </div>
 
-                        </div>
+                        `;
 
+                    }
+                )
+                .join("")
 
-                        <div class="order-item-price">
+            :
 
-                            ${formatPrice(
-                                price * quantity
-                            )}
+            `
 
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("")
-
-            : `
                 <div class="order-item-details">
+
                     تفاصيل المنتجات غير متوفرة.
+
                 </div>
-              `;
+
+            `;
 
 
     const total =
         Number(
-            order.total || 0
+            order.total ||
+            0
         );
 
 
     return `
 
-        <article class="order-card">
+        <article
+            class="order-card"
+            data-order-id="${escapeHtml(
+                order.id || ""
+            )}"
+        >
+
 
             <div class="order-header">
 
@@ -1244,11 +1957,15 @@ function renderOrder(order) {
                     <div class="order-number">
 
                         📦 رقم الطلب:
+
                         ${escapeHtml(
-                            String(orderNumber)
+                            String(
+                                orderNumber
+                            )
                         )}
 
                     </div>
+
 
                     <div class="order-date">
 
@@ -1279,17 +1996,25 @@ function renderOrder(order) {
 
             <div class="order-footer">
 
-                <span class="order-total-label">
+                <span
+                    class="order-total-label"
+                >
                     إجمالي الطلب
                 </span>
 
-                <strong class="order-total">
 
-                    ${formatPrice(total)}
+                <strong
+                    class="order-total"
+                >
+
+                    ${formatPrice(
+                        total
+                    )}
 
                 </strong>
 
             </div>
+
 
         </article>
 
@@ -1298,495 +2023,433 @@ function renderOrder(order) {
 }
 
 
-/* =========================
-   توحيد الحالة
-========================= */
-
-function normalizeStatus(status) {
-
-    const value =
-        String(
-            status || "جديد"
-        )
-            .trim()
-            .toLowerCase();
-
-
-    if (
-        value.includes("جديد") ||
-        value.includes("انتظار") ||
-        value.includes("مراجعة")
-    ) {
-
-        return "pending";
-
-    }
-
-
-    if (
-        value.includes("تأكيد") ||
-        value.includes("مؤكد")
-    ) {
-
-        return "confirmed";
-
-    }
-
-
-    if (
-        value.includes("تجهيز")
-    ) {
-
-        return "preparing";
-
-    }
-
-
-    if (
-        value.includes("شحن") ||
-        value.includes("توصيل")
-    ) {
-
-        return "shipping";
-
-    }
-
-
-    if (
-        value.includes("تسليم") ||
-        value.includes("مكتمل")
-    ) {
-
-        return "delivered";
-
-    }
-
-
-    if (
-        value.includes("إلغاء") ||
-        value.includes("ملغي")
-    ) {
-
-        return "cancelled";
-
-    }
-
-
-    return "pending";
-
-}
-
-
-/* =========================
-   نص الحالة
-========================= */
-
-function getStatusText(status) {
-
-    const statuses = {
-
-        pending:
-            "⏳ قيد المراجعة",
-
-        confirmed:
-            "✅ تم التأكيد",
-
-        preparing:
-            "📦 جاري التجهيز",
-
-        shipping:
-            "🚚 في التوصيل",
-
-        delivered:
-            "🎉 تم التسليم",
-
-        cancelled:
-            "❌ ملغي"
-
-    };
-
-    return (
-        statuses[status] ||
-        "⏳ قيد المراجعة"
-    );
-
-}
-
-
-/* =========================
-   لون الحالة
-========================= */
-
-function getStatusClass(status) {
-
-    const classes = {
-
-        pending:
-            "status-pending",
-
-        confirmed:
-            "status-confirmed",
-
-        preparing:
-            "status-preparing",
-
-        shipping:
-            "status-shipping",
-
-        delivered:
-            "status-delivered",
-
-        cancelled:
-            "status-cancelled"
-
-    };
-
-    return (
-        classes[status] ||
-        "status-pending"
-    );
-
-}
-
-
-/* =========================
-   تسجيل الخروج
-========================= */
-
-logoutButton.addEventListener(
-    "click",
-    async function() {
-
-        if (
-            !confirm(
-                "هل تريد تسجيل الخروج؟"
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            await signOut(auth);
-
-            localStorage.removeItem(
-                "myStoreCurrentUser"
-            );
-
-            window.location.href =
-                "auth.html";
-
-        } catch (error) {
-
-            showError(
-                "حدث خطأ أثناء تسجيل الخروج."
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================
-   تعديل الاسم
-========================= */
-
-editNameButton.addEventListener(
-    "click",
-    async function() {
-
-        if (!currentUser) return;
-
-
-        const newName =
-            prompt(
-                "اكتب الاسم الجديد:",
-                currentUser.displayName || ""
+/* =====================================================
+   🔔 LOAD NOTIFICATIONS
+===================================================== */
+
+function loadNotifications(
+    user
+) {
+
+    try {
+
+        const notificationsQuery =
+            query(
+                collection(
+                    db,
+                    "notifications"
+                ),
+                where(
+                    "userId",
+                    "==",
+                    user.uid
+                )
             );
 
 
-        if (!newName) return;
+        notificationsUnsubscribe =
+            onSnapshot(
+                notificationsQuery,
+
+                function(snapshot) {
 
 
-        try {
+                    currentNotifications =
+                        snapshot.docs
+                            .map(
+                                function(item) {
 
-            await updateProfile(
-                currentUser,
-                {
-                    displayName:
-                        newName.trim()
+                                    return {
+
+                                        id:
+                                            item.id,
+
+                                        ...item.data()
+
+                                    };
+
+                                }
+                            );
+
+
+                    /*
+                       الأحدث أولًا
+                    */
+
+                    currentNotifications.sort(
+                        function(a,b) {
+
+                            return (
+                                getTimestampValue(
+                                    b.createdAt
+                                )
+                                -
+                                getTimestampValue(
+                                    a.createdAt
+                                )
+                            );
+
+                        }
+                    );
+
+
+                    renderNotifications(
+                        currentNotifications
+                    );
+
+                },
+
+                function(error) {
+
+                    console.error(
+                        "Notifications error:",
+                        error
+                    );
+
+
+                    notificationsList.innerHTML = `
+
+                        <div class="empty-notifications">
+
+                            <div class="empty-notifications-icon">
+                                ⚠️
+                            </div>
+
+                            تعذر تحميل الإشعارات
+
+                        </div>
+
+                    `;
+
                 }
             );
 
 
-            saveCurrentUser(
-                currentUser
-            );
+    } catch(error) {
 
-
-            showAccount(
-                currentUser
-            );
-
-
-            showSuccess(
-                "تم تحديث الاسم بنجاح ✅"
-            );
-
-        } catch (error) {
-
-            showError(
-                "حدث خطأ أثناء تحديث الاسم."
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================
-   طريقة الدخول
-========================= */
-
-function getLoginMethod(user) {
-
-    const providers =
-        user.providerData || [];
-
-
-    if (
-        providers.some(function(p) {
-
-            return (
-                p.providerId ===
-                "google.com"
-            );
-
-        })
-    ) {
-
-        return "Google 🔵";
-
-    }
-
-
-    if (
-        providers.some(function(p) {
-
-            return (
-                p.providerId ===
-                "phone"
-            );
-
-        })
-    ) {
-
-        return "رقم الهاتف 📱";
-
-    }
-
-
-    return "Firebase";
-
-}
-
-
-/* =========================
-   التاريخ
-========================= */
-
-function getOrderDateValue(order) {
-
-    const value =
-        order.createdAt ||
-        order.date;
-
-    if (!value) return 0;
-
-    const date =
-        new Date(value);
-
-    return isNaN(
-        date.getTime()
-    )
-        ? 0
-        : date.getTime();
-
-}
-
-
-function formatDate(value) {
-
-    if (!value) {
-        return "تاريخ غير معروف";
-    }
-
-
-    const date =
-        new Date(value);
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return String(value);
-
-    }
-
-
-    return date.toLocaleDateString(
-        "ar-LY",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }
-    );
-
-}
-
-
-/* =========================
-   الهاتف
-========================= */
-
-function normalizePhone(phone) {
-
-    return String(
-        phone || ""
-    )
-        .replace(/\D/g, "")
-        .replace(/^218/, "")
-        .replace(/^0/, "");
-
-}
-
-
-/* =========================
-   السعر
-========================= */
-
-function formatPrice(price) {
-
-    return (
-        Number(price || 0)
-            .toLocaleString("ar-LY") +
-        " د.ل"
-    );
-
-}
-
-
-/* =========================
-   حماية HTML
-========================= */
-
-function escapeHtml(value) {
-
-    return String(
-        value ?? ""
-    )
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
+        console.error(
+            error
         );
 
-}
-
-
-/* =========================
-   رسائل
-========================= */
-
-function showError(text) {
-
-    const box =
-        document.getElementById(
-            "error-box"
-        );
-
-    box.textContent =
-        text;
-
-    box.classList.add(
-        "show"
-    );
+    }
 
 }
 
 
-function showSuccess(text) {
+/* =====================================================
+   🔔 RENDER NOTIFICATIONS
+===================================================== */
 
-    const box =
-        document.getElementById(
-            "error-box"
-        );
+function renderNotifications(
+    notifications
+) {
 
-    box.textContent =
-        text;
 
-    box.style.background =
-        "#ecfdf5";
+    const unreadCount =
+        notifications.filter(
+            function(notification) {
 
-    box.style.color =
-        "#047857";
+                return (
+                    notification.read !== true
+                );
 
-    box.style.borderColor =
-        "#a7f3d0";
+            }
+        ).length;
 
-    box.classList.add(
-        "show"
-    );
 
-    setTimeout(function() {
+    /*
+       تحديث الرقم
+    */
 
-        box.classList.remove(
+    if (
+        unreadCount > 0
+    ) {
+
+        notificationBadge.textContent =
+            unreadCount > 99
+                ? "99+"
+                : unreadCount;
+
+
+        notificationBadge.classList.add(
             "show"
         );
 
-        box.style.background =
-            "";
+    } else {
 
-        box.style.color =
-            "";
+        notificationBadge.classList.remove(
+            "show"
+        );
 
-        box.style.borderColor =
-            "";
+    }
 
-    }, 3000);
+
+    /*
+       لا توجد إشعارات
+    */
+
+    if (
+        notifications.length === 0
+    ) {
+
+        notificationsList.innerHTML = `
+
+            <div class="empty-notifications">
+
+                <div class="empty-notifications-icon">
+                    🔕
+                </div>
+
+                لا توجد إشعارات حاليًا.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    notificationsList.innerHTML =
+        notifications
+            .map(
+                renderNotification
+            )
+            .join("");
 
 }
 
-</script>
 
-</body>
-    </html>
+/* =====================================================
+   🔔 NOTIFICATION CARD
+===================================================== */
+
+function renderNotification(
+    notification
+) {
+
+    const unread =
+        notification.read !== true;
+
+
+    const title =
+        notification.title ||
+        "تحديث جديد";
+
+
+    const message =
+        notification.message ||
+        "لديك إشعار جديد.";
+
+
+    const time =
+        formatNotificationTime(
+            notification.createdAt
+        );
+
+
+    return `
+
+        <div
+            class="
+                notification-item
+                ${unread ? "unread" : ""}
+            "
+            data-id="${escapeHtml(
+                notification.id
+            )}"
+            onclick="
+                notificationClicked(
+                    '${escapeJs(
+                        notification.id
+                    )}',
+                    '${escapeJs(
+                        notification.orderId ||
+                        ""
+                    )}'
+                )
+            "
+        >
+
+
+            <div class="notification-icon">
+
+                🔔
+
+            </div>
+
+
+            <div class="notification-content">
+
+                <div class="notification-title">
+
+                    ${escapeHtml(
+                        title
+                    )}
+
+                </div>
+
+
+                <div class="notification-message">
+
+                    ${escapeHtml(
+                        message
+                    )}
+
+                </div>
+
+
+                <div class="notification-time">
+
+                    ${escapeHtml(
+                        time
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="notification-delete"
+                title="حذف"
+                onclick="
+                    event.stopPropagation();
+                    deleteNotification(
+                        '${escapeJs(
+                            notification.id
+                        )}'
+                    )
+                "
+            >
+                ×
+            </button>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   🔔 CLICK NOTIFICATION
+===================================================== */
+
+window.notificationClicked =
+async function(
+    notificationId,
+    orderId
+) {
+
+    try {
+
+        await markNotificationAsRead(
+            notificationId
+        );
+
+    } catch(error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+
+    /*
+       إغلاق القائمة
+    */
+
+    notificationsPanel.classList.remove(
+        "show"
+    );
+
+
+    /*
+       إذا الإشعار متعلق بطلب
+    */
+
+    if (
+        orderId
+    ) {
+
+        const orderElement =
+            document.querySelector(
+                `[data-order-id="${CSS.escape(
+                    orderId
+                )}"]`
+            );
+
+
+        if (
+            orderElement
+        ) {
+
+            orderElement.scrollIntoView(
+                {
+                    behavior:
+                        "smooth",
+                    block:
+                        "center"
+                }
+            );
+
+            orderElement.style.outline =
+                "3px solid #2563eb";
+
+
+            setTimeout(
+                function() {
+
+                    orderElement.style.outline =
+                        "";
+
+                },
+                2000
+            );
+
+        }
+
+    }
+
+};
+
+
+/* =====================================================
+   🔔 MARK AS READ
+===================================================== */
+
+async function markNotificationAsRead(
+    notificationId
+) {
+
+    if (
+        !notificationId
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "notifications",
+                notificationId
+            ),
+            {
+                read: true
+            }
+        );
+
+    } catch(error) {
+
+        console.error(
+            "Mark notification
