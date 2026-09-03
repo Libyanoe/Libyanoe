@@ -2,7 +2,6 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -93,6 +92,10 @@ button{
     font-weight:bold;
 }
 
+.login-btn:active{
+    transform:scale(.98);
+}
+
 .login-error{
     color:#dc2626;
     margin-top:12px;
@@ -110,7 +113,9 @@ button{
 }
 
 
-/* SIDEBAR */
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar{
     width:250px;
@@ -174,7 +179,9 @@ button{
 }
 
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 .main{
     flex:1;
@@ -678,7 +685,9 @@ button{
 <body>
 
 
-<!-- LOGIN -->
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="loginPage" class="login-page">
 
@@ -696,8 +705,9 @@ button{
         >
 
         <button
+            type="button"
             class="login-btn"
-            onclick="login()"
+            id="loginButton"
         >
             دخول
         </button>
@@ -714,7 +724,9 @@ button{
 </div>
 
 
-<!-- DASHBOARD -->
+<!-- =========================
+     DASHBOARD
+========================= -->
 
 <div
     id="dashboard"
@@ -730,6 +742,7 @@ button{
         <div class="menu">
 
             <button
+                type="button"
                 id="productsMenu"
                 class="active"
                 onclick="showProducts()"
@@ -738,6 +751,7 @@ button{
             </button>
 
             <button
+                type="button"
                 id="ordersMenu"
                 onclick="showOrders()"
             >
@@ -745,6 +759,7 @@ button{
             </button>
 
             <button
+                type="button"
                 class="add-btn"
                 onclick="openProductModal()"
             >
@@ -752,6 +767,7 @@ button{
             </button>
 
             <button
+                type="button"
                 class="store-btn"
                 onclick="goToStore()"
             >
@@ -759,6 +775,7 @@ button{
             </button>
 
             <button
+                type="button"
                 class="logout-btn"
                 onclick="logout()"
             >
@@ -796,9 +813,7 @@ button{
 
                 <div class="icon">📦</div>
 
-                <h3>
-                    إجمالي المنتجات
-                </h3>
+                <h3>إجمالي المنتجات</h3>
 
                 <strong id="totalProducts">
                     0
@@ -811,9 +826,7 @@ button{
 
                 <div class="icon">✅</div>
 
-                <h3>
-                    المنتجات المتوفرة
-                </h3>
+                <h3>المنتجات المتوفرة</h3>
 
                 <strong id="availableProducts">
                     0
@@ -826,9 +839,7 @@ button{
 
                 <div class="icon">🛒</div>
 
-                <h3>
-                    الطلبات الجديدة
-                </h3>
+                <h3>الطلبات الجديدة</h3>
 
                 <strong id="newOrders">
                     0
@@ -841,9 +852,7 @@ button{
 
                 <div class="icon">💰</div>
 
-                <h3>
-                    قيمة المبيعات
-                </h3>
+                <h3>قيمة المبيعات</h3>
 
                 <strong id="salesValue">
                     0 د.ل
@@ -854,7 +863,9 @@ button{
         </div>
 
 
-        <!-- PRODUCTS -->
+        <!-- =========================
+             PRODUCTS
+        ========================= -->
 
         <section
             id="productsSection"
@@ -885,7 +896,9 @@ button{
         </section>
 
 
-        <!-- ORDERS -->
+        <!-- =========================
+             ORDERS
+        ========================= -->
 
         <section
             id="ordersSection"
@@ -920,7 +933,9 @@ button{
 </div>
 
 
-<!-- PRODUCT MODAL -->
+<!-- =========================
+     PRODUCT MODAL
+========================= -->
 
 <div
     id="productModal"
@@ -936,6 +951,7 @@ button{
             </h2>
 
             <button
+                type="button"
                 class="close-modal"
                 onclick="closeProductModal()"
             >
@@ -1074,7 +1090,6 @@ button{
                     type="file"
                     id="productImage"
                     accept="image/*"
-                    onchange="previewImage(event)"
                 >
 
                 <div
@@ -1107,7 +1122,9 @@ button{
 </div>
 
 
-<!-- FIREBASE -->
+<!-- =========================
+     FIREBASE
+========================= -->
 
 <script src="https://www.gstatic.com/firebasejs/12.0.0/firebase-app-compat.js"></script>
 
@@ -1117,7 +1134,7 @@ button{
 <script>
 
 /* =====================================================
-   FIREBASE
+   FIREBASE CONFIG
 ===================================================== */
 
 const firebaseConfig = {
@@ -1154,14 +1171,11 @@ try{
         firebaseConfig
     );
 
-    db = firebase.firestore();
+    db =
+        firebase.firestore();
 
     console.log(
         "Firebase Firestore connected."
-    );
-
-    setFirebaseStatus(
-        "🟢 Firestore متصل"
     );
 
 }catch(error){
@@ -1169,10 +1183,6 @@ try{
     console.error(
         "Firebase initialization error:",
         error
-    );
-
-    setFirebaseStatus(
-        "🟠 التخزين المحلي"
     );
 
 }
@@ -1205,6 +1215,45 @@ let migrationStarted =
 
 
 /* =====================================================
+   DOM READY
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        setupLogin();
+
+        setupProductForm();
+
+        setupImagePreview();
+
+        setupModal();
+
+        setFirebaseStatus(
+            db
+            ?
+            "🟢 Firestore متصل"
+            :
+            "🟠 التخزين المحلي"
+        );
+
+
+        if(
+            sessionStorage.getItem(
+                "adminLoggedIn"
+            ) === "true"
+        ){
+
+            showDashboard();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    FIREBASE STATUS
 ===================================================== */
 
@@ -1217,7 +1266,8 @@ function setFirebaseStatus(text){
 
     if(element){
 
-        element.textContent = text;
+        element.textContent =
+            text;
 
     }
 
@@ -1228,17 +1278,76 @@ function setFirebaseStatus(text){
    LOGIN
 ===================================================== */
 
-function login(){
+function setupLogin(){
+
+    const button =
+        document.getElementById(
+            "loginButton"
+        );
 
     const password =
-        document
-            .getElementById("password")
-            .value
-            .trim();
+        document.getElementById(
+            "password"
+        );
+
+
+    if(button){
+
+        button.addEventListener(
+            "click",
+            login
+        );
+
+    }
+
+
+    if(password){
+
+        password.addEventListener(
+            "keydown",
+            function(event){
+
+                if(
+                    event.key ===
+                    "Enter"
+                ){
+
+                    event.preventDefault();
+
+                    login();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+function login(){
+
+    const passwordInput =
+        document.getElementById(
+            "password"
+        );
 
     const error =
-        document
-            .getElementById("loginError");
+        document.getElementById(
+            "loginError"
+        );
+
+
+    if(!passwordInput){
+
+        return;
+
+    }
+
+
+    const password =
+        passwordInput.value.trim();
 
 
     if(password === PASSWORD){
@@ -1248,35 +1357,30 @@ function login(){
             "true"
         );
 
-        error.style.display =
-            "none";
+
+        if(error){
+
+            error.style.display =
+                "none";
+
+        }
+
 
         showDashboard();
 
+
     }else{
 
-        error.style.display =
-            "block";
+        if(error){
+
+            error.style.display =
+                "block";
+
+        }
 
     }
 
 }
-
-
-document
-    .getElementById("password")
-    .addEventListener(
-        "keydown",
-        function(event){
-
-            if(event.key === "Enter"){
-
-                login();
-
-            }
-
-        }
-    );
 
 
 /* =====================================================
@@ -1285,16 +1389,33 @@ document
 
 function showDashboard(){
 
-    document
-        .getElementById("loginPage")
-        .classList
-        .add("hidden");
+    const loginPage =
+        document.getElementById(
+            "loginPage"
+        );
+
+    const dashboard =
+        document.getElementById(
+            "dashboard"
+        );
 
 
-    document
-        .getElementById("dashboard")
-        .classList
-        .remove("hidden");
+    if(loginPage){
+
+        loginPage.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if(dashboard){
+
+        dashboard.classList.remove(
+            "hidden"
+        );
+
+    }
 
 
     loadProducts();
@@ -1309,21 +1430,6 @@ function showDashboard(){
 
 
 /* =====================================================
-   AUTO LOGIN
-===================================================== */
-
-if(
-    sessionStorage.getItem(
-        "adminLoggedIn"
-    ) === "true"
-){
-
-    showDashboard();
-
-}
-
-
-/* =====================================================
    LOGOUT
 ===================================================== */
 
@@ -1333,13 +1439,16 @@ function logout(){
 
         ordersUnsubscribe();
 
-        ordersUnsubscribe = null;
+        ordersUnsubscribe =
+            null;
 
     }
+
 
     sessionStorage.removeItem(
         "adminLoggedIn"
     );
+
 
     location.reload();
 
@@ -1449,7 +1558,9 @@ function getProducts(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         return [];
 
@@ -1482,21 +1593,36 @@ function loadProducts(){
 
 function updateProductStats(products){
 
-    document
-        .getElementById("totalProducts")
-        .textContent =
-        products.length;
+    const total =
+        document.getElementById(
+            "totalProducts"
+        );
+
+    const available =
+        document.getElementById(
+            "availableProducts"
+        );
 
 
-    document
-        .getElementById("availableProducts")
-        .textContent =
-        products.filter(
-            p =>
-                Number(
-                    p.quantity || 0
-                ) > 0
-        ).length;
+    if(total){
+
+        total.textContent =
+            products.length;
+
+    }
+
+
+    if(available){
+
+        available.textContent =
+            products.filter(
+                p =>
+                    Number(
+                        p.quantity || 0
+                    ) > 0
+            ).length;
+
+    }
 
 }
 
@@ -1505,6 +1631,7 @@ function updateStats(){
 
     const products =
         getProducts();
+
 
     updateProductStats(
         products
@@ -1526,8 +1653,11 @@ function renderProducts(){
             "productsGrid"
         );
 
+
     if(!grid){
+
         return;
+
     }
 
 
@@ -1568,8 +1698,7 @@ function renderProducts(){
 
 
                 return (
-                    name.includes(search)
-                    ||
+                    name.includes(search) ||
                     category.includes(search)
                 );
 
@@ -1593,10 +1722,7 @@ function renderProducts(){
     grid.innerHTML =
         filtered
             .map(
-                product =>
-                    createProductCard(
-                        product
-                    )
+                createProductCard
             )
             .join("");
 
@@ -1677,14 +1803,18 @@ function createProductCard(product){
 
 
                 <div class="product-price">
+
                     ${formatPrice(price)}
                     د.ل
+
                 </div>
 
 
                 <div class="product-stock">
+
                     الكمية:
                     ${quantity}
+
                 </div>
 
 
@@ -1710,6 +1840,7 @@ function createProductCard(product){
                 <div class="product-actions">
 
                     <button
+                        type="button"
                         class="edit-btn"
                         onclick="editProduct('${escapeJS(product.id)}')"
                     >
@@ -1718,6 +1849,7 @@ function createProductCard(product){
 
 
                     <button
+                        type="button"
                         class="delete-btn"
                         onclick="deleteProduct('${escapeJS(product.id)}')"
                     >
@@ -1750,6 +1882,13 @@ function openProductModal(product){
         document.getElementById(
             "productForm"
         );
+
+
+    if(!modal || !form){
+
+        return;
+
+    }
 
 
     form.reset();
@@ -1861,34 +2000,69 @@ function openProductModal(product){
     }
 
 
-    modal
-        .classList
-        .add("show");
+    modal.classList.add(
+        "show"
+    );
 
 }
 
 
 function closeProductModal(){
 
-    document
-        .getElementById("productModal")
-        .classList
-        .remove("show");
+    const modal =
+        document.getElementById(
+            "productModal"
+        );
+
+
+    if(modal){
+
+        modal.classList.remove(
+            "show"
+        );
+
+    }
 
 }
 
 
 /* =====================================================
-   IMAGE
+   IMAGE PREVIEW
 ===================================================== */
+
+function setupImagePreview(){
+
+    const input =
+        document.getElementById(
+            "productImage"
+        );
+
+
+    if(!input){
+
+        return;
+
+    }
+
+
+    input.addEventListener(
+        "change",
+        previewImage
+    );
+
+}
+
 
 function previewImage(event){
 
     const file =
         event.target.files[0];
 
+
     if(!file){
+
         return;
+
     }
 
 
@@ -1914,7 +2088,9 @@ function previewImage(event){
         };
 
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(
+        file
+    );
 
 }
 
@@ -1923,219 +2099,253 @@ function previewImage(event){
    SAVE PRODUCT
 ===================================================== */
 
-document
-    .getElementById("productForm")
-    .addEventListener(
+function setupProductForm(){
+
+    const form =
+        document.getElementById(
+            "productForm"
+        );
+
+
+    if(!form){
+
+        return;
+
+    }
+
+
+    form.addEventListener(
         "submit",
-        function(event){
-
-            event.preventDefault();
-
-
-            const id =
-                document
-                    .getElementById("productId")
-                    .value
-                    .trim();
-
-
-            const name =
-                document
-                    .getElementById("productName")
-                    .value
-                    .trim();
-
-
-            const price =
-                Number(
-                    document
-                        .getElementById("productPrice")
-                        .value
-                );
-
-
-            const quantity =
-                Number(
-                    document
-                        .getElementById("productQuantity")
-                        .value
-                );
-
-
-            const category =
-                document
-                    .getElementById("productCategory")
-                    .value
-                    .trim();
-
-
-            const sizesText =
-                document
-                    .getElementById("productSizes")
-                    .value
-                    .trim();
-
-
-            const colorsText =
-                document
-                    .getElementById("productColors")
-                    .value
-                    .trim();
-
-
-            const description =
-                document
-                    .getElementById("productDescription")
-                    .value
-                    .trim();
-
-
-            const preview =
-                document
-                    .getElementById("previewImg")
-                    .src;
-
-
-            if(!name){
-
-                alert(
-                    "اكتب اسم المنتج."
-                );
-
-                return;
-
-            }
-
-
-            const products =
-                getProducts();
-
-
-            const existingIndex =
-                products.findIndex(
-                    p =>
-                        String(p.id)
-                        ===
-                        String(id)
-                );
-
-
-            let image = "";
-
-
-            if(
-                preview &&
-                preview !== window.location.href
-            ){
-
-                image = preview;
-
-            }
-
-
-            if(
-                existingIndex !== -1 &&
-                !image
-            ){
-
-                image =
-                    products[
-                        existingIndex
-                    ].image || "";
-
-            }
-
-
-            const product = {
-
-                id:
-                    id ||
-                    generateProductId(),
-
-                name,
-
-                price,
-
-                quantity,
-
-                category,
-
-                sizes:
-                    sizesText
-                    ?
-                    sizesText
-                        .split(",")
-                        .map(
-                            x => x.trim()
-                        )
-                        .filter(Boolean)
-                    :
-                    [
-                        "S",
-                        "M",
-                        "L",
-                        "XL"
-                    ],
-
-                colors:
-                    colorsText
-                    ?
-                    colorsText
-                        .split(",")
-                        .map(
-                            x => x.trim()
-                        )
-                        .filter(Boolean)
-                    :
-                    [
-                        "أسود",
-                        "أبيض"
-                    ],
-
-                description,
-
-                image
-
-            };
-
-
-            if(existingIndex !== -1){
-
-                products[
-                    existingIndex
-                ] = product;
-
-            }else{
-
-                products.push(
-                    product
-                );
-
-            }
-
-
-            saveProducts(
-                products
-            );
-
-
-            closeProductModal();
-
-            renderProducts();
-
-            updateStats();
-
-
-            alert(
-                existingIndex !== -1
-                ?
-                "تم تعديل المنتج ✅"
-                :
-                "تمت إضافة المنتج ✅"
-            );
-
-        }
+        saveProduct
     );
+
+}
+
+
+function saveProduct(event){
+
+    event.preventDefault();
+
+
+    const id =
+        document
+            .getElementById("productId")
+            .value
+            .trim();
+
+
+    const name =
+        document
+            .getElementById("productName")
+            .value
+            .trim();
+
+
+    const price =
+        Number(
+            document
+                .getElementById("productPrice")
+                .value
+        );
+
+
+    const quantity =
+        Number(
+            document
+                .getElementById("productQuantity")
+                .value
+        );
+
+
+    const category =
+        document
+            .getElementById("productCategory")
+            .value
+            .trim();
+
+
+    const sizesText =
+        document
+            .getElementById("productSizes")
+            .value
+            .trim();
+
+
+    const colorsText =
+        document
+            .getElementById("productColors")
+            .value
+            .trim();
+
+
+    const description =
+        document
+            .getElementById("productDescription")
+            .value
+            .trim();
+
+
+    const preview =
+        document
+            .getElementById("previewImg")
+            .src;
+
+
+    if(!name){
+
+        alert(
+            "اكتب اسم المنتج."
+        );
+
+        return;
+
+    }
+
+
+    const products =
+        getProducts();
+
+
+    const existingIndex =
+        products.findIndex(
+            p =>
+                String(p.id) ===
+                String(id)
+        );
+
+
+    let image = "";
+
+
+    if(
+        preview &&
+        !preview.endsWith(
+            "/admin.html"
+        )
+    ){
+
+        image =
+            preview;
+
+    }
+
+
+    if(
+        existingIndex !== -1 &&
+        !image
+    ){
+
+        image =
+            products[
+                existingIndex
+            ].image || "";
+
+    }
+
+
+    const product = {
+
+        id:
+            id ||
+            generateProductId(),
+
+        name:
+
+            name,
+
+        price:
+
+            price,
+
+        quantity:
+
+            quantity,
+
+        category:
+
+            category,
+
+        sizes:
+
+            sizesText
+            ?
+            sizesText
+                .split(",")
+                .map(
+                    x => x.trim()
+                )
+                .filter(Boolean)
+            :
+            [
+                "S",
+                "M",
+                "L",
+                "XL"
+            ],
+
+        colors:
+
+            colorsText
+            ?
+            colorsText
+                .split(",")
+                .map(
+                    x => x.trim()
+                )
+                .filter(Boolean)
+            :
+            [
+                "أسود",
+                "أبيض"
+            ],
+
+        description:
+
+            description,
+
+        image:
+
+            image
+
+    };
+
+
+    if(existingIndex !== -1){
+
+        products[
+            existingIndex
+        ] = product;
+
+    }else{
+
+        products.push(
+            product
+        );
+
+    }
+
+
+    saveProducts(
+        products
+    );
+
+
+    closeProductModal();
+
+    renderProducts();
+
+    updateStats();
+
+
+    alert(
+        existingIndex !== -1
+        ?
+        "تم تعديل المنتج ✅"
+        :
+        "تمت إضافة المنتج ✅"
+    );
+
+}
 
 
 /* =====================================================
@@ -2157,7 +2367,7 @@ function generateProductId(){
 
 
 /* =====================================================
-   EDIT
+   EDIT PRODUCT
 ===================================================== */
 
 function editProduct(id){
@@ -2169,8 +2379,7 @@ function editProduct(id){
     const product =
         products.find(
             p =>
-                String(p.id)
-                ===
+                String(p.id) ===
                 String(id)
         );
 
@@ -2194,7 +2403,7 @@ function editProduct(id){
 
 
 /* =====================================================
-   DELETE
+   DELETE PRODUCT
 ===================================================== */
 
 function deleteProduct(id){
@@ -2206,14 +2415,15 @@ function deleteProduct(id){
     const product =
         products.find(
             p =>
-                String(p.id)
-                ===
+                String(p.id) ===
                 String(id)
         );
 
 
     if(!product){
+
         return;
+
     }
 
 
@@ -2224,15 +2434,16 @@ function deleteProduct(id){
 
 
     if(!confirmed){
+
         return;
+
     }
 
 
     const filtered =
         products.filter(
             p =>
-                String(p.id)
-                !==
+                String(p.id) !==
                 String(id)
         );
 
@@ -2255,7 +2466,45 @@ function deleteProduct(id){
 
 
 /* =====================================================
-   ORDERS LISTENER
+   MODAL
+===================================================== */
+
+function setupModal(){
+
+    const modal =
+        document.getElementById(
+            "productModal"
+        );
+
+
+    if(!modal){
+
+        return;
+
+    }
+
+
+    modal.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target ===
+                modal
+            ){
+
+                closeProductModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FIRESTORE ORDERS
 ===================================================== */
 
 function startOrdersListener(){
@@ -2263,8 +2512,12 @@ function startOrdersListener(){
     if(!db){
 
         setFirebaseStatus(
-            "🟠 Firestore غير متاح - التخزين المحلي"
+            "🟠 التخزين المحلي"
         );
+
+        renderOrders();
+
+        updateOrderStats();
 
         return;
 
@@ -2275,13 +2528,14 @@ function startOrdersListener(){
 
         ordersUnsubscribe();
 
-        ordersUnsubscribe = null;
+        ordersUnsubscribe =
+            null;
 
     }
 
 
     setFirebaseStatus(
-        "🔄 تحميل الطلبات من Firestore..."
+        "🔄 تحميل الطلبات..."
     );
 
 
@@ -2290,43 +2544,39 @@ function startOrdersListener(){
             .collection("orders")
             .onSnapshot(
 
-                snapshot => {
+                function(snapshot){
 
                     firestoreOrders =
-                        snapshot.docs
-                            .map(
-                                doc => {
+                        snapshot.docs.map(
+                            function(doc){
 
-                                    return {
+                                return {
 
-                                        id: doc.id,
+                                    id:
+                                        doc.id,
 
-                                        ...doc.data()
+                                    ...doc.data()
 
-                                    };
+                                };
 
-                                }
-                            );
+                            }
+                        );
 
 
                     firestoreOrders.sort(
-                        (a,b) => {
+                        function(a,b){
 
-                            const dateA =
-                                getOrderTime(
-                                    a.createdAt ||
-                                    a.date
-                                );
-
-
-                            const dateB =
+                            return (
                                 getOrderTime(
                                     b.createdAt ||
                                     b.date
-                                );
-
-
-                            return dateB - dateA;
+                                )
+                                -
+                                getOrderTime(
+                                    a.createdAt ||
+                                    a.date
+                                )
+                            );
 
                         }
                     );
@@ -2342,7 +2592,7 @@ function startOrdersListener(){
 
 
                     setFirebaseStatus(
-                        "🟢 Firestore متصل - الطلبات مباشرة"
+                        "🟢 Firestore متصل"
                     );
 
 
@@ -2353,10 +2603,10 @@ function startOrdersListener(){
                 },
 
 
-                error => {
+                function(error){
 
                     console.error(
-                        "Firestore listener error:",
+                        "Firestore error:",
                         error
                     );
 
@@ -2366,7 +2616,7 @@ function startOrdersListener(){
 
 
                     setFirebaseStatus(
-                        "🔴 خطأ في Firestore - التخزين المحلي"
+                        "🔴 Firestore - التخزين المحلي"
                     );
 
 
@@ -2400,7 +2650,9 @@ function getLocalOrders(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            error
+        );
 
         return [];
 
@@ -2413,7 +2665,9 @@ function saveLocalOrders(orders){
 
     localStorage.setItem(
         ORDERS_KEY,
-        JSON.stringify(orders)
+        JSON.stringify(
+            orders
+        )
     );
 
 }
@@ -2425,11 +2679,14 @@ function saveLocalOrders(orders){
 
 function getOrders(){
 
-    if(firestoreOrdersLoaded){
+    if(
+        firestoreOrdersLoaded
+    ){
 
         return firestoreOrders;
 
     }
+
 
     return getLocalOrders();
 
@@ -2437,18 +2694,22 @@ function getOrders(){
 
 
 /* =====================================================
-   MIGRATION
+   MIGRATE OLD ORDERS
 ===================================================== */
 
 async function migrateLocalOrdersToFirestore(){
 
     if(!db){
+
         return;
+
     }
 
 
     if(migrationStarted){
+
         return;
+
     }
 
 
@@ -2461,7 +2722,9 @@ async function migrateLocalOrdersToFirestore(){
 
 
     if(!localOrders.length){
+
         return;
+
     }
 
 
@@ -2489,7 +2752,7 @@ async function migrateLocalOrdersToFirestore(){
 
 
         localOrders.forEach(
-            order => {
+            function(order){
 
                 const id =
                     String(
@@ -2500,7 +2763,9 @@ async function migrateLocalOrdersToFirestore(){
 
 
                 if(!id){
+
                     return;
+
                 }
 
 
@@ -2538,7 +2803,7 @@ async function migrateLocalOrdersToFirestore(){
             await batch.commit();
 
             console.log(
-                "Old orders migrated:",
+                "Orders migrated:",
                 count
             );
 
@@ -2557,6 +2822,678 @@ async function migrateLocalOrdersToFirestore(){
 
 
 /* =====================================================
+   RENDER ORDERS
+===================================================== */
+
+function renderOrders(){
+
+    const list =
+        document.getElementById(
+            "ordersList"
+        );
+
+
+    if(!list){
+
+        return;
+
+    }
+
+
+    const searchInput =
+        document.getElementById(
+            "searchOrders"
+        );
+
+
+    const search =
+        searchInput
+        ?
+        searchInput.value
+            .trim()
+            .toLowerCase()
+        :
+        "";
+
+
+    const orders =
+        getOrders();
+
+
+    const filtered =
+        orders.filter(
+            function(order){
+
+                const number =
+                    String(
+                        order.orderNumber ||
+                        order.id ||
+                        order.orderId ||
+                        ""
+                    ).toLowerCase();
+
+
+                const name =
+                    String(
+                        order.customerName ||
+                        ""
+                    ).toLowerCase();
+
+
+                const phone =
+                    String(
+                        order.customerPhone ||
+                        ""
+                    ).toLowerCase();
+
+
+                return (
+                    number.includes(search) ||
+                    name.includes(search) ||
+                    phone.includes(search)
+                );
+
+            }
+        );
+
+
+    if(!filtered.length){
+
+        list.innerHTML = `
+            <div class="empty">
+                🛒 لا توجد طلبات
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        filtered
+            .map(
+                createOrderCard
+            )
+            .join("");
+
+}
+
+
+/* =====================================================
+   ORDER CARD
+===================================================== */
+
+function createOrderCard(order){
+
+    const orderNumber =
+        order.orderNumber ||
+        order.id ||
+        order.orderId ||
+        "طلب";
+
+
+    const date =
+        formatOrderDate(
+            order.createdAt ||
+            order.date
+        );
+
+
+    const status =
+        normalizeStatus(
+            order.status
+        );
+
+
+    const items =
+        Array.isArray(order.items)
+        ?
+        order.items
+        :
+        [];
+
+
+    const itemsHTML =
+        items.length
+        ?
+        items.map(
+            function(item){
+
+                return `
+
+                    <div class="order-item">
+
+                        ${
+                            item.image
+                            ?
+                            `
+                            <img
+                                src="${escapeHTML(item.image)}"
+                                alt="${escapeHTML(
+                                    item.name ||
+                                    "منتج"
+                                )}"
+                            >
+                            `
+                            :
+                            `
+                            <div style="
+                                width:55px;
+                                height:55px;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                background:#eee;
+                                border-radius:8px;
+                                font-size:25px;
+                            ">
+                                🏃
+                            </div>
+                            `
+                        }
+
+
+                        <div class="order-item-info">
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.name ||
+                                    "منتج"
+                                )}
+                            </strong>
+
+                            <small>
+
+                                الكمية:
+                                ${Number(
+                                    item.quantity || 0
+                                )}
+
+                                ${
+                                    item.size
+                                    ?
+                                    ` | المقاس: ${escapeHTML(item.size)}`
+                                    :
+                                    ""
+                                }
+
+                                ${
+                                    item.color
+                                    ?
+                                    ` | اللون: ${escapeHTML(item.color)}`
+                                    :
+                                    ""
+                                }
+
+                            </small>
+
+                        </div>
+
+
+                        <strong>
+
+                            ${formatPrice(
+                                Number(
+                                    item.price || 0
+                                ) *
+                                Number(
+                                    item.quantity || 0
+                                )
+                            )}
+
+                            د.ل
+
+                        </strong>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("")
+        :
+        `
+            <div class="empty">
+                لا توجد تفاصيل للمنتجات
+            </div>
+        `;
+
+
+    return `
+
+        <div class="order-card">
+
+            <div class="order-header">
+
+                <div>
+
+                    <div class="order-number">
+
+                        🔢
+                        ${escapeHTML(
+                            String(
+                                orderNumber
+                            )
+                        )}
+
+                    </div>
+
+                    <div class="order-date">
+
+                        📅
+                        ${escapeHTML(
+                            date
+                        )}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-customer">
+
+                👤
+
+                <strong>
+                    ${escapeHTML(
+                        order.customerName ||
+                        "غير محدد"
+                    )}
+                </strong>
+
+                <br>
+
+                📞
+
+                ${escapeHTML(
+                    order.customerPhone ||
+                    "غير محدد"
+                )}
+
+                ${
+                    order.city
+                    ?
+                    `
+                    <br>
+                    📍
+                    ${escapeHTML(
+                        order.city
+                    )}
+                    `
+                    :
+                    ""
+                }
+
+                ${
+                    order.address
+                    ?
+                    `
+                    <br>
+                    🏠
+                    ${escapeHTML(
+                        order.address
+                    )}
+                    `
+                    :
+                    ""
+                }
+
+                ${
+                    order.notes
+                    ?
+                    `
+                    <br>
+                    📝
+                    ${escapeHTML(
+                        order.notes
+                    )}
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+
+            <div class="order-items">
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="order-footer">
+
+                <div class="order-total">
+
+                    💰
+
+                    ${formatPrice(
+                        Number(
+                            order.total || 0
+                        )
+                    )}
+
+                    د.ل
+
+                </div>
+
+
+                <select
+                    class="status-select"
+                    onchange="changeOrderStatus(
+                        '${escapeJS(order.id)}',
+                        this.value
+                    )"
+                >
+
+                    ${createStatusOptions(
+                        status
+                    )}
+
+                </select>
+
+
+                <button
+                    type="button"
+                    class="delete-order"
+                    onclick="deleteOrder(
+                        '${escapeJS(order.id)}'
+                    )"
+                >
+
+                    🗑️ حذف الطلب
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   STATUS OPTIONS
+===================================================== */
+
+function createStatusOptions(current){
+
+    const statuses = [
+
+        [
+            "pending",
+            "⏳ قيد المراجعة"
+        ],
+
+        [
+            "confirmed",
+            "✅ تم التأكيد"
+        ],
+
+        [
+            "preparing",
+            "📦 قيد التجهيز"
+        ],
+
+        [
+            "ready",
+            "🟢 جاهز"
+        ],
+
+        [
+            "shipping",
+            "🚚 في الشحن"
+        ],
+
+        [
+            "delivered",
+            "🎉 تم التسليم"
+        ],
+
+        [
+            "cancelled",
+            "❌ ملغي"
+        ]
+
+    ];
+
+
+    return statuses
+        .map(
+            function(item){
+
+                return `
+
+                    <option
+                        value="${item[0]}"
+                        ${
+                            current ===
+                            item[0]
+                            ?
+                            "selected"
+                            :
+                            ""
+                        }
+                    >
+                        ${item[1]}
+                    </option>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* =====================================================
+   CHANGE ORDER STATUS
+===================================================== */
+
+async function changeOrderStatus(
+    orderId,
+    status
+){
+
+    const normalized =
+        normalizeStatus(
+            status
+        );
+
+
+    const orders =
+        getOrders();
+
+
+    const index =
+        orders.findIndex(
+            function(order){
+
+                return (
+                    String(order.id) ===
+                    String(orderId)
+                );
+
+            }
+        );
+
+
+    if(index === -1){
+
+        alert(
+            "لم يتم العثور على الطلب."
+        );
+
+        return;
+
+    }
+
+
+    const order =
+        orders[index];
+
+
+    const oldStatus =
+        normalizeStatus(
+            order.status
+        );
+
+
+    if(
+        oldStatus ===
+        normalized
+    ){
+
+        return;
+
+    }
+
+
+    const updatedAt =
+        new Date().toISOString();
+
+
+    order.status =
+        normalized;
+
+    order.updatedAt =
+        updatedAt;
+
+
+    /* =========================
+       FIRESTORE
+    ========================= */
+
+    if(
+        db &&
+        firestoreOrdersLoaded
+    ){
+
+        try{
+
+            await db
+                .collection("orders")
+                .doc(
+                    String(orderId)
+                )
+                .update({
+
+                    status:
+                        normalized,
+
+                    updatedAt:
+                        updatedAt
+
+                });
+
+
+            /*
+               إنشاء إشعار للعميل
+            */
+
+            await createOrderNotification(
+                order,
+                normalized
+            );
+
+
+            /*
+               تحديث النسخة المحلية
+            */
+
+            const localIndex =
+                firestoreOrders.findIndex(
+                    function(item){
+
+                        return (
+                            String(item.id) ===
+                            String(orderId)
+                        );
+
+                    }
+                );
+
+
+            if(localIndex !== -1){
+
+                firestoreOrders[
+                    localIndex
+                ] = {
+
+                    ...firestoreOrders[
+                        localIndex
+                    ],
+
+                    status:
+                        normalized,
+
+                    updatedAt:
+                        updatedAt
+
+                };
+
+            }
+
+
+            saveLocalOrders(
+                firestoreOrders
+            );
+
+
+            renderOrders();
+
+            updateOrderStats();
+
+
+            return;
+
+        }catch(error){
+
+            console.error(
+                "Change status error:",
+                error
+            );
+
+
+            alert(
+                "حدث خطأ أثناء تحديث حالة الطلب:\n\n" +
+                error.message
+            );
+
+
+            renderOrders();
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+       LOCAL STORAGE
+    */
+
+    saveLocalOrders(
+        orders
+    );
+
+
+    renderOrders();
+
+    updateOrderStats();
+
+}
+
+
+/* =====================================================
    CREATE NOTIFICATION
 ===================================================== */
 
@@ -2568,7 +3505,7 @@ async function createOrderNotification(
     if(!db){
 
         console.warn(
-            "Firestore غير متاح، لم يتم إنشاء الإشعار."
+            "Firestore غير متاح."
         );
 
         return false;
@@ -2585,7 +3522,7 @@ async function createOrderNotification(
     if(!userId){
 
         console.warn(
-            "الطلب لا يحتوي userId."
+            "هذا الطلب لا يحتوي userId."
         );
 
         return false;
@@ -2613,7 +3550,9 @@ async function createOrderNotification(
     try{
 
         await db
-            .collection("notifications")
+            .collection(
+                "notifications"
+            )
             .add({
 
                 userId:
@@ -2667,6 +3606,7 @@ async function createOrderNotification(
             error
         );
 
+
         return false;
 
     }
@@ -2678,7 +3618,9 @@ async function createOrderNotification(
    NOTIFICATION STATUS
 ===================================================== */
 
-function getNotificationStatusText(status){
+function getNotificationStatusText(
+    status
+){
 
     const normalized =
         normalizeStatus(
@@ -2721,18 +3663,471 @@ function getNotificationStatusText(status){
 
 
 /* =====================================================
-   CHANGE ORDER STATUS
+   DELETE ORDER
 ===================================================== */
 
-async function changeOrderStatus(
-    orderId,
-    status
+async function deleteOrder(
+    orderId
 ){
 
-    const normalized =
-        normalizeStatus(
-            status
+    const confirmed =
+        confirm(
+            "هل تريد حذف هذا الطلب؟"
         );
 
 
-    const
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    if(
+        db &&
+        firestoreOrdersLoaded
+    ){
+
+        try{
+
+            await db
+                .collection("orders")
+                .doc(
+                    String(orderId)
+                )
+                .delete();
+
+
+            firestoreOrders =
+                firestoreOrders.filter(
+                    function(order){
+
+                        return (
+                            String(order.id) !==
+                            String(orderId)
+                        );
+
+                    }
+                );
+
+
+            saveLocalOrders(
+                firestoreOrders
+            );
+
+
+            renderOrders();
+
+            updateOrderStats();
+
+
+            alert(
+                "تم حذف الطلب 🗑️"
+            );
+
+
+            return;
+
+        }catch(error){
+
+            console.error(
+                "Delete order error:",
+                error
+            );
+
+
+            alert(
+                "تعذر حذف الطلب:\n" +
+                error.message
+            );
+
+
+            return;
+
+        }
+
+    }
+
+
+    const orders =
+        getLocalOrders()
+            .filter(
+                function(order){
+
+                    return (
+                        String(order.id) !==
+                        String(orderId)
+                    );
+
+                }
+            );
+
+
+    saveLocalOrders(
+        orders
+    );
+
+
+    renderOrders();
+
+    updateOrderStats();
+
+
+    alert(
+        "تم حذف الطلب 🗑️"
+    );
+
+}
+
+
+/* =====================================================
+   ORDER STATS
+===================================================== */
+
+function updateOrderStats(){
+
+    const orders =
+        getOrders();
+
+
+    const newOrders =
+        orders.filter(
+            function(order){
+
+                const status =
+                    normalizeStatus(
+                        order.status
+                    );
+
+
+                return (
+                    status ===
+                    "pending"
+                );
+
+            }
+        ).length;
+
+
+    const sales =
+        orders
+            .filter(
+                function(order){
+
+                    return (
+                        normalizeStatus(
+                            order.status
+                        ) !==
+                        "cancelled"
+                    );
+
+                }
+            )
+            .reduce(
+                function(sum,order){
+
+                    return (
+                        sum +
+                        Number(
+                            order.total || 0
+                        )
+                    );
+
+                },
+                0
+            );
+
+
+    const newOrdersElement =
+        document.getElementById(
+            "newOrders"
+        );
+
+
+    const salesElement =
+        document.getElementById(
+            "salesValue"
+        );
+
+
+    if(newOrdersElement){
+
+        newOrdersElement.textContent =
+            newOrders;
+
+    }
+
+
+    if(salesElement){
+
+        salesElement.textContent =
+            formatPrice(
+                sales
+            ) +
+            " د.ل";
+
+    }
+
+}
+
+
+/* =====================================================
+   NORMALIZE STATUS
+===================================================== */
+
+function normalizeStatus(
+    status
+){
+
+    const value =
+        String(
+            status || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const map = {
+
+        "جديد":
+            "pending",
+
+        "قيد المراجعة":
+            "pending",
+
+        "pending":
+            "pending",
+
+        "تم التأكيد":
+            "confirmed",
+
+        "confirmed":
+            "confirmed",
+
+        "جاري التجهيز":
+            "preparing",
+
+        "قيد التجهيز":
+            "preparing",
+
+        "preparing":
+            "preparing",
+
+        "جاهز":
+            "ready",
+
+        "ready":
+            "ready",
+
+        "في التوصيل":
+            "shipping",
+
+        "في الشحن":
+            "shipping",
+
+        "shipping":
+            "shipping",
+
+        "تم التسليم":
+            "delivered",
+
+        "delivered":
+            "delivered",
+
+        "ملغي":
+            "cancelled",
+
+        "cancelled":
+            "cancelled"
+
+    };
+
+
+    return (
+        map[value] ||
+        "pending"
+    );
+
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function getOrderTime(
+    value
+){
+
+    if(!value){
+
+        return 0;
+
+    }
+
+
+    if(
+        value &&
+        typeof value.toDate ===
+        "function"
+    ){
+
+        return value
+            .toDate()
+            .getTime();
+
+    }
+
+
+    const time =
+        new Date(value)
+            .getTime();
+
+
+    return Number.isNaN(time)
+        ?
+        0
+        :
+        time;
+
+}
+
+
+function formatOrderDate(
+    value
+){
+
+    const time =
+        getOrderTime(
+            value
+        );
+
+
+    if(!time){
+
+        return "تاريخ غير معروف";
+
+    }
+
+
+    return new Date(
+        time
+    ).toLocaleString(
+        "ar-LY"
+    );
+
+}
+
+
+/* =====================================================
+   PRICE
+===================================================== */
+
+function formatPrice(
+    price
+){
+
+    return Number(
+        price || 0
+    ).toLocaleString(
+        "ar-LY",
+        {
+            minimumFractionDigits:0,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value == null
+        ?
+        ""
+        :
+        value
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE JS
+===================================================== */
+
+function escapeJS(
+    value
+){
+
+    return String(
+        value == null
+        ?
+        ""
+        :
+        value
+    )
+    .replace(
+        /\\/g,
+        "\\\\"
+    )
+    .replace(
+        /'/g,
+        "\\'"
+    )
+    .replace(
+        /"/g,
+        '\\"'
+    )
+    .replace(
+        /\r/g,
+        "\\r"
+    )
+    .replace(
+        /\n/g,
+        "\\n"
+    );
+
+}
+
+
+/* =====================================================
+   END
+===================================================== */
+
+console.log(
+    "Admin panel loaded successfully."
+);
+
+</script>
+
+</body>
+
+</html>
