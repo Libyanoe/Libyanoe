@@ -760,7 +760,9 @@ select {
     z-index: 1000;
 }
 
-.modal-overlay.show {
+/* إصلاح فتح السلة والنوافذ المنبثقة */
+.modal-overlay.show,
+.modal-overlay.active {
     display: flex;
 }
 
@@ -1215,4 +1217,4 @@ select {
 #add-product-button,
 .add-product-button {
     display: none !important;
-   }
+}
