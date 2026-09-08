@@ -2,39 +2,2229 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>متجر الرياضة</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <meta
+        name="theme-color"
+        content="#171a1f"
+    >
 
-    <!-- تنسيق نافذة اختيار المقاس واللون فقط -->
-    <style>
-        .product-options {
-            margin-top: 10px;
-        }
+    <meta
+        name="description"
+        content="دوّر - دوّر على اللي تبيه"
+    >
 
-        .option-group {
-            margin-bottom: 16px;
-        }
+    <title>دوّر - دوّر على اللي تبيه</title>
 
-        .option-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
-        .option-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+</head>
 
-        .option-button {
-            border: 1px solid #d1d5db;
-            background: #fff;
-            color: #18202a;
+
+<body>
+
+<div class="app">
+
+
+    <!-- =========================================
+         الهيدر
+    ========================================== -->
+
+    <header class="top-header">
+
+        <div class="brand-area">
+
+            <div class="brand-logo" aria-label="شعار دوّر">
+                <img src="assets/doorr-mark.png" alt="شعار دوّر" class="brand-logo-image">
+            </div>
+
+            <div class="brand-text">
+
+                <h1>
+                    دوّر
+                </h1>
+
+                <span>
+                    دوّر على اللي تبيه
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="notification-btn"
+            type="button"
+            onclick="openNotifications()"
+            aria-label="الإشعارات"
+        >
+
+            <span class="ui-icon ui-icon-bell" aria-hidden="true"></span>
+
+            <i
+                class="notification-dot"
+                id="notificationDot"
+            ></i>
+
+        </button>
+
+    </header>
+
+
+
+    <!-- =========================================
+         الصفحة الرئيسية
+    ========================================== -->
+
+    <main
+        id="homePage"
+        class="page"
+    >
+
+
+        <!-- الترحيب -->
+
+        <section class="welcome-section">
+
+            <span class="welcome-small">
+                أهلاً بك في
+            </span>
+
+            <div class="welcome-text">
+
+                <h2>
+                    دوّر
+                </h2>
+
+                <p>
+                    دوّر على اللي تبيه بسهولة
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- البحث -->
+
+        <section class="search-section">
+
+            <div class="main-search">
+
+                <span class="search-icon">
+                    <span class="ui-icon ui-icon-search" aria-hidden="true"></span>
+                </span>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="شن تبي تدوّر عليه؟"
+                    autocomplete="off"
+                    oninput="searchItems()"
+                >
+
+                <button
+                    class="filter-btn"
+                    type="button"
+                    onclick="openFilters()"
+                    aria-label="الفلاتر"
+                >
+                    <span class="ui-icon ui-icon-filter" aria-hidden="true"></span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- الموقع -->
+
+        <section class="location-section">
+
+            <button
+                class="location-button"
+                type="button"
+                onclick="openLocation()"
+            >
+
+                <div class="location-icon">
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span>
+                </div>
+
+                <div class="location-info">
+
+                    <small>
+                        موقعك الحالي
+                    </small>
+
+                    <strong id="currentLocation">
+                        كل ليبيا
+                    </strong>
+
+                </div>
+
+                <span class="location-arrow">
+                    ‹
+                </span>
+
+            </button>
+
+        </section>
+
+
+
+        <!-- =========================================
+             الأقسام
+        ========================================== -->
+
+        <section class="section-block">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        تصفح حسب
+                    </span>
+
+                    <h3>
+                        الأقسام
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="showAllCategories()"
+                >
+                    عرض الكل
+                </button>
+
+            </div>
+
+
+            <div class="categories-grid">
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('سيارات')"
+                >
+
+                    <div class="category-icon car">
+                        <span class="ui-icon ui-icon-car" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        سيارات
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('إلكترونيات')"
+                >
+
+                    <div class="category-icon electronics">
+                        <span class="ui-icon ui-icon-phone" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        إلكترونيات
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('عقارات')"
+                >
+
+                    <div class="category-icon property">
+                        <span class="ui-icon ui-icon-home" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        عقارات
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('ملابس')"
+                >
+
+                    <div class="category-icon clothes">
+                        <span class="ui-icon ui-icon-shirt" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        ملابس
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('أثاث')"
+                >
+
+                    <div class="category-icon furniture">
+                        <span class="ui-icon ui-icon-furniture" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        أثاث
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('معدات')"
+                >
+
+                    <div class="category-icon tools">
+                        <span class="ui-icon ui-icon-tools" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        معدات
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('حيوانات')"
+                >
+
+                    <div class="category-icon animals">
+                        <span class="ui-icon ui-icon-paw" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        حيوانات
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="category-card"
+                    type="button"
+                    onclick="selectCategory('أخرى')"
+                >
+
+                    <div class="category-icon other">
+                        <span class="ui-icon ui-icon-box" aria-hidden="true"></span>
+                    </div>
+
+                    <span>
+                        أخرى
+                    </span>
+
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             الإعلانات المميزة
+        ========================================== -->
+
+        <section class="section-block">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        اخترنا لك
+                    </span>
+
+                    <h3>
+                        إعلانات مميزة
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="showAllAds()"
+                >
+                    عرض الكل
+                </button>
+
+            </div>
+
+
+            <div
+                id="featuredAds"
+                class="ads-horizontal"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             أحدث الإعلانات
+        ========================================== -->
+
+        <section class="section-block">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        جديد دوّر
+                    </span>
+
+                    <h3>
+                        أحدث الإعلانات
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="showAllAds()"
+                >
+                    عرض الكل
+                </button>
+
+            </div>
+
+
+            <div
+                id="latestAds"
+                class="ads-grid"
+            ></div>
+
+
+            <div
+                id="noResults"
+                class="no-results"
+                style="display:none;"
+            >
+
+                <div class="no-results-icon">
+                    <span class="ui-icon ui-icon-search" aria-hidden="true"></span>
+                </div>
+
+                <h3>
+                    ما لقيناش نتائج
+                </h3>
+
+                <p>
+                    جرّب كلمة ثانية أو قسم مختلف
+                </p>
+
+                <button
+                    type="button"
+                    onclick="clearSearch()"
+                >
+                    مسح البحث
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             بانر البيع
+        ========================================== -->
+
+        <section class="sell-banner">
+
+            <div class="sell-banner-content">
+
+                <div class="sell-icon" aria-hidden="true"><span class="ui-icon ui-icon-camera"></span></div>
+
+                <div>
+
+                    <span>
+                        عندك حاجة ما تحتاجهاش؟
+                    </span>
+
+                    <strong>
+                        بيعها على دوّر
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                onclick="openAddAd()"
+            >
+                أضف إعلان
+            </button>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         صفحة البحث
+    ========================================== -->
+
+    <section
+        id="searchPage"
+        class="page secondary-page"
+        style="display:none;"
+    >
+
+        <div class="page-header">
+
+            <button
+                type="button"
+                onclick="goHome()"
+            >
+                →
+            </button>
+
+            <h2>
+                البحث
+            </h2>
+
+        </div>
+
+
+        <div class="page-search-box">
+
+            <input
+                type="search"
+                id="pageSearchInput"
+                placeholder="دوّر على إعلان..."
+                autocomplete="off"
+                oninput="pageSearch()"
+            >
+
+            <span>
+                <span class="ui-icon ui-icon-search" aria-hidden="true"></span>
+            </span>
+
+        </div>
+
+
+        <div
+            id="searchResults"
+            class="ads-grid"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         صفحة المفضلة
+    ========================================== -->
+
+    <section
+        id="favoritesPage"
+        class="page secondary-page"
+        style="display:none;"
+    >
+
+        <div class="page-header">
+
+            <button
+                type="button"
+                onclick="goHome()"
+            >
+                →
+            </button>
+
+            <h2>
+                المفضلة
+            </h2>
+
+        </div>
+
+
+        <div
+            id="favoritesContent"
+            class="ads-grid"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         صفحة الحساب
+    ========================================== -->
+
+    <section
+        id="profilePage"
+        class="page secondary-page"
+        style="display:none;"
+    >
+
+        <div class="page-header">
+
+            <h2>
+                حسابي
+            </h2>
+
+        </div>
+
+
+        <div class="profile-card profile-card-pro">
+
+            <div class="profile-avatar-wrap">
+                <div class="profile-avatar" id="profileAvatar"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></div>
+                <button class="profile-avatar-edit" type="button" onclick="openProfileEditor()" aria-label="تعديل الحساب"><span class="ui-icon ui-icon-edit" aria-hidden="true"></span></button>
+            </div>
+
+            <div class="profile-data">
+                <span class="profile-welcome">حسابك على دوّر</span>
+                <h3 id="profileName">مرحبًا بك في دوّر</h3>
+                <p id="profilePhone">سجّل الدخول لإدارة إعلاناتك</p>
+            </div>
+
+            <button id="profileLoginButton" class="profile-main-action" type="button" onclick="openLogin()">دخول</button>
+            <button id="profileEditButton" class="profile-main-action profile-edit-action" type="button" onclick="openProfileEditor()" style="display:none;">تعديل</button>
+
+        </div>
+
+        <div id="profileStats" class="profile-stats" style="display:none;">
+            <div><strong id="profileAdsCount">0</strong><span>إعلاناتي</span></div>
+            <div><strong id="profileFavoritesCount">0</strong><span>المفضلة</span></div>
+            <div><strong id="profileViewsCount">0</strong><span>مشاهدة</span></div>
+        </div>
+
+
+        <div class="profile-options">
+
+
+            <button
+                type="button"
+                onclick="openMyAds()"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-list" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    إعلاناتي
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="openFavoritesPage()"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    المفضلة
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="openMessages()"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-chat" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    الرسائل
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="openSettings()"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-settings" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    الإعدادات
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="openHelp()"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-help" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    المساعدة
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+            <button
+                id="logoutButton"
+                type="button"
+                onclick="logoutUser()"
+                style="display:none;"
+            >
+
+                <span>
+                    <span class="ui-icon ui-icon-logout" aria-hidden="true"></span>
+                </span>
+
+                <span>
+                    تسجيل الخروج
+                </span>
+
+                <b>
+                    ‹
+                </b>
+
+            </button>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         صفحة إعلاناتي
+    ========================================== -->
+
+    <section
+        id="myAdsPage"
+        class="page secondary-page my-ads-page"
+        style="display:none;"
+    >
+
+        <div class="my-ads-header">
+
+            <button
+                class="back-btn"
+                type="button"
+                onclick="openProfilePage()"
+            >
+                →
+            </button>
+
+
+            <div>
+
+                <h2>
+                    إعلاناتي
+                </h2>
+
+                <div
+                    id="myAdsCount"
+                    class="my-ads-count"
+                >
+                    إدارة إعلاناتك
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="myAdsContent"
+            class="my-ads-list"
+        ></div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         صفحة ملف البائع
+    ========================================== -->
+
+    <section
+        id="sellerProfilePage"
+        class="page secondary-page seller-profile-page"
+        style="display:none;"
+    >
+
+        <div class="seller-profile-header">
+            <button
+                class="seller-profile-back"
+                type="button"
+                onclick="goHome()"
+                aria-label="رجوع"
+            >
+                →
+            </button>
+
+            <div>
+                <span>ملف البائع</span>
+                <h2>دوّر</h2>
+            </div>
+
+            <div class="seller-profile-header-space"></div>
+        </div>
+
+        <div id="sellerProfileContent"></div>
+
+    </section>
+
+
+    <!-- =========================================
+         نافذة إضافة إعلان
+    ========================================== -->
+
+    <div
+        id="addAdModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeAddAd()"
+        ></div>
+
+
+        <div class="modal-box">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeAddAd()"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-title">
+
+                <span>
+                    <span class="ui-icon ui-icon-megaphone" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <h2>
+                        أضف إعلانك
+                    </h2>
+
+                    <p>
+                        بيع أغراضك بسهولة على دوّر
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="addAdForm"
+                onsubmit="publishAd(event)"
+            >
+
+
+                <!-- اسم الإعلان -->
+
+                <div class="form-group">
+
+                    <label for="adTitle">
+                        عنوان الإعلان
+                    </label>
+
+                    <input
+                        type="text"
+                        id="adTitle"
+                        placeholder="مثال: آيفون 15 برو ماكس"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- القسم والسعر -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="adCategory">
+                            القسم
+                        </label>
+
+                        <select
+                            id="adCategory"
+                            onchange="ensureCarFields('add', true); ensureElectronicsFields('add', true)"
+                            required
+                        >
+
+                            <option value="">
+                                اختر القسم
+                            </option>
+
+                            <option value="سيارات">
+                                سيارات
+                            </option>
+
+                            <option value="إلكترونيات">
+                                إلكترونيات
+                            </option>
+
+                            <option value="عقارات">
+                                عقارات
+                            </option>
+
+                            <option value="ملابس">
+                                ملابس
+                            </option>
+
+                            <option value="أثاث">
+                                أثاث
+                            </option>
+
+                            <option value="معدات">
+                                معدات
+                            </option>
+
+                            <option value="حيوانات">
+                                حيوانات
+                            </option>
+
+                            <option value="أخرى">
+                                أخرى
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="adPrice">
+                            السعر
+                        </label>
+
+                        <input
+                            type="number"
+                            id="adPrice"
+                            placeholder="0"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- المدينة -->
+
+                <div class="form-group">
+
+                    <label for="adCity">
+                        المدينة
+                    </label>
+
+                    <select
+                        id="adCity"
+                        required
+                    >
+
+                        <option value="">
+                            اختر المدينة
+                        </option>
+
+                        <option value="طرابلس">
+                            طرابلس
+                        </option>
+
+                        <option value="بنغازي">
+                            بنغازي
+                        </option>
+
+                        <option value="مصراتة">
+                            مصراتة
+                        </option>
+
+                        <option value="الزاوية">
+                            الزاوية
+                        </option>
+
+                        <option value="زليتن">
+                            زليتن
+                        </option>
+
+                        <option value="سبها">
+                            سبها
+                        </option>
+
+                        <option value="البيضاء">
+                            البيضاء
+                        </option>
+
+                        <option value="درنة">
+                            درنة
+                        </option>
+
+                        <option value="غريان">
+                            غريان
+                        </option>
+
+                        <option value="الخمس">
+                            الخمس
+                        </option>
+
+                        <option value="ترهونة">
+                            ترهونة
+                        </option>
+
+                        <option value="سرت">
+                            سرت
+                        </option>
+
+                        <option value="طبرق">
+                            طبرق
+                        </option>
+
+                        <option value="أخرى">
+                            أخرى
+                        </option>
+
+                    </select>
+
+                    <div class="ad-location-tools">
+                        <button type="button" class="location-pick-btn" onclick="pickAdLocation('add')"><span class="ui-icon ui-icon-location" aria-hidden="true"></span> استخدام موقعي الحالي</button>
+                        <span id="adLocationStatus" class="location-status">الموقع اختياري — المدينة مطلوبة</span>
+                    </div>
+                    <input type="hidden" id="adLatitude">
+                    <input type="hidden" id="adLongitude">
+
+                </div>
+
+
+
+                <!-- الوصف -->
+
+                <div class="form-group">
+
+                    <label for="adDescription">
+                        وصف الإعلان
+                    </label>
+
+                    <textarea
+                        id="adDescription"
+                        placeholder="اكتب تفاصيل الإعلان وحالته..."
+                        maxlength="1000"
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- الصور -->
+
+                <div class="form-group">
+
+                    <label>
+                        صور الإعلان
+                    </label>
+
+
+                    <div
+                        class="upload-box"
+                        id="uploadBox"
+                    >
+
+                        <span class="upload-icon">
+                            <span class="ui-icon ui-icon-camera" aria-hidden="true"></span>
+                        </span>
+
+                        <strong>
+                            أضف صور
+                        </strong>
+
+                        <small>
+                            الصور تساعدك تبيع أسرع
+                        </small>
+
+
+                        <input
+                            type="file"
+                            id="adImages"
+                            accept="image/*"
+                            multiple
+                        >
+
+                    </div>
+
+
+                    <div
+                        id="imagePreview"
+                        class="image-preview"
+                    ></div>
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="publishAdButton"
+                >
+                    نشر الإعلان
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة تعديل الإعلان
+    ========================================== -->
+
+    <div
+        id="editAdModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeEditAd()"
+        ></div>
+
+
+        <div class="modal-box edit-ad-modal">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeEditAd()"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-title">
+
+                <span>
+                    <span class="ui-icon ui-icon-edit" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <h2>
+                        تعديل الإعلان
+                    </h2>
+
+                    <p>
+                        عدّل بيانات إعلانك واحفظ التغييرات
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="editAdForm"
+                onsubmit="saveEditedAd(event)"
+            >
+
+
+                <div class="form-group">
+
+                    <label for="editAdTitle">
+                        عنوان الإعلان
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editAdTitle"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="editAdCategory">
+                            القسم
+                        </label>
+
+                        <select
+                            id="editAdCategory"
+                            onchange="ensureCarFields('edit', true); ensureElectronicsFields('edit', true)"
+                            required
+                        >
+
+                            <option value="">
+                                اختر القسم
+                            </option>
+
+                            <option value="سيارات">
+                                سيارات
+                            </option>
+
+                            <option value="إلكترونيات">
+                                إلكترونيات
+                            </option>
+
+                            <option value="عقارات">
+                                عقارات
+                            </option>
+
+                            <option value="ملابس">
+                                ملابس
+                            </option>
+
+                            <option value="أثاث">
+                                أثاث
+                            </option>
+
+                            <option value="معدات">
+                                معدات
+                            </option>
+
+                            <option value="حيوانات">
+                                حيوانات
+                            </option>
+
+                            <option value="أخرى">
+                                أخرى
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editAdPrice">
+                            السعر
+                        </label>
+
+                        <input
+                            type="number"
+                            id="editAdPrice"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="editAdCity">
+                        المدينة
+                    </label>
+
+                    <select
+                        id="editAdCity"
+                        required
+                    >
+
+                        <option value="">
+                            اختر المدينة
+                        </option>
+
+                        <option value="طرابلس">
+                            طرابلس
+                        </option>
+
+                        <option value="بنغازي">
+                            بنغازي
+                        </option>
+
+                        <option value="مصراتة">
+                            مصراتة
+                        </option>
+
+                        <option value="الزاوية">
+                            الزاوية
+                        </option>
+
+                        <option value="زليتن">
+                            زليتن
+                        </option>
+
+                        <option value="سبها">
+                            سبها
+                        </option>
+
+                        <option value="البيضاء">
+                            البيضاء
+                        </option>
+
+                        <option value="درنة">
+                            درنة
+                        </option>
+
+                        <option value="غريان">
+                            غريان
+                        </option>
+
+                        <option value="الخمس">
+                            الخمس
+                        </option>
+
+                        <option value="ترهونة">
+                            ترهونة
+                        </option>
+
+                        <option value="سرت">
+                            سرت
+                        </option>
+
+                        <option value="طبرق">
+                            طبرق
+                        </option>
+
+                        <option value="أخرى">
+                            أخرى
+                        </option>
+
+                    </select>
+
+                    <div class="ad-location-tools">
+                        <button type="button" class="location-pick-btn" onclick="pickAdLocation('edit')"><span class="ui-icon ui-icon-location" aria-hidden="true"></span> تحديث موقعي الحالي</button>
+                        <span id="editAdLocationStatus" class="location-status">الموقع اختياري</span>
+                    </div>
+                    <input type="hidden" id="editAdLatitude">
+                    <input type="hidden" id="editAdLongitude">
+
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <label for="editAdDescription">
+                        وصف الإعلان
+                    </label>
+
+                    <textarea
+                        id="editAdDescription"
+                        maxlength="1000"
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- الصور الحالية والجديدة -->
+
+                <div class="form-group">
+
+                    <label>
+                        صور الإعلان
+                    </label>
+
+
+                    <div
+                        id="editImagePreview"
+                        class="edit-ad-images"
+                    ></div>
+
+
+                    <div
+                        class="upload-box"
+                        id="editUploadBox"
+                    >
+
+                        <span>
+                            <span class="ui-icon ui-icon-camera" aria-hidden="true"></span>
+                        </span>
+
+                        <strong>
+                            إضافة صور جديدة
+                        </strong>
+
+                        <small>
+                            يمكنك إضافة صور أخرى
+                        </small>
+
+
+                        <input
+                            type="file"
+                            id="editAdImages"
+                            accept="image/*"
+                            multiple
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="saveEditButton"
+                >
+                    حفظ التعديلات
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة تفاصيل الإعلان
+    ========================================== -->
+
+    <div
+        id="adDetailsModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeAdDetails()"
+        ></div>
+
+
+        <div class="modal-box ad-details-box">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeAdDetails()"
+            >
+                ×
+            </button>
+
+
+            <div
+                id="adDetailsContent"
+                class="ad-details-content"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة الإشعارات
+    ========================================== -->
+
+    <div
+        id="notificationsModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeNotifications()"
+        ></div>
+
+
+        <div class="modal-box">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeNotifications()"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-title">
+
+                <span>
+                    <span class="ui-icon ui-icon-bell" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <h2>
+                        الإشعارات
+                    </h2>
+
+                    <p>
+                        آخر التحديثات
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="notification-item">
+
+                <span>
+                    <span class="ui-icon ui-icon-hand" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <strong>
+                        أهلاً بك في دوّر
+                    </strong>
+
+                    <p>
+                        ابدأ بتصفح الإعلانات الموجودة حولك.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="notification-item">
+
+                <span>
+                    <span class="ui-icon ui-icon-megaphone" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <strong>
+                        عندك شيء للبيع؟
+                    </strong>
+
+                    <p>
+                        أضف إعلانك الآن ووصل للمشترين.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة الفلاتر
+    ========================================== -->
+
+    <div
+        id="filtersModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeFilters()"
+        ></div>
+
+
+        <div class="modal-box">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeFilters()"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-title">
+
+                <span>
+                    <span class="ui-icon ui-icon-menu" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <h2>
+                        ترتيب الإعلانات
+                    </h2>
+
+                    <p>
+                        اختر طريقة عرض الإعلانات
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-options">
+
+
+                <button
+                    type="button"
+                    onclick="applyFilter('الأحدث')"
+                >
+                    <span class="ui-icon ui-icon-clock" aria-hidden="true"></span> الأحدث أولاً
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="applyFilter('الأقل سعرًا')"
+                >
+                    <span class="ui-icon ui-icon-money" aria-hidden="true"></span> الأقل سعرًا
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="applyFilter('الأعلى سعرًا')"
+                >
+                    <span class="ui-icon ui-icon-money" aria-hidden="true"></span> الأعلى سعرًا
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة الموقع
+    ========================================== -->
+
+    <div
+        id="locationModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeLocation()"
+        ></div>
+
+
+        <div class="modal-box">
+
+            <button
+                class="modal-close"
+                type="button"
+                onclick="closeLocation()"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-title">
+
+                <span>
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span>
+                </span>
+
+                <div>
+
+                    <h2>
+                        اختر موقعك
+                    </h2>
+
+                    <p>
+                        شوف الإعلانات القريبة منك
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-options">
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('كل ليبيا')"
+                >
+                    <span class="ui-icon ui-icon-flag" aria-hidden="true"></span> كل ليبيا
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('طرابلس')"
+                >
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span> طرابلس
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('بنغازي')"
+                >
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span> بنغازي
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('مصراتة')"
+                >
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span> مصراتة
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('الزاوية')"
+                >
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span> الزاوية
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="setLocation('سبها')"
+                >
+                    <span class="ui-icon ui-icon-location" aria-hidden="true"></span> سبها
+                </button>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         نافذة تسجيل الدخول
+    ========================================== -->
+
+    <div
+        id="loginModal"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div
+            class="modal-overlay"
+            onclick="closeLogin()"
+        ></div>
+
+        <div class="modal-box login-box">
+
+            <button class="modal-close" type="button" onclick="closeLogin()">×</button>
+
+            <div class="login-icon"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></div>
+
+            <h2 id="loginModalTitle">تسجيل الدخول</h2>
+
+            <p id="loginModalSubtitle">
+                ادخل برقم هاتفك وكلمة المرور
+            </p>
+
+            <div class="auth-mode-switch">
+                <button type="button" id="authLoginModeBtn" class="auth-mode-btn active" onclick="setAuthMode('login')">تسجيل الدخول</button>
+                <button type="button" id="authRegisterModeBtn" class="auth-mode-btn" onclick="setAuthMode('register')">إنشاء حساب</button>
+            </div>
+
+            <form id="loginForm" onsubmit="loginUser(event)">
+
+                <div class="form-group" id="authNameGroup" style="display:none;">
+                    <label for="loginName">الاسم</label>
+                    <input
+                        type="text"
+                        id="loginName"
+                        placeholder="اكتب اسمك"
+                        maxlength="60"
+                        autocomplete="name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPhone">رقم الهاتف</label>
+                    <input
+                        type="tel"
+                        id="loginPhone"
+                        placeholder="09xxxxxxxx"
+                        maxlength="15"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">كلمة المرور</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="••••••••"
+                            minlength="6"
+                            maxlength="72"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button type="button" class="password-toggle-btn" data-password-toggle="loginPassword" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="إظهار كلمة المرور" title="إظهار كلمة المرور"><span class="ui-icon ui-icon-eye" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="authConfirmPasswordGroup" style="display:none;">
+                    <label for="loginPasswordConfirm">تأكيد كلمة المرور</label>
+                    <div class="password-input-wrap">
+                        <input
+                            type="password"
+                            id="loginPasswordConfirm"
+                            placeholder="أعد كتابة كلمة المرور"
+                            minlength="6"
+                            maxlength="72"
+                            autocomplete="new-password"
+                        >
+                        <button type="button" class="password-toggle-btn" data-password-toggle="loginPasswordConfirm" onclick="togglePasswordVisibility('loginPasswordConfirm', this)" aria-label="إظهار كلمة المرور" title="إظهار كلمة المرور"><span class="ui-icon ui-icon-eye" aria-hidden="true"></span></button>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn" id="authSubmitBtn">
+                    تسجيل الدخول <span class="ui-icon ui-icon-lock" aria-hidden="true"></span>
+                </button>
+
+                <p class="phone-auth-note auth-password-note">
+                    يتم حفظ جلسة الدخول تلقائيًا على جهازك. لا يوجد خيار «تذكرني». لا يتم إرسال SMS ولا تحتاج لإضافة بطاقة دفع.
+                </p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+         نافذة إعدادات الحساب
+    ========================================== -->
+
+    <div id="accountSettingsModal" class="modal" style="display:none;">
+        <div class="modal-overlay" onclick="closeAccountSettings()"></div>
+        <div class="modal-box account-settings-box">
+            <button class="modal-close" type="button" onclick="closeAccountSettings()">×</button>
+
+            <div class="settings-head">
+                <div class="settings-head-icon"><span class="ui-icon ui-icon-settings" aria-hidden="true"></span></div>
+                <div>
+                    <h2>إعدادات الحساب</h2>
+                    <p>تحكم في بيانات حسابك على دوّر</p>
+                </div>
+            </div>
+
+            <div class="settings-account-mini">
+                <div class="settings-mini-avatar" id="settingsAvatar"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></div>
+                <div>
+                    <strong id="settingsAccountName">مستخدم دوّر</strong>
+                    <span id="settingsAccountPhone">—</span>
+                </div>
+            </div>
+
+            <div class="settings-list">
+                <button type="button" onclick="openProfileEditor(); closeAccountSettings();">
+                    <span class="settings-list-icon"><span class="ui-icon ui-icon-edit" aria-hidden="true"></span></span>
+                    <div><strong>تعديل الملف الشخصي</strong><small>الاسم والصورة والنبذة والمدينة</small></div>
+                    <b>‹</b>
+                </button>
+
+                <button type="button" onclick="changePhoneFromSettings()">
+                    <span class="settings-list-icon"><span class="ui-icon ui-icon-phone" aria-hidden="true"></span></span>
+                    <div><strong>تغيير رقم الهاتف</strong><small>نقل حسابك ورقمك إلى رقم جديد</small></div>
+                    <b>‹</b>
+                </button>
+            </div>
+
+            <div class="settings-security-note">
+                <strong><span class="ui-icon ui-icon-lock" aria-hidden="true"></span> تنبيه أمان</strong>
+                <span>تطبيق دوّر الحالي يحفظ الحساب محليًا على هذا الجهاز. تغيير الرقم هنا لا يُعتبر تحققًا من ملكية الرقم الجديد.</span>
+            </div>
+
+            <button type="button" class="settings-delete-btn" onclick="openDeleteAccount()">
+                <span class="ui-icon ui-icon-trash" aria-hidden="true"></span> حذف الحساب وبياناتي
+            </button>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         نافذة حذف الحساب
+    ========================================== -->
+
+    <div id="deleteAccountModal" class="modal" style="display:none;">
+        <div class="modal-overlay" onclick="closeDeleteAccount()"></div>
+        <div class="modal-box delete-account-box">
+            <button class="modal-close" type="button" onclick="closeDeleteAccount()">×</button>
+            <div class="delete-account-icon"><span class="ui-icon ui-icon-warning" aria-hidden="true"></span></div>
+            <h2>حذف الحساب؟</h2>
+            <p>سيتم حذف حسابك من هذا الجهاز وحذف إعلاناتك ورسائلك وإشعاراتك المحلية. هذا الإجراء لا يمكن التراجع عنه.</p>
+            <div class="delete-account-actions">
+                <button type="button" class="delete-cancel-btn" onclick="closeDeleteAccount()">إلغاء</button>
+                <button type="button" class="delete-confirm-btn" onclick="deleteAccountPermanently()">نعم، احذف الحساب</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         نافذة تعديل الحساب
+    ========================================== -->
+
+    <div id="profileEditorModal" class="modal" style="display:none;">
+        <div class="modal-overlay" onclick="closeProfileEditor()"></div>
+        <div class="modal-box profile-editor-box">
+            <button class="modal-close" type="button" onclick="closeProfileEditor()">×</button>
+            <div class="profile-editor-head">
+                <div class="profile-editor-avatar" id="profileEditorAvatar"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></div>
+                <div>
+                    <h2>تعديل الحساب</h2>
+                    <p>خلّي معلوماتك محدثة على دوّر</p>
+                </div>
+            </div>
+            <div class="profile-editor-photo-row">
+                <label class="profile-photo-btn"><span class="ui-icon ui-icon-camera" aria-hidden="true"></span> تغيير الصورة
+                    <input type="file" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(event)">
+                </label>
+                <button type="button" class="profile-photo-remove" onclick="removeProfilePhoto()">حذف الصورة</button>
+            </div>
+            <div class="form-group">
+                <label for="profileEditName">الاسم</label>
+                <input type="text" id="profileEditName" maxlength="40" placeholder="اكتب اسمك">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <input type="tel" id="profileEditPhone" disabled>
+                <small class="profile-editor-note">رقم الهاتف مرتبط بحسابك ولا يمكن تغييره من هنا.</small>
+            </div>
+            <div class="form-group">
+                <label for="profileEditBio">نبذة عنك <span class="profile-field-hint">اختياري</span></label>
+                <textarea id="profileEditBio" maxlength="160" rows="3" placeholder="مثلاً: أبيع وأشتري السيارات والإلكترونيات على دوّر"></textarea>
+                <small class="profile-editor-note">اكتب نبذة قصيرة تظهر في ملفك الشخصي.</small>
+            </div>
+            <div class="form-group">
+                <label for="profileEditCity">المدينة</label>
+                <select id="profileEditCity">
+                    <option value="">اختر مدينتك</option>
+                    <option>طرابلس</option><option>بنغازي</option><option>مصراتة</option><option>الزاوية</option>
+                    <option>زليتن</option><option>الخمس</option><option>غريان</option><option>سبها</option>
+                    <option>سرت</option><option>البيضاء</option><option>درنة</option><option>طبرق</option>
+                    <option>أجدابيا</option><option>المرج</option><option>ترهونة</option><option>نالوت</option>
+                    <option>غدامس</option><option>الكفرة</option><option>مرزق</option><option>أوباري</option>
+                    <option>يفرن</option><option>صبراتة</option><option>رقدالين</option><option>تاورغاء</option>
+                    <option>بني وليد</option><option>زوارة</option><option>الجميل</option><option>أخرى</option>
+                </select>
+            </div>
+            <div class="profile-password-card">
+                <div>
+                    <strong><span class="ui-icon ui-icon-lock" aria-hidden="true"></span> كلمة المرور</strong>
+                    <small>غيّر كلمة مرور حسابك بأمان</small>
+                </div>
+                <button type="button" onclick="openPasswordChange()">تغيير</button>
+            </div>
+            <button type="button" class="primary-btn" onclick="saveProfileEditor()">حفظ التغييرات</button>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         نافذة تغيير كلمة المرور
+    ========================================== -->
+
+    <div id="passwordChangeModal" class="modal" style="display:none;">
+        <div class="modal-overlay" onclick="closePasswordChange()"></div>
+        <div class="modal-box password-change-box">
+            <button class="modal-close" type="button" onclick="closePasswordChange()">×</button>
+            <div class="password-change-head">
+                <div class="password-change-icon"><span class="ui-icon ui-icon-lock" aria-hidden="true"></span></div>
+                <div>
+                    <h2>تغيير كلمة المرور</h2>
+                    <p>اختر كلمة مرور قوية لحسابك على دوّر</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="currentPassword">كلمة المرور الحالية</label>
+                <input type="password" id="currentPassword" autocomplete="current-password" placeholder="أدخل كلمة المرور الحالية">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">كلمة المرور الجديدة</label>
+                <input type="password" id="newPassword" autocomplete="new-password" minlength="6" placeholder="6 أحرف أو أكثر">
+            </div>
+            <div class="form-group">
+                <label for="confirmNewPassword">تأكيد كلمة المرور الجديدة</label>
+                <input type="password" id="confirmNewPassword" autocomplete="new-password" minlength="6" placeholder="أعد كتابة كلمة المرور">
+            </div>
+            <div class="password-change-note">يفضل استخدام كلمة مرور طويلة تحتوي على أحرف وأرقام ورموز.</div>
+            <button type="button" class="primary-btn" onclick="changeAccountPassword()">تحديث كلمة المرور</button>
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         Toast
+    ========================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+
+        <span id="toastIcon">
+            ✓
+        </span>
+
+        <span id="toastMessage">
+            تم
+        </span>
+
+    </div>
+
+
+
+    <!-- =========================================
+         الزر العائم
+    ========================================== -->
+
+    <button
+        class="floating-add-btn"
+        type="button"
+        onclick="openAddAd()"
+        aria-label="إضافة إعلان"
+    >
+
+        <span>
+            +
+        </span>
+
+        <small>
+            إعلان
+        </small>
+
+    </button>
+
+
+
+    <!-- =========================================
+         شريط التنقل السفلي
+    ========================================== -->
+
+    <nav class="bottom-nav">
+
+
+        <button
+            id="navHome"
+            class="nav-item active"
+            type="button"
+            onclick="goHome()"
+        >
+
+            <span>
+                <span class="ui-icon ui-icon-home" aria-hidden="true"></span>
+            </span>
+
+            <small>
+                الرئيسية
+            </small>
+
+        </button>
+
+
+        <button
+            id="navSearch"
+            class="nav-item"
+            type="button"
+            onclick="openSearchPage()"
+        >
+
+            <span>
+                <span class="ui-icon ui-icon-search" aria-hidden="true"></span>
+            </span>
+
+            <small>
+                بحث
+            </small>
+
+        </button>
+
+
+        <button
+            class="nav-item add-nav-item"
+            type="button"
+            onclick="openAddAd()"
+        >
+
+            <span>
+                +
+            </span>
+
+            <small>
+                أضف
+            </small>
+
+        </button>
+
+
+        <button
+            id="navFavorites"
+            class="nav-item"
+            type="button"
+            onclick="openFavoritesPage()"
+        >
+
+            <span>
+                <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
+            </span>
+
+            <small>
+                المفضلة
+            </small>
+
+        </button>
+
+
+        <button
+            id="navProfile"
+            class="nav-item"
+            type="button"
+            onclick="openProfilePage()"
+        >
+
+            <span>
+                <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
+            </span>
+
+            <small>
+                حسابي
+            </small>
+
+        </button>
+
+
+    </nav>
+
+
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
+<script src="script.js"></script>
+
+</body>
+
+</html>            color: #18202a;
             border-radius: 9px;
             padding: 9px 14px;
             cursor: pointer;
